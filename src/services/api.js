@@ -2,7 +2,8 @@ import axios from "axios";
 import Cookies from "js-cookie";
 
 const api = axios.create({
-  baseURL: "http://localhost:3000/",
+  // baseURL: "http://localhost:3000/",
+  baseURL: "https://api-relapro-v1.onrender.com",
   withCredentials: true,
 });
 
@@ -21,7 +22,7 @@ let isRefreshing = false;
 let failedQueue = [];
 
 const processQueue = (error, token = null) => {
-  failedQueue.forEach(prom => {
+  failedQueue.forEach((prom) => {
     if (error) prom.reject(error);
     else prom.resolve(token);
   });
@@ -33,13 +34,17 @@ api.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
-    if (error.response?.status === 401 && originalRequest.url !== "/auth/login" && !originalRequest._retry) {
+    if (
+      error.response?.status === 401 &&
+      originalRequest.url !== "/auth/login" &&
+      !originalRequest._retry
+    ) {
       if (isRefreshing) {
-        return new Promise(function(resolve, reject) {
+        return new Promise(function (resolve, reject) {
           failedQueue.push({ resolve, reject });
         })
-        .then(() => api(originalRequest))
-        .catch(err => Promise.reject(err));
+          .then(() => api(originalRequest))
+          .catch((err) => Promise.reject(err));
       }
 
       originalRequest._retry = true;
@@ -52,12 +57,14 @@ api.interceptors.response.use(
         return api(originalRequest);
       } catch (refreshError) {
         processQueue(refreshError);
-        
+
         // LÓGICA CORRIGIDA:
         // Dispara um evento global para notificar a aplicação para fazer logout.
         // Isto é mais seguro do que aceder a contextos internos do React.
-        console.error("Sessão expirada. A notificar a aplicação para logout...");
-        window.dispatchEvent(new Event('forceLogout'));
+        console.error(
+          "Sessão expirada. A notificar a aplicação para logout..."
+        );
+        window.dispatchEvent(new Event("forceLogout"));
 
         return Promise.reject(refreshError);
       } finally {
