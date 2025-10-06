@@ -3,7 +3,7 @@ import Cookies from "js-cookie";
 
 const api = axios.create({
   // baseURL: "http://localhost:3000/",
-  baseURL: "https://api-relapro-v1.onrender.com",
+  baseURL: "/api",
   withCredentials: true,
 });
 
