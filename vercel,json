@@ -1,7 +1,7 @@
 {
   "rewrites": [
     {
-      "source": "/:path*",
+      "source": "/api/:path*",
       "destination": "https://api-relapro-v1.onrender.com/:path*"
     }
   ]
