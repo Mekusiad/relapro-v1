@@ -63,9 +63,9 @@ function AppRoutes() {
   // LÓGICA CENTRALIZADA AQUI
   // Mostra a tela de carregamento para TODA a aplicação
   // enquanto o AuthProvider verifica a sessão.
-  if (loading) {
-    return <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>Carregando...</div>;
-  }
+  // if (loading) {
+  //   return <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>Carregando...</div>;
+  // }
 
   // Quando o loading termina, renderiza as rotas corretas.
   return (
@@ -86,7 +86,10 @@ function AppRoutes() {
         <Route path="dashboard" element={<DashboardPage />} />
         <Route path="equipments" element={<EquipmentsPage />} />
         <Route path="faturamento" element={<FaturamentoPage />} />
-        <Route path="faturamento/graficos" element={<FaturamentoGraficosPage />} />
+        <Route
+          path="faturamento/graficos"
+          element={<FaturamentoGraficosPage />}
+        />
         <Route path="os/new" element={<OSFormPage />} />
         <Route path="os/edit/:osId" element={<OSFormPage />} />
         <Route path="servicos-os" element={<ServicosOsPage />} />
@@ -104,7 +107,7 @@ function App() {
       <AuthProvider>
         <EquipamentoProvider>
           <Toaster richColors position="top-right" />
-          <AppRoutes /> 
+          <AppRoutes />
         </EquipamentoProvider>
       </AuthProvider>
     </BrowserRouter>
