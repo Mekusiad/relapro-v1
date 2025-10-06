@@ -25,7 +25,6 @@ export const AuthProvider = ({ children }) => {
   // Função de logout para ser usada quando o usuário clica em "Sair".
   const logout = useCallback(async () => {
     try {
-      // Tenta invalidar o token no backend.
       await api.post("/auth/logout");
     } catch (error) {
       console.error(
@@ -33,63 +32,66 @@ export const AuthProvider = ({ children }) => {
         error
       );
     } finally {
-      // Limpa os dados do frontend independentemente do resultado do backend.
       clearAuthData();
     }
   }, [clearAuthData]);
 
   useEffect(() => {
-    // Este listener agora serve para deslogar o usuário se um token expirar
+    // Este listener serve para deslogar o usuário se um token expirar
     // DURANTE a navegação, após o carregamento inicial.
     const handleForceLogout = () => {
-      console.log(
-        "Evento 'forceLogout' recebido: sessão expirou durante o uso."
-      );
+      console.log("Sessão expirou durante o uso da aplicação. Limpando dados.");
       clearAuthData();
     };
     window.addEventListener("forceLogout", handleForceLogout);
 
     // Função de verificação de sessão inicial.
-    async function verifyUserSession() {
+    const verifyUserSession = async () => {
+      console.log("Iniciando verificação de sessão...");
       try {
         const response = await api.get("/auth/me");
-        // SUCESSO: O usuário tem uma sessão válida (token de acesso válido ou refresh bem-sucedido).
+        // SUCESSO: O usuário tem uma sessão válida.
         if (response.data && response.data.user) {
+          console.log("Sessão verificada com sucesso.", response.data.user);
           setUser(response.data.user);
         } else {
-          // Caso inesperado, mas seguro.
           setUser(null);
         }
-        // Define o loading como false no caminho de SUCESSO.
-        setLoading(false);
       } catch (error) {
-        // FALHA: O interceptor tentou renovar o token e falhou.
-        // A promise foi rejeitada e o erro chegou aqui.
-        console.info(
-          "Não foi possível verificar a sessão. O usuário está deslogado."
-        );
+        // FALHA: Ocorreu um erro (provavelmente 401), e o interceptor não conseguiu renovar o token.
+        console.log("Falha ao verificar sessão. Usuário está deslogado.");
         clearAuthData();
-        // Define o loading como false no caminho de FALHA.
+      } finally {
+        // ESTE BLOCO É CRUCIAL:
+        // Ele será executado SEMPRE, tanto no SUCESSO (try) quanto na FALHA (catch).
+        console.log(
+          "Verificação de sessão finalizada. Removendo tela de loading."
+        );
         setLoading(false);
       }
-    }
+    };
 
     verifyUserSession();
 
-    // Função de limpeza do useEffect.
     return () => {
       window.removeEventListener("forceLogout", handleForceLogout);
     };
-  }, [clearAuthData]); // A dependência aqui é a função de limpeza.
+  }, [clearAuthData]);
 
   const login = async (usuario, senha) => {
-    const response = await apiPerformLogin(usuario, senha);
-    if (response && response.status === true) {
-      setUser(response.user);
-    } else {
+    try {
+      const response = await apiPerformLogin(usuario, senha);
+      if (response && response.status === true) {
+        setUser(response.user);
+      } else {
+        // Garante que o usuário seja nulo em caso de falha no login
+        setUser(null);
+      }
+      return response;
+    } catch (error) {
       setUser(null);
+      throw error;
     }
-    return response;
   };
 
   const value = {
