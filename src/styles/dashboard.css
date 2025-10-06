@@ -1,0 +1,333 @@
+/* src/styles/dashboard.css */
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+/* Cabeçalho */
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.header-title h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--black);
+  margin: 0;
+}
+
+.header-title p {
+  color: var(--gray-dark);
+  margin-top: 0.25rem;
+}
+
+.header-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+/* Cards de Estatísticas */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+.stat-card-new {
+  background-color: var(--white);
+  padding: 1.5rem;
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  border-left: 4px solid var(--primary-color);
+}
+
+.stat-card-new .stat-icon {
+  color: var(--primary-color);
+}
+
+.stat-card-new .stat-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--black);
+}
+
+.stat-card-new .stat-label {
+  color: var(--gray-dark);
+}
+
+/* Gráfico e Lista de OS */
+.dashboard-main-content {
+    display: flex; /* Usar flexbox para empilhamento */
+    flex-direction: column; /* Direção vertical */
+    gap: 1.5rem;
+}
+
+.chart-container {
+    grid-column: span 12;
+    background-color: var(--white);
+    padding: 1.5rem;
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-sm);
+}
+
+.recent-os-container {
+    grid-column: span 12;
+}
+
+@media (min-width: 1024px) {
+    .chart-container {
+        grid-column: span 7;
+    }
+    .recent-os-container {
+        grid-column: span 5;
+    }
+}
+
+.content-card {
+     background-color: var(--white);
+    padding: 1.5rem;
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-sm);
+}
+
+.content-card h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: var(--black);
+}
+
+.os-list-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.os-list-table th, .os-list-table td {
+  padding: 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid var(--gray-light);
+}
+
+.os-list-table th {
+    font-size: 0.8rem;
+    color: var(--gray-dark);
+    text-transform: uppercase;
+}
+
+.os-list-table .os-client-info {
+    font-weight: 500;
+}
+
+/* ==================================================== */
+/* === ESTILOS PARA ATIVIDADE RECENTE (NOVO)      === */
+/* ==================================================== */
+
+.activity-feed-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem; /* Espaço entre os itens da atividade */
+}
+
+.activity-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.activity-icon {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--white);
+}
+
+/* Cores para diferentes tipos de ícones */
+.activity-icon.user { background-color: #3b82f6; } /* Azul */
+.activity-icon.os-update { background-color: #f59e0b; } /* Amarelo */
+.activity-icon.os-new { background-color: #10b981; } /* Verde */
+
+.activity-content {
+  flex-grow: 1;
+}
+
+.activity-content p {
+  margin: 0;
+  font-weight: 500;
+  color: var(--black);
+  line-height: 1.4;
+}
+
+.activity-content p strong {
+  color: var(--primary-dark);
+}
+
+.activity-timestamp {
+  font-size: 0.8rem;
+  color: var(--gray-dark);
+  margin-top: 0.25rem;
+}
+
+/* ==================================================== */
+/* === ESTILOS PARA CARDS DE FATURAMENTO (NOVO)   === */
+/* ==================================================== */
+
+.billing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-top: -0.5rem; /* Ajuste para aproximar da seção de stats */
+  margin-bottom: 1.5rem;
+}
+
+.billing-card {
+  background-color: var(--white);
+  padding: 1.5rem;
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  transition: var(--transition);
+}
+
+.billing-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-md);
+}
+
+.billing-icon {
+  flex-shrink: 0;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--white);
+}
+
+/* Cores de fundo para cada ícone */
+.billing-icon.revenue { background-color: #2ecc71; } /* success */
+.billing-icon.completed { background-color: #3498db; } /* info */
+.billing-icon.new-clients { background-color: #9b59b6; } /* roxo */
+
+.billing-info .billing-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--black);
+  margin: 0;
+}
+
+.billing-info .billing-label {
+  font-size: 0.9rem;
+  color: var(--gray-dark);
+  margin: 0;
+}
+
+/* ==================================================== */
+/* === ESTILOS PARA TABELA COM ABAS (NOVO)        === */
+/* ==================================================== */
+
+.tab-navigation {
+  display: flex;
+  border-bottom: 2px solid var(--gray-light);
+  margin-bottom: 1.5rem;
+}
+
+.tab-button {
+  padding: 0.75rem 1.25rem;
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--gray-dark);
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px; /* Alinha com a borda do container */
+  transition: var(--transition);
+}
+
+.tab-button:hover {
+  color: var(--primary-dark);
+}
+
+.tab-button.active {
+  color: var(--primary-color);
+  font-weight: 600;
+  border-bottom-color: var(--primary-color);
+}
+
+.os-table-container {
+    overflow-x: auto; /* Garante responsividade em telas pequenas */
+}
+
+
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+}
+
+.stat-card-v2 {
+  background-color: var(--white);
+  padding: 1.5rem;
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  transition: var(--transition);
+}
+
+.stat-card-v2:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-md);
+}
+
+.stat-icon-v2 {
+  flex-shrink: 0;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--white);
+}
+
+/* Cores de fundo para cada ícone */
+.stat-icon-v2.abertas { background-color: var(--warning); }
+.stat-icon-v2.andamento { background-color: var(--info); }
+.stat-icon-v2.finalizadas { background-color: var(--success); }
+.stat-icon-v2.faturamento { background-color: var(--primary-dark); }
+
+.stat-info .stat-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--black);
+  margin: 0;
+}
+
+.stat-info .stat-label {
+  font-size: 0.9rem;
+  color: var(--gray-dark);
+  margin: 0;
+}

@@ -1,0 +1,948 @@
+/* src/styles/os-form.css (Versão Melhorada) */
+
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+}
+
+/* ==================================================== */
+/* === CONTAINER E CABEÇALHO DA PÁGINA              === */
+/* ==================================================== */
+.os-form-screen-container .container h1 {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 2.25rem;
+  color: var(--primary-dark);
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--gray-light);
+}
+
+.os-form {
+  background-color: var(--white);
+  padding: 2.5rem;
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-md);
+  border-top: 4px solid var(--primary-color);
+}
+
+/* ==================================================== */
+/* === SEÇÕES E GRUPOS DE FORMULÁRIO                === */
+/* ==================================================== */
+.form-section {
+  margin-bottom: 2.5rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--gray-light);
+}
+.form-section:last-of-type {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+.form-section h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.5rem;
+  color: var(--primary-dark);
+  margin-bottom: 1.5rem;
+}
+.form-section h3 .material-icons {
+  font-size: 2rem;
+}
+
+.form-row {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+.form-row .form-group {
+  flex: 1;
+  min-width: 280px;
+  margin-bottom: 0;
+}
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: var(--gray-dark);
+  font-size: 0.9rem;
+}
+
+/* ==================================================== */
+/* === NOVA SELEÇÃO DE RESPONSÁVEIS (CARDS)         === */
+/* ==================================================== */
+.form-label-group {
+    font-weight: 500;
+    color: var(--gray-dark);
+    margin-bottom: 0.75rem;
+    display: block;
+    font-size: 1rem;
+}
+
+.selection-card-group {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.selection-card input {
+  display: none;
+}
+
+.selection-card label {
+  display: block;
+  padding: 1rem;
+  border: 2px solid var(--gray-light);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  text-align: center;
+  font-weight: 500;
+  background-color: var(--background-light);
+}
+
+.selection-card label:hover {
+  border-color: var(--primary-color);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.selection-card input:checked + label {
+  border-color: var(--primary-color);
+  background-color: var(--secondary-color);
+  color: var(--primary-dark);
+  font-weight: 700;
+  box-shadow: var(--shadow-sm);
+}
+
+
+/* ==================================================== */
+/* === ESTILO PARA RELATÓRIO FOTOGRÁFICO            === */
+/* ==================================================== */
+.photo-block {
+  background-color: var(--background-light);
+  border: 1px solid var(--gray-light);
+  border-radius: var(--border-radius);
+  padding: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.photo-block h4 {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--primary-dark);
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+.file-upload {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.file-upload .btn-upload {
+  background-color: var(--white);
+  color: var(--primary-dark);
+  border: 1px solid var(--gray-medium);
+}
+.file-upload .btn-upload:hover {
+  background-color: var(--gray-light);
+}
+.file-upload span {
+  font-size: 0.9rem;
+  color: var(--gray-dark);
+}
+
+.fotos-preview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px dashed var(--gray-medium);
+}
+
+.fotos-preview-grid .photo-preview-item {
+  border: 1px solid var(--gray-light);
+  border-radius: var(--border-radius);
+  background: var(--white);
+  box-shadow: var(--shadow-sm);
+}
+
+.fotos-preview-grid .img-container {
+  height: 140px;
+  position: relative;
+}
+
+.fotos-preview-grid .img-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: var(--border-radius) var(--border-radius) 0 0;
+}
+
+.fotos-preview-grid .remove-img-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    font-size: 16px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+}
+
+.fotos-preview-grid .photo-preview-item:hover .remove-img-btn {
+    opacity: 1;
+}
+
+.fotos-preview-grid .photo-description {
+  width: 100%;
+  padding: 0.5rem;
+  border: none;
+  border-top: 1px solid var(--gray-light);
+  font-size: 0.85rem;
+  border-radius: 0 0 var(--border-radius) var(--border-radius);
+}
+.fotos-preview-grid .photo-description:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.fotos-preview-grid .hint-details {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 2rem;
+  font-style: italic;
+  color: var(--gray-dark);
+}
+
+/* ==================================================== */
+/* === ABAS DE SUBESTAÇÃO                           === */
+/* ==================================================== */
+.tabs-container {
+  display: flex;
+  border-bottom: 1px solid var(--gray-medium);
+  margin-bottom: 1.5rem;
+}
+.tab-button {
+  padding: 0.75rem 1.5rem;
+  cursor: pointer;
+  border: none;
+  border-bottom: 3px solid transparent;
+  background-color: transparent;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--gray-dark);
+  margin-bottom: -1px;
+}
+.tab-button:hover {
+  background-color: var(--gray-light);
+  color: var(--primary-dark);
+}
+.tab-button.active {
+  color: var(--primary-color);
+  border-bottom-color: var(--primary-color);
+  font-weight: 600;
+}
+
+.tab-content {
+  padding: 1.5rem;
+  border: 1px solid var(--gray-light);
+  border-radius: var(--border-radius);
+  background-color: var(--white);
+}
+
+.substation-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.substation-name-input {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--primary-dark);
+    border: none;
+    background: transparent;
+    padding: 0;
+}
+.substation-name-input:read-only {
+    cursor: default;
+}
+
+.tab-content h5 {
+  color: var(--primary-dark);
+  font-size: 1.1rem;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--gray-light);
+}
+
+/* ==================================================== */
+/* === LISTA DE EQUIPAMENTOS (VISUAL REFINADO)      === */
+/* ==================================================== */
+.equipamentos-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.equipamento-tipo-container {
+  background-color: var(--white);
+  border: 1px solid var(--gray-light);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+.equipamento-tipo-header {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  padding: 0.75rem 1.25rem;
+  transition: background-color 0.2s ease;
+}
+
+.equipamento-tipo-header:not(.read-only) {
+    cursor: pointer;
+}
+.equipamento-tipo-header:not(.read-only):hover {
+    background-color: #fafafa;
+}
+
+.equipamento-tipo-header label {
+  font-weight: 500;
+  color: var(--black);
+}
+
+.equipamento-tipo-header input[type="checkbox"] {
+  transform: scale(1.2);
+  accent-color: var(--primary-color);
+}
+
+.equipamento-quantidade {
+  width: 70px;
+  text-align: center;
+}
+
+.equipamento-nome-readonly {
+  font-weight: 500;
+}
+
+.equipamento-quantidade-readonly {
+  background-color: var(--gray-light);
+  color: var(--gray-dark);
+  padding: 0.2rem 0.6rem;
+  border-radius: 1rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.unidades-list {
+  padding: 1rem 1.25rem 1rem 3.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  background-color: var(--background-light);
+  border-top: 1px solid var(--gray-light);
+}
+
+.unidade-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.unidade-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--gray-dark);
+}
+
+.unidade-item .btn {
+  padding: 0.3rem 0.8rem;
+  font-size: 0.85rem;
+  border: 1px solid var(--gray-medium);
+  background-color: var(--white);
+}
+
+/* --- Ações e Outros --- */
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+.hint {
+  font-size: 0.85rem;
+  color: var(--gray-dark);
+  margin-top: 0.5rem;
+  display: block;
+}
+/* Estilos para o novo layout de adição de componentes */
+
+.equipamento-tipo-container {
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    padding: 1rem 1.5rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.equipamento-tipo-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.equipamento-header-left {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.equipamento-header-left .equipamento-icon {
+    color: var(--primary-color);
+}
+
+.equipamento-header-left label {
+    font-weight: 500;
+    color: #333;
+}
+
+.equipamento-badge-count {
+    background-color: var(--primary-light);
+    color: white;
+    font-size: 0.8rem;
+    font-weight: bold;
+    padding: 0.2rem 0.6rem;
+    border-radius: 12px;
+    min-width: 20px;
+    text-align: center;
+}
+
+.unidades-list {
+    border-top: 1px solid #f0f0f0;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.unidade-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+}
+
+.unidade-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Estilos para os novos botões de ícone */
+.btn.btn-icon-add {
+    background-color: var(--secondary-color);
+    color: var(--primary-dark);
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+}
+.btn.btn-icon-add:hover {
+    background-color: #c8e6c9;
+}
+
+.btn.btn-icon-danger {
+    background-color: #fee2e2;
+    color: var(--danger);
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    min-width: auto;
+}
+.btn.btn-icon-danger:hover {
+    background-color: var(--danger);
+    color: white;
+}
+.btn.btn-icon-danger .material-icons {
+    font-size: 1.2rem;
+}
+
+/* Adicionar ao final de src/styles/os-form.css */
+
+.equipamento-item-grouped {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem;
+    border-bottom: 1px solid var(--gray-light);
+}
+
+.equipamentos-list.grouped {
+    border: 1px solid var(--gray-light);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+}
+
+.equipamento-item-grouped:last-child {
+    border-bottom: none;
+}
+
+.quantity-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.quantity-controls span {
+    font-weight: 500;
+    min-width: 25px;
+    text-align: center;
+}
+
+.quantity-controls button {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 1px solid var(--gray-medium);
+    background-color: var(--gray-light);
+    cursor: pointer;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.quantity-controls button.remove-all-btn {
+    background-color: #fee2e2;
+    color: var(--danger);
+    border-color: var(--danger);
+}
+
+.add-component-section {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--gray-light);
+}
+
+.component-template-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1rem;
+}
+
+.component-template-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem;
+    background-color: var(--background-light);
+    border: 1px solid var(--gray-light);
+    border-radius: var(--border-radius);
+}
+
+/* Adicionar ao final de src/styles/os-form.css */
+
+.master-component-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    border: 1px solid var(--gray-light);
+    border-radius: var(--border-radius);
+    padding: 1rem;
+}
+
+.master-component-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem;
+    border-bottom: 1px solid var(--gray-light);
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.master-component-item:last-child {
+    border-bottom: none;
+}
+
+.component-selector {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-grow: 1;
+}
+
+.component-selector label {
+    font-weight: 500;
+}
+
+.component-selector input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.component-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.quantity-controls-inline {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.quantity-controls-inline span {
+    font-weight: 500;
+    font-size: 1rem;
+    min-width: 25px;
+    text-align: center;
+    padding: 0.3rem;
+    border: 1px solid var(--gray-medium);
+    border-radius: var(--border-radius);
+}
+
+.quantity-controls-inline button {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px solid var(--gray-medium);
+    background-color: var(--gray-light);
+    cursor: pointer;
+    font-size: 1.4rem;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ==================================================== */
+/* === ESTILOS PARA GRUPOS DE COMPONENTES (NOVO)    === */
+/* ==================================================== */
+
+.component-group {
+  background-color: #fdfdfd; /* Um fundo levemente diferente */
+  border: 1px solid var(--gray-light);
+  border-radius: var(--border-radius);
+  margin-bottom: 1rem;
+  overflow: hidden; /* Garante que o border-radius funcione */
+  transition: var(--transition);
+  box-shadow: var(--shadow-sm);
+}
+
+.component-group:hover {
+  box-shadow: var(--shadow-md);
+  border-color: var(--gray-medium);
+}
+
+.component-group-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background-color: #f9f9f9;
+  border-bottom: 1px solid var(--gray-light);
+}
+
+.component-group-header strong {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--primary-dark);
+}
+
+.component-instances-list {
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem; /* Espaço entre as unidades */
+}
+
+.component-instance-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0.5rem;
+  border-radius: var(--border-radius-sm);
+  transition: background-color 0.2s ease;
+}
+
+.component-instance-item:hover {
+  background-color: var(--background-light);
+}
+
+.component-instance-item span {
+  font-weight: 500;
+  color: var(--gray-dark);
+}
+
+.component-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* Ajuste para botões pequenos dentro da lista */
+.component-actions .btn {
+    padding: 0.3rem 0.8rem;
+    font-size: 0.8rem;
+}
+
+.component-actions .btn .material-icons {
+    font-size: 1rem;
+}
+
+/* Melhora a aparência da mensagem "Nenhuma unidade" */
+.hint-details {
+    padding: 1rem;
+    text-align: center;
+    font-style: italic;
+    color: #999;
+}
+
+/* ==================================================== */
+/* === ESTILOS PARA NOVA LISTA DE SUBESTAÇÕES     === */
+/* ==================================================== */
+
+.substation-list-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem; /* Espaço entre os cards de subestação */
+}
+
+.substation-card {
+  background-color: var(--white);
+  border: 1px solid var(--gray-light);
+  border-radius: var(--border-radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.substation-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 1rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid var(--gray-light);
+}
+
+.substation-name-input {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--primary-dark);
+    border: none;
+    background: transparent;
+    padding: 0;
+}
+
+.equipamentos-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* ==================================================== */
+/* === ESTILOS PARA ABAS DE SUBESTAÇÃO (NOVO)     === */
+/* ==================================================== */
+
+.substation-tabs-wrapper {
+  border: 1px solid var(--gray-light);
+  border-radius: var(--border-radius-lg);
+  margin-top: 1.5rem;
+}
+
+.tabs-container {
+  display: flex;
+  border-bottom: 1px solid var(--gray-light);
+  padding: 0.5rem 0.5rem 0 0.5rem;
+  background-color: var(--background-light);
+  border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
+  flex-wrap: wrap; /* Permite que as abas quebrem a linha em telas menores */
+}
+
+.tab-item {
+  padding: 0.75rem 1.25rem;
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--gray-dark);
+  border-bottom: 3px solid transparent;
+  margin-bottom: -1px; /* Alinha com a borda inferior do container */
+  transition: var(--transition);
+}
+
+.tab-item:hover {
+  background-color: var(--gray-light);
+  color: var(--primary-dark);
+}
+
+.tab-item.active {
+  color: var(--primary-color);
+  border-bottom-color: var(--primary-color);
+  background-color: var(--white);
+  border-radius: var(--border-radius) var(--border-radius) 0 0;
+}
+
+.tab-content {
+  padding: 1.5rem;
+  background-color: var(--white);
+  border-radius: 0 0 var(--border-radius-lg) var(--border-radius-lg);
+}
+
+/* ... (todo o seu CSS existente) ... */
+
+.add-component-section {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--gray-light);
+}
+
+.component-template-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1rem;
+    margin-top: 0.5rem;
+}
+
+.component-template-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    background-color: var(--background-light);
+    border: 1px solid var(--gray-light);
+    border-radius: var(--border-radius);
+    transition: var(--transition);
+}
+
+.component-template-item:hover {
+    border-color: var(--primary-color);
+    background-color: var(--white);
+}
+
+.component-template-item span {
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+/* src/styles/os-form.css */
+
+/* ... (todo o seu CSS existente) ... */
+
+/* ==================================================== */
+/* === ESTILOS PARA SELEÇÃO DE EQUIPE (TechnicianSelection) === */
+/* ==================================================== */
+
+.technician-role-group {
+  margin-bottom: 2rem;
+}
+
+.technician-role-title {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.technician-selection-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.technician-select-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background-color: var(--white);
+  border: 2px solid var(--gray-light);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+
+.technician-select-card:hover {
+  border-color: var(--primary-light);
+  background-color: #f0f9ff; /* Fundo azul claro no hover */
+}
+
+.technician-select-card.selected {
+  border-color: var(--primary-color);
+  background-color: #ecfeff; /* Fundo ciano bem claro */
+  box-shadow: 0 0 0 2px var(--primary-color);
+}
+
+.selection-checkmark {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  color: var(--primary-color);
+}
+
+.technician-avatar-small {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--primary-dark);
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.technician-info-small {
+  display: flex;
+  flex-direction: column;
+}
+
+.technician-name-small {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.technician-role-small {
+  font-size: 0.8rem;
+  color: var(--gray-dark);
+}

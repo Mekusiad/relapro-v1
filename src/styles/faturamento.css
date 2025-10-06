@@ -1,0 +1,115 @@
+/* src/styles/faturamento.css - VERSÃO MELHORADA */
+
+/* Grid principal da página */
+.billing-page-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem; /* Aumenta o espaço entre as seções */
+}
+
+/* Grid dos cards de resumo */
+.billing-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+}
+
+.summary-card {
+  background-color: var(--white);
+  padding: 1.5rem;
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  transition: var(--transition);
+}
+
+.summary-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-md);
+}
+
+.summary-icon {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--white);
+}
+
+.icon-faturado { background-color: var(--success); }
+.icon-liquido { background-color: var(--primary-color); }
+.icon-pendente { background-color: var(--warning); }
+
+.summary-info .card-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--black);
+  margin: 0;
+}
+
+.summary-info .card-label {
+  font-size: 0.9rem;
+  color: var(--gray-dark);
+  margin: 0;
+}
+
+/* Container para as tabelas */
+.faturamento-tables-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem; /* Espaçamento entre as tabelas */
+}
+
+.billing-table-container {
+  background-color: var(--white);
+  padding: 1.5rem;
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.billing-table-container h2 {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.billing-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.billing-table th,
+.billing-table td {
+  padding: 1rem 1.25rem;
+  text-align: left;
+  border-bottom: 1px solid var(--gray-light);
+}
+
+.billing-table th {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--gray-dark);
+  background-color: var(--background-light);
+}
+
+.billing-table tbody tr {
+  transition: background-color 0.2s ease;
+}
+
+.billing-table tbody tr:hover {
+  background-color: var(--background-light);
+}
+
+.table-actions {
+    display: flex;
+    gap: 0.5rem;
+}

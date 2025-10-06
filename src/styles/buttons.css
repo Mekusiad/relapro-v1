@@ -1,0 +1,94 @@
+/* src/styles/buttons.css */
+
+/* Estilo base para todos os botões */
+.btn {
+  padding: 0.8rem 1.5rem;
+  border-radius: var(--border-radius);
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: var(--transition);
+  white-space: nowrap;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+
+.btn .material-icons {
+    font-size: 1.2rem;
+}
+
+/* Variante Primária (Azul do Tema) */
+.btn-primary {
+  background-color: var(--primary-color);
+  color: var(--white);
+  border-color: var(--primary-color);
+}
+.btn-primary:hover {
+  background-color: var(--primary-dark);
+  border-color: var(--primary-dark);
+  transform: translateY(-2px);
+}
+
+/* Variante Secundária/Cancelar (Cinza claro) */
+.btn-secondary, .btn-cancel {
+  background-color: var(--gray-light);
+  color: var(--black);
+  border-color: var(--gray-medium);
+}
+.btn-secondary:hover, .btn-cancel:hover {
+  background-color: #e0e0e0;
+  transform: translateY(-2px);
+}
+
+/* Variante de Perigo (Vermelho) */
+.btn-danger {
+  background-color: var(--danger);
+  color: var(--white);
+  border-color: var(--danger);
+}
+.btn-danger:hover {
+  background-color: #c0392b;
+  border-color: #c0392b;
+}
+
+/* Variante de Informação (Azul para Relatório) */
+.btn-info {
+  background-color: var(--info);
+  color: var(--white);
+  border-color: var(--info);
+}
+.btn-info:hover {
+  background-color: #2980b9;
+  border-color: #2980b9;
+}
+
+/* Variante de Sucesso (Verde para Editar) */
+.btn-success {
+  background-color: var(--success-color);
+  color: var(--white);
+  border-color: var(--success-color);
+}
+.btn-success:hover {
+  background-color: var(--success-color-dark);
+  border-color: var(--success-color-dark);
+}
+
+.btn:disabled {
+    background-color: var(--gray-medium);
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Variante para botão secundário com borda */
+.btn-secondary-outline {
+  background-color: transparent;
+  color: var(--primary-color);
+  border: 1px solid var(--primary-color);
+}
+.btn-secondary-outline:hover {
+  background-color: var(--secondary-color);
+  border-color: var(--primary-color);
+}

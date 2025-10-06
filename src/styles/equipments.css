@@ -1,0 +1,139 @@
+.equipments-screen-container {
+  padding: 2rem;
+}
+
+.equipments-screen-container .screen-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.equipments-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+  margin-top: 20px;
+}
+
+.equipment-card {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* Garantir que o grid acomode corretamente */
+  min-height: 250px; /* Valor ajustável conforme o conteúdo médio */
+  border-left: 5px solid var(--primary-light);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.equipment-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-md);
+}
+
+.equipment-card-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  border-bottom: 1px solid var(--gray-light);
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+}
+
+.equipment-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: var(--primary-color);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.equipment-info {
+  flex-grow: 1;
+}
+
+.equipment-name {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--primary-dark);
+  margin: 0;
+}
+
+.equipment-model {
+  font-size: 14px;
+  color: var(--gray-dark);
+  margin: 2px 0 0 0;
+}
+
+.equipment-card-body p {
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 6px;
+}
+
+.equipment-card-body p strong {
+  color: var(--primary-dark);
+}
+
+.equipment-card-footer {
+  margin-top: auto;
+  padding-top: 1rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.btn-edit-equip,
+.btn-delete-equip {
+  background: none;
+  border: none;
+  font-weight: bold;
+  padding: 6px 12px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+  display: flex;
+  gap: 8px; /* Adiciona um pequeno espaço entre os botões */
+  align-items: center; /* Alinha os itens verticalmente ao centro */
+  justify-content: center; /* Opcional: Alinha os botões horizontalmente ao centro */
+}
+
+.btn-edit-equip {
+  color: var(--primary-color);
+}
+
+.btn-edit-equip:hover {
+  background-color: var(--secondary-color);
+  border: 1px solid var(--primary-light);
+}
+
+.btn-delete-equip {
+  color: var(--danger);
+}
+
+.btn-delete-equip:hover {
+  background-color: #fddede;
+  border: 1px solid var(--danger);
+}
+
+.equipment-form-modal .form-group {
+  margin-bottom: 1rem;
+}
+
+.equipment-form-modal .form-footer {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}

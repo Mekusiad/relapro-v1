@@ -1,0 +1,167 @@
+:root {
+  --primary-green: #2e7d32;
+  --primary-red: #c62828;
+  --text-dark: #1a1a1a;
+  --text-muted: #555;
+  --bg-white: #ffffff;
+  --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.12);
+  --transition: all 0.2s ease-in-out;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+}
+
+.technicians-screen-container {
+  padding: 2rem;
+}
+
+.screen-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.technicians-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.technician-card {
+  background-color: var(--bg-white);
+  border-left: 4px solid var(--primary-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  transition: var(--transition);
+}
+
+.technician-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-md);
+}
+
+.technician-card-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.technician-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: var(--primary-light);
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.technician-info {
+  flex-grow: 1;
+}
+
+.technician-name {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin: 0;
+  color: var(--text-dark);
+}
+
+.technician-role {
+  font-size: 0.875rem;
+  margin: 4px 0 0 0;
+  color: var(--text-muted);
+}
+
+.technician-card-body {
+  flex-grow: 1;
+}
+
+.technician-card-body p {
+  margin: 0.25rem 0;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
+.technician-card-footer {
+  margin-top: auto;
+  padding-top: 1rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.btn-edit-tech,
+.btn-delete-tech {
+  background: none;
+  border: none;
+  font-weight: bold;
+  padding: 6px 12px;
+  cursor: pointer;
+  border-radius: 4px;
+  display: flex;
+  gap: 8px; /* Adiciona um pequeno espaço entre os botões */
+  align-items: center; /* Alinha os itens verticalmente ao centro */
+  justify-content: center; /* Opcional: Alinha os botões horizontalmente ao centro */
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.btn-edit-tech {
+  color: var(--primary-green);
+}
+
+.btn-edit-tech:hover {
+  background-color: var(--secondary-color);
+  border: 1px solid var(--primary-light);
+}
+
+.btn-delete-tech {
+  color: var(--primary-red);
+}
+
+.btn-delete-tech:hover {
+  background-color: #fee2e2;
+  border: 1px solid #ef4444;
+}
+
+/* NOVAS CLASSES ADICIONADAS */
+.access-level-badge {
+  display: inline-block;
+  padding: 0.2em 0.6em;
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: 0.25rem;
+  margin-left: 0.5rem;
+}
+
+.level-ADMIN {
+  color: #fff;
+  background-color: var(--danger);
+}
+
+.level-SUPERVISOR {
+  color: #fff;
+  background-color: var(--warning);
+}
+
+.level-TECNICO {
+  color: #fff;
+  background-color: var(--info);
+}

@@ -1,0 +1,187 @@
+/* src/styles/login.css */
+
+.login-screen-wrapper {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-color: var(--white);
+}
+
+/* Painel Lateral Esquerdo */
+.login-sidebar {
+  width: 45%;
+  background-image: url('/src/assets/background-relapro.jpeg'); /* Adicione o caminho para sua imagem */
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--white);
+  text-align: center;
+  padding: 2rem;
+}
+
+.login-sidebar::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to top, rgba(14, 116, 144, 0.8), rgba(22, 78, 99, 0.9));
+  z-index: 1;
+}
+
+.sidebar-content {
+  position: relative;
+  z-index: 2;
+  animation: slideInLeft 0.8s ease-out forwards;
+}
+
+.sidebar-content h1 {
+  font-size: 3.5rem;
+  font-weight: 700;
+  color: var(--white);
+  margin: 0;
+  text-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+}
+
+.sidebar-content p {
+  font-size: 1.2rem;
+  max-width: 400px;
+  margin-top: 1rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Painel Principal Direito */
+.login-main {
+  width: 55%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  animation: fadeIn 1s ease-out forwards;
+}
+
+.login-form-container {
+  max-width: 400px;
+  width: 100%;
+}
+
+.login-header {
+  text-align: left;
+  margin-bottom: 2.5rem;
+}
+
+.login-header h2 {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--black);
+  margin: 0;
+}
+
+.login-header p {
+  color: var(--gray-dark);
+  margin-top: 0.5rem;
+  font-size: 1rem;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Campos de formulário com ícones */
+.form-group-icon {
+  position: relative;
+}
+
+.form-group-icon .input-icon {
+  position: absolute;
+  top: 50%;
+  left: 1rem;
+  transform: translateY(-50%);
+  color: var(--gray-dark);
+  pointer-events: none;
+}
+
+.form-group-icon input {
+  padding-left: 3rem;
+  height: 50px;
+}
+
+.error-message {
+  color: var(--danger);
+  background-color: #fee2e2;
+  padding: 0.75rem;
+  border-radius: var(--border-radius);
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+/* Opções (Lembrar-me, Esqueceu senha) */
+.form-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9rem;
+}
+
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--gray-dark);
+  cursor: pointer;
+}
+
+.checkbox-container input {
+  width: auto;
+  accent-color: var(--primary-color);
+}
+
+.forgot-password-link {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 500;
+}
+.forgot-password-link:hover {
+  text-decoration: underline;
+}
+
+/* Botão de Login */
+.btn-login {
+  height: 50px;
+  font-size: 1.1rem;
+}
+
+/* Animação geral de fade-in */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Responsividade */
+@media (max-width: 900px) {
+  .login-sidebar {
+    display: none;
+  }
+  .login-main {
+    width: 100%;
+  }
+}

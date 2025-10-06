@@ -1,0 +1,96 @@
+/* src/styles/sidebar.css - VERSÃO COMPLETA E CORRIGIDA */
+
+.sidebar {
+  width: 260px;
+  height: 100vh;
+  background-color: var(--primary-dark);
+  color: var(--text-light);
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem 1rem;
+  position: fixed;
+  top: 0;
+  left: 0;
+  box-shadow: var(--shadow-lg);
+  z-index: 1100;
+}
+
+.sidebar-main-content {
+    flex-grow: 1;
+}
+
+.logo-container-split {
+  display: flex;
+  align-items: center;
+  padding: 0 0.5rem 2rem 0.5rem;
+  text-decoration: none; /* Garante que não haja sublinhado */
+  color: inherit;
+}
+
+.logo-text-split {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-left: 0.75rem;
+  color: var(--white);
+  flex-direction: column;
+  line-height: 1.1;
+}
+
+.nav-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.nav-button {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.8rem 1rem;
+  border-radius: var(--border-radius);
+  text-decoration: none;
+  color: var(--text-light);
+  font-weight: 500;
+  transition: var(--transition);
+  border: none;
+  background: transparent;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+}
+
+.nav-button:hover {
+  background-color: color-mix(in srgb, var(--primary-dark) 80%, white);
+  color: var(--white);
+}
+
+.nav-button.active {
+  background-color: var(--primary-color);
+  color: var(--white);
+  font-weight: 700;
+}
+
+.sidebar-footer {
+    padding-top: 1rem;
+    border-top: 1px solid color-mix(in srgb, var(--primary-dark) 70%, white);
+}
+
+.logout-button {
+    justify-content: flex-start;
+}
+
+/* Estilos para Animação do Logo */
+.logo-animation-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--white);
+}
+
+.logo-text-split {
+  display: flex;
+}
+
+.logo-text-split > span {
+  display: inline-block;
+}

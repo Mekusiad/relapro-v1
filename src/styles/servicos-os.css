@@ -1,0 +1,188 @@
+/* src/styles/servicos-os.css - VERSÃO MELHORADA E RESPONSIVA */
+
+/* --- Barra de Filtros --- */
+.filter-bar {
+  background-color: var(--white);
+  padding: 1.5rem;
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-sm);
+  margin-top: 1.5rem;
+  margin-bottom: 2rem;
+  display: grid;
+  /* Utiliza auto-fit para quebrar as colunas automaticamente */
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1.5rem;
+  align-items: flex-end;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.filter-group label {
+  font-weight: 500;
+  font-size: 0.85rem;
+  color: var(--text-primary);
+}
+
+.filter-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* --- Tabela de Resultados --- */
+.os-table-container {
+  background-color: var(--white);
+  padding: 1.5rem;
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-sm);
+  overflow-x: auto; /* Garante que a tabela não quebre o layout em telas médias */
+}
+
+.os-results-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.os-results-table th,
+.os-results-table td {
+  padding: 1rem 1.25rem;
+  text-align: left;
+  border-bottom: 1px solid var(--gray-light);
+  white-space: nowrap; /* Evita que o texto quebre em telas médias */
+}
+
+.os-results-table th {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--gray-dark);
+  background-color: #fafafa;
+}
+
+.os-results-table tbody tr {
+  transition: background-color 0.2s ease;
+}
+
+.os-results-table tbody tr:hover {
+  background-color: var(--background-light);
+}
+
+.table-actions-centered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* --- Status da OS --- */
+.os-status.status-cancelada {
+  background-color: var(--gray-medium);
+  color: var(--black);
+}
+
+/* --- Cards de Estatísticas --- */
+.os-stats-grid {
+  display: grid;
+  /* CORREÇÃO: Layout flexível para os cards */
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.os-stat-card {
+  background-color: var(--white);
+  padding: 1.5rem;
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  transition: var(--transition);
+  border-left: 4px solid transparent;
+}
+
+.os-stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-md);
+}
+
+.os-stat-icon {
+  flex-shrink: 0;
+  width: 60px;
+  height: 60px;
+  border-radius: var(--border-radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.os-stat-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.os-stat-value {
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.1;
+}
+
+.os-stat-label {
+  font-size: 0.9rem;
+  color: var(--gray-dark);
+  font-weight: 500;
+}
+
+/* Cores específicas para os cards */
+.os-stat-icon.icon-aberta {
+  background-color: rgba(6, 182, 212, 0.15);
+  color: #06b6d4;
+}
+.os-stat-card:has(.icon-aberta) {
+  border-left-color: #06b6d4;
+}
+
+.os-stat-icon.icon-andamento {
+  background-color: rgba(245, 158, 11, 0.15);
+  color: #f59e0b;
+}
+.os-stat-card:has(.icon-andamento) {
+  border-left-color: #f59e0b;
+}
+
+.os-stat-icon.icon-pendente {
+  background-color: rgba(100, 116, 139, 0.15);
+  color: #64748b;
+}
+.os-stat-card:has(.icon-pendente) {
+  border-left-color: #64748b;
+}
+
+.os-stat-icon.icon-finalizada {
+  background-color: rgba(34, 197, 94, 0.15);
+  color: #22c55e;
+}
+.os-stat-card:has(.icon-finalizada) {
+  border-left-color: #22c55e;
+}
+
+.os-stat-icon.icon-cancelada {
+  background-color: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+}
+.os-stat-card:has(.icon-cancelada) {
+  border-left-color: #ef4444;
+}
+
+/* --- Paginação --- */
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 2rem;
+}
