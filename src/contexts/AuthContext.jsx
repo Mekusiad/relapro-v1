@@ -14,76 +14,82 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // 1. Crie uma função APENAS para limpar os dados do cliente
+  // Função dedicada a limpar os dados de autenticação do frontend.
   const clearAuthData = useCallback(() => {
     setUser(null);
     localStorage.removeItem("loggedInUserName");
     localStorage.removeItem("loggedInUserId");
     localStorage.removeItem("loggedInUserAccessLevel");
-    // Não precisa de redirect aqui, o PrivateRoute vai cuidar disso
   }, []);
 
-  // 2. A função logout agora é para quando o usuário clica no botão "Sair"
+  // Função de logout para ser usada quando o usuário clica em "Sair".
   const logout = useCallback(async () => {
     try {
+      // Tenta invalidar o token no backend.
       await api.post("/auth/logout");
     } catch (error) {
       console.error(
-        "Erro na chamada de logout ao backend (continuando o logout no frontend):",
+        "Erro na chamada de logout ao backend (continuando no frontend):",
         error
       );
     } finally {
-      clearAuthData(); // Reutilize a função de limpeza
+      // Limpa os dados do frontend independentemente do resultado do backend.
+      clearAuthData();
     }
   }, [clearAuthData]);
 
   useEffect(() => {
-    // 3. O handler agora chama a função de limpeza diretamente, SEM chamada de API
+    // Este listener agora serve para deslogar o usuário se um token expirar
+    // DURANTE a navegação, após o carregamento inicial.
     const handleForceLogout = () => {
-      console.log("Evento 'forceLogout' recebido. Limpando sessão do cliente.");
+      console.log(
+        "Evento 'forceLogout' recebido: sessão expirou durante o uso."
+      );
       clearAuthData();
-      setLoading(false); // Garante que a tela de loading suma
     };
-
     window.addEventListener("forceLogout", handleForceLogout);
 
+    // Função de verificação de sessão inicial.
     async function verifyUserSession() {
       try {
         const response = await api.get("/auth/me");
+        // SUCESSO: O usuário tem uma sessão válida (token de acesso válido ou refresh bem-sucedido).
         if (response.data && response.data.user) {
           setUser(response.data.user);
         } else {
-          // Se não houver usuário, limpamos os dados para garantir consistência
-          clearAuthData();
+          // Caso inesperado, mas seguro.
+          setUser(null);
         }
+        // Define o loading como false no caminho de SUCESSO.
+        setLoading(false);
       } catch (error) {
-        console.info("Nenhuma sessão ativa encontrada.");
+        // FALHA: O interceptor tentou renovar o token e falhou.
+        // A promise foi rejeitada e o erro chegou aqui.
+        console.info(
+          "Não foi possível verificar a sessão. O usuário está deslogado."
+        );
         clearAuthData();
-      } finally {
+        // Define o loading como false no caminho de FALHA.
         setLoading(false);
       }
     }
 
     verifyUserSession();
 
-    // 4. Limpeza do useEffect: remova o setLoading(false) daqui, ele é desnecessário
-    //    e pode causar bugs.
+    // Função de limpeza do useEffect.
     return () => {
       window.removeEventListener("forceLogout", handleForceLogout);
     };
-  }, [clearAuthData]);
+  }, [clearAuthData]); // A dependência aqui é a função de limpeza.
 
   const login = async (usuario, senha) => {
-    try {
-      const response = await apiPerformLogin(usuario, senha);
-      if (response && response.status === true) {
-        setUser(response.user);
-      }
-      return response;
-    } catch (error) {
+    const response = await apiPerformLogin(usuario, senha);
+    if (response && response.status === true) {
+      setUser(response.user);
+    } else {
       setUser(null);
-      throw error;
     }
+    return response;
   };
 
   const value = {
