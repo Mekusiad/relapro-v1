@@ -95,8 +95,8 @@ function TechniciansPage() {
 
     try {
       const response = await deleteTechnician(
-        technicianToDelete.matricula,
-        user.matricula
+        user.matricula,
+        technicianToDelete.matricula
       );
 
       if (response.status === true) {
