@@ -110,13 +110,23 @@ function TransformadorCorrenteMedicaoForm({ data, onDataChange }) {
       </h3>
       <div className="table-container">
         <table className="medicao-table complex-header">
-          <thead>{/* ...cabeçalho da tabela... */}</thead>
+          <thead>
+            <tr>
+              <th rowSpan="2">Nº de Série</th>
+              <th colSpan="2">Corrente (A)</th>
+              <th rowSpan="2">Terminais</th>
+              <th rowSpan="2">Relação Calculada IP/IS</th>
+              <th rowSpan="2">Relação Medida</th>
+              <th rowSpan="2">Resistência Ôhmica (mΩ)</th>
+            </tr>
+            <tr>
+              <th>AT</th>
+              <th>BT</th>
+            </tr>
+          </thead>
           <tbody>
             {relacaoData.map((row, index) => (
               <tr key={row.id}>
-                {/* ================================================================== */}
-                {/* INÍCIO DA MUDANÇA: Lógica do rowSpan para Nº de Série */}
-                {/* ================================================================== */}
                 {index === 0 && (
                   <td rowSpan="3">
                     <input
@@ -129,9 +139,6 @@ function TransformadorCorrenteMedicaoForm({ data, onDataChange }) {
                     />
                   </td>
                 )}
-                {/* ================================================================== */}
-                {/* FIM DA MUDANÇA */}
-                {/* ================================================================== */}
 
                 <td>
                   <input
@@ -200,13 +207,17 @@ function TransformadorCorrenteMedicaoForm({ data, onDataChange }) {
       <h3 className="form-section-title">RESISTÊNCIA DE ISOLAMENTO (MΩ)</h3>
       <div className="table-container">
         <table className="medicao-table">
-          <thead>{/* ...cabeçalho da tabela... */}</thead>
+          <thead>
+            <tr>
+              <th>Número de Série</th>
+              <th>Terminais de Medição</th>
+              <th>Valores Medidos (MΩ)</th>
+              <th>Temperatura de Ensaio (°C)</th>
+            </tr>
+          </thead>
           <tbody>
             {resistenciaIsolamento.map((row, index) => (
               <tr key={row.id}>
-                {/* ================================================================== */}
-                {/* INÍCIO DA MUDANÇA: Lógica do rowSpan para Nº de Série */}
-                {/* ================================================================== */}
                 {index === 0 && (
                   <td rowSpan="3">
                     <input
@@ -219,9 +230,6 @@ function TransformadorCorrenteMedicaoForm({ data, onDataChange }) {
                     />
                   </td>
                 )}
-                {/* ================================================================== */}
-                {/* FIM DA MUDANÇA */}
-                {/* ================================================================== */}
 
                 <td>{row.terminais}</td>
                 <td>
