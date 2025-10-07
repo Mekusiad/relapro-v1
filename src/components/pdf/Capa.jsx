@@ -201,7 +201,7 @@ const Capa = ({ osData, bookmarkId }) => {
 
       {/* Painel Direito */}
       <View style={styles.rightPanel}>
-        {/* <Image style={styles.backgroundImage} src="/cover-bg.jpeg" /> */}
+        <Image style={styles.backgroundImage} src="/cover-bg.jpeg" />
         <View style={styles.overlay} />
         <View style={styles.rightContent}>
           {/* Seção Cliente */}
