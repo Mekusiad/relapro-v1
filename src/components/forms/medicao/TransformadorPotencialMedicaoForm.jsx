@@ -242,19 +242,21 @@ function TransformadorPotencialMedicaoForm({ data, onDataChange }) {
                     }
                   />
                 </td>
-                <td rowSpan="3">
-                  <input
-                    className="input"
-                    value={row.temperatura}
-                    onChange={(e) =>
-                      handleIsolamentoChange(
-                        index,
-                        "temperatura",
-                        e.target.value
-                      )
-                    }
-                  />
-                </td>
+                {index === 0 && (
+                  <td rowSpan="3">
+                    <input
+                      className="input"
+                      value={row.temperatura}
+                      onChange={(e) =>
+                        handleCommonIsolamentoChange(
+                          "temperatura",
+                          e.target.value
+                        )
+                      }
+                      placeholder="Temp. (°C)"
+                    />
+                  </td>
+                )}
               </tr>
             ))}
           </tbody>
