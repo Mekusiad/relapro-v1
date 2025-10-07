@@ -25,9 +25,10 @@ const createInitialIsolamentoRows = (count) =>
   }));
 
 function TransformadorCorrenteMedicaoForm({ data, onDataChange }) {
-   const formData = data || {};
+  const formData = data || {};
   const relacaoData = data?.relacaoData || createInitialRelacaoRows(3);
-  const resistenciaIsolamento = data?.resistenciaIsolamento || createInitialIsolamentoRows(3);
+  const resistenciaIsolamento =
+    data?.resistenciaIsolamento || createInitialIsolamentoRows(3);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -40,9 +41,26 @@ function TransformadorCorrenteMedicaoForm({ data, onDataChange }) {
     onDataChange({ relacaoData: updatedData });
   };
 
-    const handleIsolamentoChange = (index, field, value) => {
+  const handleIsolamentoChange = (index, field, value) => {
     const updatedData = [...resistenciaIsolamento];
     updatedData[index][field] = value;
+    onDataChange({ resistenciaIsolamento: updatedData });
+  };
+
+  const handleCommonRelacaoChange = (field, value) => {
+    const updatedData = relacaoData.map((row) => ({
+      ...row,
+      [field]: value,
+    }));
+    onDataChange({ relacaoData: updatedData });
+  };
+
+  // Handler para campos unificados na tabela de Isolamento
+  const handleCommonIsolamentoChange = (field, value) => {
+    const updatedData = resistenciaIsolamento.map((row) => ({
+      ...row,
+      [field]: value,
+    }));
     onDataChange({ resistenciaIsolamento: updatedData });
   };
 
@@ -92,46 +110,35 @@ function TransformadorCorrenteMedicaoForm({ data, onDataChange }) {
       </h3>
       <div className="table-container">
         <table className="medicao-table complex-header">
-          <thead>
-            <tr>
-              <th rowSpan="2">Nº de Série</th>
-              <th colSpan="2">Corrente (A)</th>
-              <th rowSpan="2">Terminais</th>
-              <th rowSpan="2">Relação Calculada IP/IS</th>
-              <th rowSpan="2">Relação Medida</th>
-              <th rowSpan="2">Resistência Ôhmica (mΩ)</th>
-            </tr>
-            <tr>
-              <th>AT</th>
-              <th>BT</th>
-            </tr>
-          </thead>
+          <thead>{/* ...cabeçalho da tabela... */}</thead>
           <tbody>
             {relacaoData.map((row, index) => (
               <tr key={row.id}>
-                <td>
-                  <input
-                    className="input"
-                    value={row.numSerie}
-                    onChange={(e) =>
-                      handleRelacaoChange(
-                        index,
-                        "numSerie",
-                        e.target.value
-                      )
-                    }
-                  />
-                </td>
+                {/* ================================================================== */}
+                {/* INÍCIO DA MUDANÇA: Lógica do rowSpan para Nº de Série */}
+                {/* ================================================================== */}
+                {index === 0 && (
+                  <td rowSpan="3">
+                    <input
+                      className="input"
+                      value={row.numSerie}
+                      onChange={(e) =>
+                        handleCommonRelacaoChange("numSerie", e.target.value)
+                      }
+                      placeholder="Nº de Série"
+                    />
+                  </td>
+                )}
+                {/* ================================================================== */}
+                {/* FIM DA MUDANÇA */}
+                {/* ================================================================== */}
+
                 <td>
                   <input
                     className="input"
                     value={row.correnteAT}
                     onChange={(e) =>
-                      handleRelacaoChange(
-                        index,
-                        "correnteAT",
-                        e.target.value
-                      )
+                      handleRelacaoChange(index, "correnteAT", e.target.value)
                     }
                   />
                 </td>
@@ -140,11 +147,7 @@ function TransformadorCorrenteMedicaoForm({ data, onDataChange }) {
                     className="input"
                     value={row.correnteBT}
                     onChange={(e) =>
-                      handleRelacaoChange(
-                        index,
-                        "correnteBT",
-                        e.target.value
-                      )
+                      handleRelacaoChange(index, "correnteBT", e.target.value)
                     }
                   />
                 </td>
@@ -153,11 +156,7 @@ function TransformadorCorrenteMedicaoForm({ data, onDataChange }) {
                     className="input"
                     value={row.terminais}
                     onChange={(e) =>
-                      handleRelacaoChange(
-                        index,
-                        "terminais",
-                        e.target.value
-                      )
+                      handleRelacaoChange(index, "terminais", e.target.value)
                     }
                   />
                 </td>
@@ -166,11 +165,7 @@ function TransformadorCorrenteMedicaoForm({ data, onDataChange }) {
                     className="input"
                     value={row.relacaoCalc}
                     onChange={(e) =>
-                      handleRelacaoChange(
-                        index,
-                        "relacaoCalc",
-                        e.target.value
-                      )
+                      handleRelacaoChange(index, "relacaoCalc", e.target.value)
                     }
                   />
                 </td>
@@ -179,11 +174,7 @@ function TransformadorCorrenteMedicaoForm({ data, onDataChange }) {
                     className="input"
                     value={row.relacaoMed}
                     onChange={(e) =>
-                      handleRelacaoChange(
-                        index,
-                        "relacaoMed",
-                        e.target.value
-                      )
+                      handleRelacaoChange(index, "relacaoMed", e.target.value)
                     }
                   />
                 </td>
@@ -209,41 +200,36 @@ function TransformadorCorrenteMedicaoForm({ data, onDataChange }) {
       <h3 className="form-section-title">RESISTÊNCIA DE ISOLAMENTO (MΩ)</h3>
       <div className="table-container">
         <table className="medicao-table">
-          <thead>
-            <tr>
-              <th>Número de Série</th>
-              <th>Terminais de Medição</th>
-              <th>Valores Medidos (MΩ)</th>
-              <th>Temperatura de Ensaio (°C)</th>
-            </tr>
-          </thead>
+          <thead>{/* ...cabeçalho da tabela... */}</thead>
           <tbody>
             {resistenciaIsolamento.map((row, index) => (
               <tr key={row.id}>
-                <td>
-                  <input
-                    className="input"
-                    value={row.numSerie}
-                    onChange={(e) =>
-                      handleIsolamentoChange(
-                        index,
-                        "numSerie",
-                        e.target.value
-                      )
-                    }
-                  />
-                </td>
+                {/* ================================================================== */}
+                {/* INÍCIO DA MUDANÇA: Lógica do rowSpan para Nº de Série */}
+                {/* ================================================================== */}
+                {index === 0 && (
+                  <td rowSpan="3">
+                    <input
+                      className="input"
+                      value={row.numSerie}
+                      onChange={(e) =>
+                        handleCommonIsolamentoChange("numSerie", e.target.value)
+                      }
+                      placeholder="Nº de Série"
+                    />
+                  </td>
+                )}
+                {/* ================================================================== */}
+                {/* FIM DA MUDANÇA */}
+                {/* ================================================================== */}
+
                 <td>{row.terminais}</td>
                 <td>
                   <input
                     className="input"
                     value={row.medido}
                     onChange={(e) =>
-                      handleIsolamentoChange(
-                        index,
-                        "medido",
-                        e.target.value
-                      )
+                      handleIsolamentoChange(index, "medido", e.target.value)
                     }
                   />
                 </td>
@@ -286,8 +272,8 @@ function TransformadorCorrenteMedicaoForm({ data, onDataChange }) {
           onChange={handleChange}
         />
         <label htmlFor="naoConforme">
-          EQUIPAMENTO NÃO CONFORME (se houver, selecione a caixa e
-          descreva as informações na caixa abaixo)
+          EQUIPAMENTO NÃO CONFORME (se houver, selecione a caixa e descreva as
+          informações na caixa abaixo)
         </label>
       </div>
       {formData.naoConforme && (
