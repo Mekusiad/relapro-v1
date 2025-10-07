@@ -44,14 +44,14 @@ function ServicosOsPage() {
   const [clients, setClients] = useState([]);
   const [loading, setLoading] = useState(true);
 
-const [filters, setFilters] = useState({
-  clienteId: "",
-  tipoServico: "",
-  status: "",
-  dataInicio: primeiroDiaDoAno.toISOString().split("T")[0], // yyyy-mm-dd
-  dataFim: hoje.toISOString().split("T")[0],                 // yyyy-mm-dd
-  page: 1,
-});
+  const [filters, setFilters] = useState({
+    clienteId: "",
+    tipoServico: "",
+    status: "",
+    dataInicio: primeiroDiaDoAno.toISOString().split("T")[0], // yyyy-mm-dd
+    dataFim: hoje.toISOString().split("T")[0], // yyyy-mm-dd
+    page: 1,
+  });
 
   const [pagination, setPagination] = useState({
     currentPage: 1,
@@ -62,6 +62,7 @@ const [filters, setFilters] = useState({
   const [osToDelete, setOsToDelete] = useState(null);
   const [isGeneratingPdf, setIsGeneratingPdf] = useState(null);
   const { user } = useAuth();
+  const isTecnico = user?.nivelAcesso === "TECNICO";
 
   const loadData = useCallback(async () => {
     if (!user) return;
@@ -189,7 +190,14 @@ const [filters, setFilters] = useState({
         <h1>
           <ClipboardList size={32} /> Ordens de Serviço
         </h1>
-        <Button variant="primary" onClick={() => navigate("/os/new")}>
+        <Button
+          variant="primary"
+          onClick={() => navigate("/os/new")}
+          disabled={isTecnico}
+          title={
+            isTecnico ? "Ação não permitida para técnicos" : "Adicionar nova OS"
+          }
+        >
           <Plus size={20} /> Adicionar OS
         </Button>
       </div>
@@ -319,11 +327,11 @@ const [filters, setFilters] = useState({
           />
         </div>
         {areFiltersActive(filters) && (
-            <div className="filter-actions">
-                <Button variant="cancel" onClick={handleClearFilters}>
-                    <X size={16} /> Limpar
-                </Button>
-            </div>
+          <div className="filter-actions">
+            <Button variant="cancel" onClick={handleClearFilters}>
+              <X size={16} /> Limpar
+            </Button>
+          </div>
         )}
       </div>
 
@@ -359,7 +367,9 @@ const [filters, setFilters] = useState({
                   <td data-label="Tipo de Serviço">
                     {SERVICE_TYPE_NAMES[os.tipoServico] || os.tipoServico}
                   </td>
-                  <td data-label="Data Início">{formatDate(os.previsaoInicio)}</td>
+                  <td data-label="Data Início">
+                    {formatDate(os.previsaoInicio)}
+                  </td>
                   <td data-label="Status">
                     <span
                       className={`os-status status-${os.status
@@ -389,14 +399,16 @@ const [filters, setFilters] = useState({
                           <FileText size={16} />
                         )}
                       </Button>
-                      <Button
-                        variant="icon-danger"
-                        size="sm"
-                        onClick={() => handleDeleteClick(os)}
-                        title="Excluir"
-                      >
-                        <Trash2 size={16} />
-                      </Button>
+                      {!isTecnico && (
+                        <Button
+                          variant="icon-danger"
+                          size="sm"
+                          onClick={() => handleDeleteClick(os)}
+                          title="Excluir"
+                        >
+                          <Trash2 size={16} />
+                        </Button>
+                      )}
                     </div>
                   </td>
                 </tr>

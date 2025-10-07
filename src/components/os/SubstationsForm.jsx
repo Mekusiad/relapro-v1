@@ -19,8 +19,14 @@ const COMPONENTES_PADRAO = [
   { nome: "Resistor de aterramento", tipo: "RESISTOR" },
   { nome: "Pára-raios", tipo: "PARARAIO" },
   { nome: "Cabos e muflas", tipo: "CABOMUFLA" },
-  { nome: "Chave seccionadora de alta tensão", tipo: "CHAVE_SECCIONADORA_ALTA" },
-  { nome: "Chave seccionadora de média tensão", tipo: "CHAVE_SECCIONADORA_MEDIA" },
+  {
+    nome: "Chave seccionadora de alta tensão",
+    tipo: "CHAVE_SECCIONADORA_ALTA",
+  },
+  {
+    nome: "Chave seccionadora de média tensão",
+    tipo: "CHAVE_SECCIONADORA_MEDIA",
+  },
   { nome: "Disjuntor de alta tensão", tipo: "DISJUNTOR_ALTA" },
   { nome: "Disjuntor de média tensão", tipo: "DISJUNTOR_MEDIA" },
   { nome: "Transformador de potência de alta tensão", tipo: "TRAFO_ALTA" },
@@ -37,6 +43,7 @@ function SubstationsForm({
   isEditMode,
   onOpenInfoModal,
   onOpenMeasurementModal,
+  isDisabled,
 }) {
   const [activeTab, setActiveTab] = useState(null);
   const [newSubstationName, setNewSubstationName] = useState("");
@@ -145,7 +152,7 @@ function SubstationsForm({
         <span className="material-icons">electrical_services</span> Subestações
         e Componentes
       </h3>
-      
+
       {!isOsForm && (
         <div className="add-substation-container">
           <input
@@ -154,6 +161,7 @@ function SubstationsForm({
             onChange={(e) => setNewSubstationName(e.target.value)}
             placeholder="Nome da nova subestação"
             className="input"
+            disabled={isDisabled}
           />
           <Button type="button" onClick={handleAddSubstation}>
             {" "}
@@ -249,93 +257,100 @@ function SubstationsForm({
                           {instances.map((instance, index) => {
                             // 2. VERIFICA se o componente é novo
                             const isNewComponent = !isUUID(instance.id);
-                            
+
                             return (
-                            <div
-                              key={instance.id}
-                              className="component-instance-item"
-                            >
-                              {isOsForm ? (
-                                isEditMode ? (
-                                  <div className="component-selector non-clickable">
-                                    <CheckSquare
-                                      size={20}
-                                      className="checkbox-icon checked"
-                                    />
-                                    <span>Unidade {index + 1}</span>
-                                  </div>
-                                ) : (
-                                  <div
-                                    className="component-selector"
-                                    onClick={() =>
-                                      handleToggleComponent(
-                                        currentSubstation.id,
-                                        instance.id
-                                      )
-                                    }
-                                  >
-                                    {instance.selecionado ? (
+                              <div
+                                key={instance.id}
+                                className="component-instance-item"
+                              >
+                                {isOsForm ? (
+                                  isEditMode ? (
+                                    <div className="component-selector non-clickable">
                                       <CheckSquare
                                         size={20}
                                         className="checkbox-icon checked"
                                       />
-                                    ) : (
-                                      <Square
-                                        size={20}
-                                        className="checkbox-icon"
-                                      />
-                                    )}
-                                    <span>Unidade {index + 1}</span>
-                                  </div>
-                                )
-                              ) : (
-                                <span>Unidade {index + 1}</span>
-                              )}
-
-                              <div className="component-actions">
-                                {isOsForm ? (
-                                  <Button
-                                    size="sm"
-                                    type="button"
-                                    onClick={() => onOpenMeasurementModal(instance)}
-                                  >
-                                    Medições
-                                  </Button>
-                                ) : (
-                                  <>
-                                    {/* 3. APLICA a lógica de desabilitar e a dica */}
-                                    <Button
-                                      size="sm"
-                                      type="button"
+                                      <span>Unidade {index + 1}</span>
+                                    </div>
+                                  ) : (
+                                    <div
+                                      className="component-selector"
                                       onClick={() =>
-                                        onOpenInfoModal(
-                                          instance,
-                                          currentSubstation.id
-                                        )
-                                      }
-                                      disabled={isNewComponent}
-                                      title={isNewComponent ? "Salve o cliente para poder editar os detalhes deste novo componente." : "Editar informações do componente"}
-                                    >
-                                      Editar Info
-                                    </Button>
-                                    <Button
-                                      type="button"
-                                      variant="danger-outline"
-                                      size="sm"
-                                      onClick={() =>
-                                        handleRemoveComponentUnit(
+                                        handleToggleComponent(
                                           currentSubstation.id,
                                           instance.id
                                         )
                                       }
                                     >
-                                      Remover
-                                    </Button>
-                                  </>
+                                      {instance.selecionado ? (
+                                        <CheckSquare
+                                          size={20}
+                                          className="checkbox-icon checked"
+                                        />
+                                      ) : (
+                                        <Square
+                                          size={20}
+                                          className="checkbox-icon"
+                                        />
+                                      )}
+                                      <span>Unidade {index + 1}</span>
+                                    </div>
+                                  )
+                                ) : (
+                                  <span>Unidade {index + 1}</span>
                                 )}
+
+                                <div className="component-actions">
+                                  {isOsForm ? (
+                                    <Button
+                                      size="sm"
+                                      type="button"
+                                      onClick={() =>
+                                        onOpenMeasurementModal(instance)
+                                      }
+                                    >
+                                      Medições
+                                    </Button>
+                                  ) : (
+                                    <>
+                                      {/* 3. APLICA a lógica de desabilitar e a dica */}
+                                      <Button
+                                        size="sm"
+                                        type="button"
+                                        onClick={() =>
+                                          onOpenInfoModal(
+                                            instance,
+                                            currentSubstation.id
+                                          )
+                                        }
+                                        disabled={isNewComponent}
+                                        title={
+                                          isNewComponent
+                                            ? "Salve o cliente para poder editar os detalhes deste novo componente."
+                                            : "Editar informações do componente"
+                                        }
+                                      >
+                                        Editar Info
+                                      </Button>
+                                      <Button
+                                        type="button"
+                                        variant="danger-outline"
+                                        size="sm"
+                                        onClick={() =>
+                                          handleRemoveComponentUnit(
+                                            currentSubstation.id,
+                                            instance.id
+                                          )
+                                        }
+                                      >
+                                        Remover
+                                      </Button>
+                                    </>
+                                  )}
+                                </div>
                               </div>
-                            </div>
-                          )})}
+                            );
+                          })}
                         </div>
                       )}
                     </div>

@@ -12,7 +12,10 @@ import TabelasDeMedicao from "./TabelasDeMedicao.jsx";
 import Conclusao from "./Conclusao.jsx";
 import RelatorioFotografico from "./RelatorioFotografico.jsx";
 
-// Registra as fontes para garantir que o PDF seja renderizado corretamente
+// --- CORREÇÃO APLICADA AQUI ---
+// Registramos as fontes novamente, mas agora usando caminhos locais.
+// IMPORTANTE: Você DEVE criar uma pasta 'public/fonts' no seu projeto
+// e colocar os arquivos da fonte Roboto (ttf) dentro dela.
 try {
   Font.register({
     family: "Roboto",
@@ -35,12 +38,11 @@ try {
 } catch (e) {
   console.error("Erro ao registrar fontes:", e);
 }
+// -----------------------------
 
 function RelatorioPDF({
   osData,
   allTechnicians,
-  Html,
-  stylesheet,
   onRenderCallback,
   pageNumbers,
 }) {
@@ -73,47 +75,37 @@ function RelatorioPDF({
   }, [osData]);
 
   return (
-    <Document onRender={onRenderCallback}>
-      {/* 1. Capa */}
-      <Capa osData={osData} />
-
-      {/* 2. Sumário (passa os números das páginas, se disponíveis) */}
+    <Document
+      onRender={onRenderCallback}
+      title={`Relatório OS ${osData.numeroOs}`}
+    >
+      <Capa osData={osData} bookmarkId="capa" />
       <Sumario osData={osData} sections={sections} pageNumbers={pageNumbers} />
-
-      {/* 3. Dados da OS */}
-      <DadosDaOS osData={osData} allTechnicians={allTechnicians} />
-
-      {/* 4. Recomendações (renderizado condicionalmente) */}
-      {sections.hasRecommendations && <Recomendacoes osData={osData} />}
-
-      {/* 5. Metodologia */}
-      <Metodologia />
-
-      {/* 6. Tabelas de Medição (renderizado condicionalmente) */}
-      {sections.hasMeasurements && (
-        <TabelasDeMedicao
-          subestacoes={osData.subestacoes}
-          Html={Html}
-          stylesheet={stylesheet}
-        />
+      <DadosDaOS
+        osData={osData}
+        allTechnicians={allTechnicians}
+        bookmarkId="dados_os"
+      />
+      {sections.hasRecommendations && (
+        <Recomendacoes osData={osData} bookmarkId="recomendacoes" />
       )}
-
-      {/* 7. Conclusão */}
-      <Conclusao osData={osData} />
-
-      {/* 8. Relatórios Fotográficos (renderizados condicionalmente) */}
+      <Metodologia bookmarkId="metodologia" />
+      {sections.hasMeasurements && (
+        <TabelasDeMedicao subestacoes={osData.subestacoes} />
+      )}
+      <Conclusao osData={osData} bookmarkId="conclusao" />
       <RelatorioFotografico
-        title="6. RELATÓRIO FOTOGRÁFICO - ANTES"
+        title="Relatório Fotográfico - ANTES"
         photos={sections.fotosAntes}
         bookmarkId="fotos_antes"
       />
       <RelatorioFotografico
-        title="7. RELATÓRIO FOTOGRÁFICO - DURANTE"
+        title="Relatório Fotográfico - DURANTE"
         photos={sections.fotosDurante}
         bookmarkId="fotos_durante"
       />
       <RelatorioFotografico
-        title="8. RELATÓRIO FOTOGRÁFICO - DEPOIS"
+        title="Relatório Fotográfico - DEPOIS"
         photos={sections.fotosDepois}
         bookmarkId="fotos_depois"
       />

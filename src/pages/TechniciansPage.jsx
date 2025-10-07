@@ -59,13 +59,15 @@ function TechniciansPage() {
   // Ajustado para o fluxo manual do toast
   const handleSave = async (technicianData) => {
     const isEditing = !!editingTechnician;
-    const toastId = toast.loading(isEditing ? "Atualizando funcionário..." : "Cadastrando funcionário...");
+    const toastId = toast.loading(
+      isEditing ? "Atualizando funcionário..." : "Cadastrando funcionário..."
+    );
 
     try {
       const response = isEditing
-        ? await updateTechnician(user.matricula, technicianData )
+        ? await updateTechnician(user.matricula, technicianData)
         : await addTechnician(technicianData, user.matricula);
-      
+
       if (response.status === true) {
         toast.success(response.message, { id: toastId });
         loadTechnicians(currentPage);
@@ -92,7 +94,10 @@ function TechniciansPage() {
     const toastId = toast.loading("Excluindo funcionário...");
 
     try {
-      const response = await deleteTechnician(technicianToDelete.matricula, user.matricula);
+      const response = await deleteTechnician(
+        technicianToDelete.matricula,
+        user.matricula
+      );
 
       if (response.status === true) {
         toast.success(response.message, { id: toastId });
@@ -103,7 +108,7 @@ function TechniciansPage() {
     } catch (error) {
       toast.error(error.message, { id: toastId });
     }
-    
+
     setIsConfirmModalOpen(false);
     setTechnicianToDelete(null);
   };
@@ -119,7 +124,9 @@ function TechniciansPage() {
   return (
     <div className="technicians-screen-container container">
       <div className="screen-header">
-        <h1><span className="material-icons">engineering</span> Gestão de Técnicos</h1>
+        <h1>
+          <span className="material-icons">engineering</span> Gestão de Técnicos
+        </h1>
         <Button variant="primary" onClick={() => handleOpenFormModal(null)}>
           <span className="material-icons">add</span> Cadastrar Novo Técnico
         </Button>
@@ -144,10 +151,28 @@ function TechniciansPage() {
             )}
           </div>
           {totalPages > 1 && (
-            <div className="pagination-controls" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '2rem', gap: '1rem' }}>
-              <Button onClick={handlePrevPage} disabled={currentPage === 1}>Anterior</Button>
-              <span>Página {currentPage} de {totalPages}</span>
-              <Button onClick={handleNextPage} disabled={currentPage === totalPages}>Próximo</Button>
+            <div
+              className="pagination-controls"
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                marginTop: "2rem",
+                gap: "1rem",
+              }}
+            >
+              <Button onClick={handlePrevPage} disabled={currentPage === 1}>
+                Anterior
+              </Button>
+              <span>
+                Página {currentPage} de {totalPages}
+              </span>
+              <Button
+                onClick={handleNextPage}
+                disabled={currentPage === totalPages}
+              >
+                Próximo
+              </Button>
             </div>
           )}
         </>
@@ -159,7 +184,7 @@ function TechniciansPage() {
         technician={editingTechnician}
         onSave={handleSave}
       />
-      
+
       <ConfirmationModal
         isOpen={isConfirmModalOpen}
         onClose={() => setIsConfirmModalOpen(false)}
@@ -172,4 +197,3 @@ function TechniciansPage() {
 }
 
 export default TechniciansPage;
-

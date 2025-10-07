@@ -52,12 +52,11 @@ const styles = StyleSheet.create({
   },
 });
 
-const Metodologia = () => (
-  // BOOKMARK ADICIONADO AQUI
+const Metodologia = ({ bookmarkId }) => (
   <Page
     size="A4"
     style={styles.page}
-    bookmark={{ title: "3. METODOLOGIA APLICADA", id: "metodologia" }}
+    bookmark={{ title: "Metodologia", id: bookmarkId }}
   >
     <Text style={styles.mainTitle}>3. Metodologia e Critérios</Text>
 

@@ -1,15 +1,39 @@
 // src/components/pdf/tabelas/ComponentInfoHeaderPdf.jsx
 
-import React from 'react';
-import { Text, View, StyleSheet } from '@react-pdf/renderer';
+import React from "react";
+import { Text, View, StyleSheet } from "@react-pdf/renderer";
 
 const styles = StyleSheet.create({
-  headerContainer: { backgroundColor: '#f8f9fa', border: '1px solid #dee2e6', borderRadius: 3, padding: '8px 10px', marginBottom: 10, fontFamily: 'Roboto' },
-  title: { fontSize: 11, fontWeight: 'bold', color: '#343a40', marginBottom: 6, paddingBottom: 4, borderBottom: '1px solid #e9ecef' },
-  grid: { display: 'flex', flexDirection: 'row', flexWrap: 'wrap', marginTop: 4 },
-  field: { display: 'flex', flexDirection: 'row', width: '50%', paddingBottom: 3 },
-  label: { fontSize: 8, fontWeight: 'bold', color: '#6c757d', width: '40%' },
-  value: { fontSize: 8, color: '#212529', width: '60%' },
+  headerContainer: {
+    backgroundColor: "#f8f9fa",
+    border: "1px solid #dee2e6",
+    borderRadius: 3,
+    padding: "8px 10px",
+    marginBottom: 10,
+    fontFamily: "Roboto",
+  },
+  title: {
+    fontSize: 11,
+    fontWeight: "bold",
+    color: "#343a40",
+    marginBottom: 6,
+    paddingBottom: 4,
+    borderBottom: "1px solid #e9ecef",
+  },
+  grid: {
+    display: "flex",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    marginTop: 4,
+  },
+  field: {
+    display: "flex",
+    flexDirection: "row",
+    width: "50%",
+    paddingBottom: 3,
+  },
+  label: { fontSize: 8, fontWeight: "bold", color: "#6c757d", width: "40%" },
+  value: { fontSize: 8, color: "#212529", width: "60%" },
 });
 
 const InfoField = ({ label, value }) => {
@@ -28,8 +52,10 @@ const ComponentInfoHeaderPdf = ({ component }) => {
   const info = component.info || {};
 
   return (
-    <View style={styles.headerContainer} wrap={false}>
-      <Text style={styles.title}>{component.nomeEquipamento || 'Nome não informado'}</Text>
+    <View style={styles.headerContainer}>
+      <Text style={styles.title}>
+        {component.nomeEquipamento || "Nome não informado"}
+      </Text>
       <View style={styles.grid}>
         {/* Adicionados TODOS os campos possíveis para garantir que apareçam */}
         <InfoField label="Subestação" value={component.subestacaoNome} />
@@ -45,7 +71,10 @@ const ComponentInfoHeaderPdf = ({ component }) => {
         <InfoField label="Tensão Secundário" value={info.tensaoSecundario} />
         <InfoField label="Corrente Nominal" value={info.correnteNominal} />
         <InfoField label="Corrente Primário" value={info.correntePrimario} />
-        <InfoField label="Corrente Secundário" value={info.correnteSecundario} />
+        <InfoField
+          label="Corrente Secundário"
+          value={info.correnteSecundario}
+        />
         <InfoField label="Meio Isolante" value={info.meioIsolante} />
         <InfoField label="Volume Óleo" value={info.volumeOleoIsolante} />
         <InfoField label="Massa Total" value={info.massaTotal} />

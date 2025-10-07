@@ -86,18 +86,17 @@ const InfoItem = ({ label, value }) => {
   );
 };
 
-const DadosDaOS = ({ osData, allTechnicians }) => {
+const DadosDaOS = ({ osData, allTechnicians, bookmarkId }) => {
   const tecnicosNomes = osData.tecnicos
     ?.map((t) => allTechnicians.find((tech) => tech.id === t)?.nome)
     .filter(Boolean)
     .join(", ");
 
   return (
-    // BOOKMARK ADICIONADO AQUI
     <Page
       size="A4"
       style={styles.page}
-      bookmark={{ title: "1. DADOS DA ORDEM DE SERVIÇO", id: "dados_os" }}
+      bookmark={{ title: "Dados da OS", id: bookmarkId }}
     >
       <Text style={styles.mainTitle}>1. Dados da Ordem de Serviço</Text>
 

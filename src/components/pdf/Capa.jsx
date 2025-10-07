@@ -1,6 +1,7 @@
 // src/components/pdf/Capa.jsx
 
 import React from "react";
+// CORREÇÃO: Removido o hífen extra. O correto é '@react-pdf/renderer'
 import {
   Page,
   Text,
@@ -157,7 +158,14 @@ const EmailIcon = () => (
   </Svg>
 );
 
-const Capa = ({ osData }) => {
+const Capa = ({ osData, bookmarkId }) => {
+  if (!osData)
+    return (
+      <Page>
+        <Text>Dados da Ordem de Serviço não encontrados.</Text>
+      </Page>
+    );
+
   const serviceName =
     SERVICE_TYPE_NAMES[osData.tipoServico] || "Relatório de Serviço";
   const serviceDate = formatDate(osData.previsaoInicio);
@@ -167,8 +175,7 @@ const Capa = ({ osData }) => {
     <Page
       size="A4"
       style={styles.page}
-      // A capa geralmente não precisa de bookmark para o sumário, mas adicionado por consistência se necessário.
-      bookmark={{ title: "Capa", id: "capa" }}
+      bookmark={{ title: "Capa", id: bookmarkId }}
     >
       {/* Painel Esquerdo */}
       <View style={styles.leftPanel}>
@@ -194,7 +201,7 @@ const Capa = ({ osData }) => {
 
       {/* Painel Direito */}
       <View style={styles.rightPanel}>
-        <Image style={styles.backgroundImage} src="/cover-bg.jpeg" />
+        {/* <Image style={styles.backgroundImage} src="/cover-bg.jpeg" /> */}
         <View style={styles.overlay} />
         <View style={styles.rightContent}>
           {/* Seção Cliente */}

@@ -27,7 +27,9 @@ function OSFormPage() {
   const { osId } = useParams();
   const navigate = useNavigate();
   const isEditMode = !!osId;
+
   const { user } = useAuth();
+  const isTecnico = user?.nivelAcesso === "TECNICO";
 
   const [osData, setOsData] = useState({
     clienteId: "",
@@ -37,7 +39,7 @@ function OSFormPage() {
     status: "ABERTA",
     engenheiroMatricula: null,
     supervisorMatricula: null,
-    tecnicoMatricula: [],
+    tecnicos: [],
     subestacoes: [],
     fotosAntes: [],
     fotosDurante: [],
@@ -76,7 +78,7 @@ function OSFormPage() {
               clienteId: data.cliente?.id,
               cliente: data.cliente,
               subestacoes: processedSubstations,
-              tecnicoMatricula: (data.tecnicos || []).map((t) => t.matricula),
+              tecnicos: (data.tecnicos || []).map((t) => t.matricula),
               fotosAntes: (
                 data.fotos?.filter((f) => f.tipoFoto === "ANTES") || []
               ).map((p) => ({ ...p, preview: p.url })),
@@ -281,7 +283,7 @@ function OSFormPage() {
   // FIM DA CORREÇÃO
   // ==================================================================
 
-// ==================================================================
+  // ==================================================================
   // CORREÇÃO APLICADA AQUI
   // A função agora se chama 'onSaveSuccess' e apenas atualiza o estado.
   // ==================================================================
@@ -293,7 +295,9 @@ function OSFormPage() {
         // Encontra o componente que foi atualizado
         if (comp.id === ensaioAtualizado.componenteId) {
           // Procura pelo ensaio dentro do componente
-          const ensaioIndex = comp.ensaios.findIndex(e => e.id === ensaioAtualizado.id);
+          const ensaioIndex = comp.ensaios.findIndex(
+            (e) => e.id === ensaioAtualizado.id
+          );
           const newEnsaios = [...comp.ensaios];
 
           if (ensaioIndex > -1) {
@@ -348,7 +352,7 @@ function OSFormPage() {
     // INÍCIO DA CORREÇÃO
     // Verificação para garantir que pelo menos um técnico foi selecionado.
     // ==================================================================
-    if (!osData.tecnicoMatricula || osData.tecnicoMatricula.length === 0) {
+    if (!osData.tecnicos || osData.tecnicos.length === 0) {
       toast.error("Por favor, selecione pelo menos um técnico responsável.");
       return; // Impede o envio do formulário
     }
@@ -367,7 +371,7 @@ function OSFormPage() {
       return;
     }
 
-    const tecnicoMatriculas = osData.tecnicoMatricula || [];
+    const tecnicos = osData.tecnicos || [];
     const componentesSelecionados = osData.subestacoes
       .flatMap((sub) => sub.componentes?.filter((c) => c.selecionado) || [])
       .map((c) => ({ id: c.id }));
@@ -394,7 +398,7 @@ function OSFormPage() {
       previsaoTermino: osData.previsaoTermino,
       conclusao: osData.conclusao,
       recomendacoes: osData.recomendacoes,
-      tecnicos: { set: tecnicoMatriculas.map((m) => ({ matricula: m })) },
+      tecnicos: { set: tecnicos.map((m) => ({ matricula: m })) },
       subestacoes: { set: subestacoesComComponentesIds },
       componentes: { set: componentesSelecionados },
     };
@@ -425,6 +429,7 @@ function OSFormPage() {
     setLoading(true);
 
     try {
+      console.log(osData);
       const response = isEditMode
         ? await updateOs(osId, payload, user.matricula)
         : await createOs(payload, user.matricula);
@@ -495,11 +500,13 @@ function OSFormPage() {
             onClientSelect={handleClientSelect}
             isEditMode={isEditMode}
             userMatricula={user?.matricula}
+            isDisabled={isTecnico}
           />
           <TechnicianSelection
             osData={osData}
             handleResponsiblesChange={handleResponsiblesChange}
             userMatricula={user?.matricula}
+            isDisabled={isTecnico}
           />
           <SubstationsForm
             substations={substationsToDisplay}
@@ -507,10 +514,12 @@ function OSFormPage() {
             onOpenMeasurementModal={handleOpenMeasurementModal}
             isOsForm={true}
             isEditMode={isEditMode}
+            isDisabled={isTecnico}
           />
           <ConclusionSection
             osData={osData}
             handleInputChange={handleInputChange}
+            isDisabled={isTecnico}
           />
           <div className="form-section">
             <h3>
@@ -553,9 +562,11 @@ function OSFormPage() {
             >
               <span className="material-icons">close</span> Cancelar
             </Button>
-            <Button type="submit" variant="primary" disabled={loading}>
-              <span className="material-icons">save</span> Salvar OS
-            </Button>
+            {!isTecnico && (
+              <Button type="submit" variant="primary" disabled={loading}>
+                <span className="material-icons">save</span> Salvar OS
+              </Button>
+            )}
           </div>
         </form>
       </div>
@@ -565,6 +576,7 @@ function OSFormPage() {
         currentMeasurement={currentMeasurementInfo}
         numeroOs={osData.numeroOs}
         onSaveSuccess={handleSaveMeasurementSuccess}
+        isDisabled={isTecnico}
       />
     </div>
   );

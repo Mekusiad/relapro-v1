@@ -83,7 +83,7 @@ const EnsaioTable = ({ title, data, columns }) => {
     <View style={styles.section}>
       <Text style={styles.subtitle}>{title}</Text>
       <View style={styles.table}>
-        <View style={[styles.tableRow, { backgroundColor: "#f1f5f9" }]} fixed>
+        <View style={styles.tableRow}>
           {columns.map((col) => (
             <Text
               key={col.key}
@@ -119,7 +119,7 @@ const EnsaioTable = ({ title, data, columns }) => {
 const ServicosSection = ({ data }) => {
   if (!data) return null;
   const servicos = Object.entries(data).filter(
-    ([_, value]) => value && value !== "N/A" && value !== false
+    ([_, value]) => value && value !== "N/A"
   );
   if (servicos.length === 0) return null;
 
@@ -139,7 +139,7 @@ const ServicosSection = ({ data }) => {
             <Text style={styles.serviceLabel}>
               {serviceLabels[key] || key}:
             </Text>
-            <Text style={styles.serviceValue}>{String(value)}</Text>
+            <Text style={styles.serviceValue}>{value}</Text>
           </View>
         ))}
       </View>
@@ -169,6 +169,9 @@ const TabelaChaveSeccionadora = ({ componente, Html, stylesheet }) => {
     <View style={styles.container}>
       {componente.ensaios.map((ensaio, index) => (
         <View key={ensaio.id} style={styles.ensaioWrapper} break={index > 0}>
+          {/* ============================================================================= */}
+          {/* CORREÇÃO APLICADA AQUI: Agrupamos o cabeçalho e as condições do ensaio */}
+          {/* ============================================================================= */}
           <View wrap={false}>
             {index === 0 && <ComponentInfoHeaderPdf component={componente} />}
             <CondicoesEnsaioPdf ensaio={ensaio} />

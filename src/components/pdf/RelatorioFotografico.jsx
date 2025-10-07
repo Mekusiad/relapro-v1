@@ -62,13 +62,17 @@ const RelatorioFotografico = ({ title, photos, bookmarkId }) => {
   return (
     <>
       {photoChunks.map((chunk, pageIndex) => (
-        // BOOKMARK ADICIONADO AQUI, e apenas na primeira página da seção
+        // --- CORREÇÃO APLICADA AQUI ---
+        // A propriedade bookmark é adicionada condicionalmente à Page.
+        // Se for a primeira página (index 0), o objeto bookmark é criado.
+        // Se não, nenhuma propriedade bookmark é adicionada.
         <Page
           key={pageIndex}
           size="A4"
           style={styles.page}
           {...(pageIndex === 0 && { bookmark: { title, id: bookmarkId } })}
         >
+          {/* O título visual continua aparecendo apenas na primeira página */}
           {pageIndex === 0 && <Text style={styles.mainTitle}>{title}</Text>}
 
           <View style={styles.gridContainer}>

@@ -63,9 +63,21 @@ function AppRoutes() {
   // LÓGICA CENTRALIZADA AQUI
   // Mostra a tela de carregamento para TODA a aplicação
   // enquanto o AuthProvider verifica a sessão.
-  // if (loading) {
-  //   return <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>Carregando...</div>;
-  // }
+
+  if (loading) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        Carregando...
+      </div>
+    );
+  }
 
   // Quando o loading termina, renderiza as rotas corretas.
   return (
@@ -79,7 +91,7 @@ function AppRoutes() {
           </PrivateRoute>
         }
       >
-        <Route index element={<Navigate to="/dashboard" />} />
+        <Route index element={<Navigate to="/servicos-os" />} />
         <Route path="clients" element={<ClientsPage />} />
         <Route path="clients/new" element={<ClientFormPage />} />
         <Route path="clients/edit/:clientId" element={<ClientFormPage />} />

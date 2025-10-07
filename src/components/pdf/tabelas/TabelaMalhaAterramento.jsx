@@ -79,10 +79,10 @@ const styles = StyleSheet.create({
 const MeasurementTable = ({ data }) => {
   if (!data) return null;
   return (
-    <View style={styles.section}>
+    <View style={styles.section} wrap={false}>
       <Text style={styles.subtitle}>Medição da Resistência</Text>
       <View style={styles.table}>
-        <View style={[styles.tableRow, { backgroundColor: "#f1f5f9" }]} fixed>
+        <View style={styles.tableRow}>
           <Text style={{ ...styles.tableColHeader, flex: 2 }}>
             Valor Medido (Ω)
           </Text>
@@ -92,10 +92,10 @@ const MeasurementTable = ({ data }) => {
         </View>
         <View style={styles.tableRow}>
           <Text style={{ ...styles.tableCol, flex: 2 }}>
-            {data.valorResistencia || "N/A"}
+            {data?.valorResistencia || "N/A"}
           </Text>
           <Text style={{ ...styles.tableCol, flex: 2 }}>
-            {data.estratificacao || "N/A"}
+            {data?.estratificacao || "N/A"}
           </Text>
         </View>
       </View>
@@ -106,7 +106,7 @@ const MeasurementTable = ({ data }) => {
 const ServicosSection = ({ data }) => {
   if (!data) return null;
   const servicos = Object.entries(data).filter(
-    ([_, value]) => value && value !== "N/A" && value !== false
+    ([_, value]) => value && value !== "N/A"
   );
   if (servicos.length === 0) return null;
 
@@ -116,7 +116,7 @@ const ServicosSection = ({ data }) => {
   };
 
   return (
-    <View style={styles.section}>
+    <View style={styles.section} wrap={false}>
       <Text style={styles.subtitle}>Serviços Efetuados</Text>
       <View style={styles.serviceGrid}>
         {servicos.map(([key, value]) => (
@@ -124,7 +124,7 @@ const ServicosSection = ({ data }) => {
             <Text style={styles.serviceLabel}>
               {serviceLabels[key] || key}:
             </Text>
-            <Text style={styles.serviceValue}>{String(value)}</Text>
+            <Text style={styles.serviceValue}>{value}</Text>
           </View>
         ))}
       </View>
@@ -135,12 +135,11 @@ const ServicosSection = ({ data }) => {
 const TabelaMalhaAterramento = ({ componente, Html, stylesheet }) => {
   return (
     <View style={styles.container}>
-      {componente.ensaios.map((ensaio, index) => (
-        <View key={ensaio.id} style={styles.ensaioWrapper} break={index > 0}>
-          <View wrap={false}>
-            {index === 0 && <ComponentInfoHeaderPdf component={componente} />}
-            <CondicoesEnsaioPdf ensaio={ensaio} />
-          </View>
+      <ComponentInfoHeaderPdf component={componente} />
+
+      {componente.ensaios.map((ensaio) => (
+        <View key={ensaio.id} style={styles.ensaioWrapper}>
+          <CondicoesEnsaioPdf ensaio={ensaio} />
 
           <MeasurementTable data={ensaio.dados} />
           <ServicosSection data={ensaio.dados?.servicos} />

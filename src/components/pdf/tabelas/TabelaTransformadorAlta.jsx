@@ -5,7 +5,6 @@ import { Text, View, StyleSheet } from "@react-pdf/renderer";
 import ComponentInfoHeaderPdf from "./ComponentInfoHeaderPdf.jsx";
 import CondicoesEnsaioPdf from "./CondicoesEnsaioPdf.jsx";
 
-// --- ESTILOS (sem alterações) ---
 const styles = StyleSheet.create({
   container: { fontFamily: "Roboto" },
   ensaioWrapper: {
@@ -83,7 +82,7 @@ const EnsaioTable = ({ title, data, columns }) => {
     <View style={styles.section}>
       <Text style={styles.subtitle}>{title}</Text>
       <View style={styles.table}>
-        <View style={[styles.tableRow, { backgroundColor: "#f1f5f9" }]} fixed>
+        <View style={styles.tableRow}>
           {columns.map((col) => (
             <Text
               key={col.key}
@@ -117,20 +116,20 @@ const EnsaioTable = ({ title, data, columns }) => {
 };
 
 const ServicosSection = ({ data }) => {
-  if (!data || !data.some((s) => s.valor && s.valor !== "N/A")) return null;
+  // Garante que 'data' é um array antes de chamar o .filter
+  const servicos = (data || []).filter((s) => s.valor && s.valor !== "N/A");
+  if (servicos.length === 0) return null;
 
   return (
     <View style={styles.section}>
       <Text style={styles.subtitle}>Serviços Efetuados</Text>
       <View style={styles.serviceGrid}>
-        {data
-          .filter((s) => s.valor && s.valor !== "N/A")
-          .map((servico, index) => (
-            <View key={index} style={styles.serviceItem}>
-              <Text style={styles.serviceLabel}>{servico.label}:</Text>
-              <Text style={styles.serviceValue}>{servico.valor}</Text>
-            </View>
-          ))}
+        {servicos.map((servico, index) => (
+          <View key={index} style={styles.serviceItem}>
+            <Text style={styles.serviceLabel}>{servico.label}:</Text>
+            <Text style={styles.serviceValue}>{servico.valor}</Text>
+          </View>
+        ))}
       </View>
     </View>
   );
@@ -177,14 +176,14 @@ const TabelaTransformadorAlta = ({ componente, Html, stylesheet }) => {
 
   return (
     <View style={styles.container}>
-      {componente.ensaios.map((ensaio, index) => {
+      <ComponentInfoHeaderPdf component={componente} />
+
+      {componente.ensaios.map((ensaio) => {
         const ensaioData = ensaio.dados || {};
         return (
-          <View key={ensaio.id} style={styles.ensaioWrapper} break={index > 0}>
-            <View wrap={false}>
-              {index === 0 && <ComponentInfoHeaderPdf component={componente} />}
-              <CondicoesEnsaioPdf ensaio={ensaio} />
-            </View>
+          // A propriedade `wrap` foi removida deste View principal
+          <View key={ensaio.id} style={styles.ensaioWrapper}>
+            <CondicoesEnsaioPdf ensaio={ensaio} />
 
             <EnsaioTable
               title="Relação de Transformação"

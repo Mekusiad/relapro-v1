@@ -65,12 +65,11 @@ const InfoRow = ({ label, value, unit = "" }) => {
 const TabelaResistor = ({ componente, Html, stylesheet }) => {
   return (
     <View style={styles.container}>
-      {componente.ensaios.map((ensaio, index) => (
-        <View key={ensaio.id} style={styles.ensaioWrapper} break={index > 0}>
-          <View wrap={false}>
-            {index === 0 && <ComponentInfoHeaderPdf component={componente} />}
-            <CondicoesEnsaioPdf ensaio={ensaio} />
-          </View>
+      <ComponentInfoHeaderPdf component={componente} />
+
+      {componente.ensaios.map((ensaio) => (
+        <View key={ensaio.id} style={styles.ensaioWrapper}>
+          <CondicoesEnsaioPdf ensaio={ensaio} />
 
           <View style={styles.section}>
             <Text style={styles.subtitle}>Resistência de Aterramento</Text>

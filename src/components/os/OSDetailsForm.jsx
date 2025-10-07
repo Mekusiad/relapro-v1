@@ -10,31 +10,44 @@ function OSDetailsForm({
   handleInputChange,
   onClientSelect,
   isEditMode,
+  isDisabled,
 }) {
   const { user } = useAuth();
   const [clients, setClients] = useState([]);
   const [loadingClients, setLoadingClients] = useState(true);
 
   useEffect(() => {
+    // Evita a execução se não houver um utilizador (ex: durante o logout)
+    if (!user?.matricula) return;
+
     const loadClients = async () => {
       setLoadingClients(true);
-      const storedClients = await getClients(user.matricula);
-
-      setClients(storedClients.clientes);
-      setLoadingClients(false);
+      try {
+        const storedClients = await getClients(user.matricula);
+        setClients(storedClients.clientes || []);
+      } catch (error) {
+        console.error("Falha ao carregar clientes:", error);
+        // Opcional: Adicionar um toast de erro aqui
+      } finally {
+        setLoadingClients(false);
+      }
     };
     loadClients();
-  }, []);
+  }, [user]); // Depende do objeto 'user' para recarregar se ele mudar
 
   const handleSelectChange = (e) => {
-    const { value } = e.target;
-    handleInputChange(e);
-    const selectedClient = clients.find((client) => client.nome === value);
+    const { value: selectedClientId } = e.target;
+    // Encontra o objeto completo do cliente com base no ID selecionado
+    const selectedClient = clients.find(
+      (client) => client.id === selectedClientId
+    );
+
     if (selectedClient) {
+      // Passa o objeto completo do cliente para o componente principal
       onClientSelect(selectedClient);
     }
   };
-  console.log(clients);
+
   return (
     <div className="form-section">
       <h3>
@@ -43,11 +56,14 @@ function OSDetailsForm({
 
       <div className="form-row">
         <div className="form-group">
-          <label htmlFor="cliente">Cliente</label>
+          <label htmlFor="clienteId">Cliente</label>
           <select
-            id="cliente"
-            name="cliente"
-            value={osData.cliente || ""}
+            id="clienteId"
+            name="clienteId"
+            // --- CORREÇÃO 1 ---
+            // O valor do select agora é 'osData.clienteId', que é uma string,
+            // correspondendo ao 'value' das opções.
+            value={osData.clienteId || ""}
             onChange={handleSelectChange}
             required
             disabled={isEditMode || loadingClients}
@@ -56,7 +72,10 @@ function OSDetailsForm({
               {loadingClients ? "Carregando..." : "Selecione um cliente"}
             </option>
             {clients.map((client) => (
-              <option key={client.id} value={client.nome}>
+              // --- CORREÇÃO 2 ---
+              // O valor de cada opção agora é o 'client.id', que é um
+              // identificador único e fiável.
+              <option key={client.id} value={client.id}>
                 {client.nome}
               </option>
             ))}
@@ -72,6 +91,7 @@ function OSDetailsForm({
             value={osData.responsavel || ""}
             onChange={handleInputChange}
             required
+            disabled={isDisabled}
           />
         </div>
       </div>
@@ -86,6 +106,7 @@ function OSDetailsForm({
             value={osData.localizacao || ""}
             onChange={handleInputChange}
             required
+            disabled={isDisabled}
           />
         </div>
       </div>
@@ -99,6 +120,7 @@ function OSDetailsForm({
             name="email"
             value={osData.email || ""}
             onChange={handleInputChange}
+            disabled={isDisabled}
           />
         </div>
         <div className="form-group">
@@ -109,6 +131,7 @@ function OSDetailsForm({
             name="contato"
             value={osData.contato || ""}
             onChange={handleInputChange}
+            disabled={isDisabled}
           />
         </div>
       </div>
@@ -122,6 +145,7 @@ function OSDetailsForm({
             name="numeroOrcamento"
             value={osData.numeroOrcamento || ""}
             onChange={handleInputChange}
+            disabled={isDisabled}
           />
         </div>
         {/* CAMPO DE VALOR ADICIONADO */}
@@ -134,6 +158,7 @@ function OSDetailsForm({
             value={osData.valorServico || ""}
             onChange={handleInputChange}
             placeholder="Ex: 1500.00"
+            disabled={isDisabled}
           />
         </div>
       </div>
@@ -146,6 +171,7 @@ function OSDetailsForm({
             name="tipoServico"
             value={osData.tipoServico || "OUTRO"}
             onChange={handleInputChange}
+            disabled={isDisabled}
           >
             <option value="MANUTENCAO_PREVENTIVA">Manutenção Preventiva</option>
             <option value="MANUTENCAO_CORRETIVA">Manutenção Corretiva</option>
@@ -167,6 +193,7 @@ function OSDetailsForm({
             }
             onChange={handleInputChange}
             required
+            disabled={isDisabled}
           />
         </div>
         <div className="form-group">
@@ -177,6 +204,7 @@ function OSDetailsForm({
             value={osData.status || "ABERTA"}
             onChange={handleInputChange}
             required
+            disabled={isDisabled}
           >
             <option value="ABERTA">Aberta</option>
             <option value="EM_ANDAMENTO">Em Andamento</option>

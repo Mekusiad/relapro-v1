@@ -71,6 +71,7 @@ function Sumario({ osData, sections, pageNumbers }) {
   if (!osData) return null;
 
   return (
+    // BOOKMARK ADICIONADO AQUI
     <Page
       size="A4"
       style={styles.page}
@@ -112,18 +113,15 @@ function Sumario({ osData, sections, pageNumbers }) {
             {Object.entries(groupedComponents).map(
               ([equipmentName, components]) => (
                 <View key={equipmentName}>
-                  {/* 1. O TIPO de equipamento continua a ser um TocItem completo */}
                   <TocItem
                     text={equipmentName}
                     page={getPage(`comp_${components[0].id}`)}
                     link={`#comp_${components[0].id}`}
                     style={styles.equipmentTypeText}
                   />
-                  {/* 2. Os componentes individuais agora são renderizados como texto simples dentro de uma View */}
                   {components.map((comp) => (
                     <View key={comp.id} style={styles.componentItemContainer}>
                       <Link src={`#comp_${comp.id}`} style={styles.tocLink}>
-                        {/* O traço "-" foi removido daqui */}
                         <Text style={styles.componentItemText}>{comp.tag}</Text>
                       </Link>
                     </View>
@@ -140,7 +138,7 @@ function Sumario({ osData, sections, pageNumbers }) {
           link="#conclusao"
           style={styles.mainItemText}
         />
-        {pageNumbers?.fotos_antes && (
+        {getPage("fotos_antes") && (
           <TocItem
             text="6. RELATÓRIO FOTOGRÁFICO - ANTES"
             page={getPage("fotos_antes")}
@@ -148,7 +146,7 @@ function Sumario({ osData, sections, pageNumbers }) {
             style={styles.mainItemText}
           />
         )}
-        {pageNumbers?.fotos_durante && (
+        {getPage("fotos_durante") && (
           <TocItem
             text="7. RELATÓRIO FOTOGRÁFICO - DURANTE"
             page={getPage("fotos_durante")}
@@ -156,7 +154,7 @@ function Sumario({ osData, sections, pageNumbers }) {
             style={styles.mainItemText}
           />
         )}
-        {pageNumbers?.fotos_depois && (
+        {getPage("fotos_depois") && (
           <TocItem
             text="8. RELATÓRIO FOTOGRÁFICO - DEPOIS"
             page={getPage("fotos_depois")}

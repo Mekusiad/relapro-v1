@@ -63,129 +63,113 @@ const styles = StyleSheet.create({
 
 const ServicosSection = ({ data }) => {
   if (!data) return null;
+  const servicos = Object.entries(data).filter(
+    ([_, value]) => value && value !== "N/A"
+  );
+  if (servicos.length === 0) return null;
 
-  const servicos = [
-    { label: "Inspeção visual geral", key: "inspecaoVisual" },
-    { label: "Limpeza a seco", key: "limpezaSeco" },
-    { label: "Reaperto de conexões", key: "reapertoConexoes" },
-    { label: "Inspeção de fiação", key: "inspecaoFios" },
-  ];
+  const serviceLabels = {
+    inspecaoVisualGeral: "Inspeção visual geral",
+    limpezaSeco: "Limpeza a seco",
+    reapertoConexoes: "Reaperto de conexões",
+    inspecaoFiacao: "Inspeção de fiação",
+  };
 
   return (
-    <View style={[styles.section, { marginTop: 15 }]}>
+    <View style={styles.section} wrap={false}>
       <Text style={styles.subtitle}>Serviços Executados</Text>
-      <View style={styles.table}>
-        <View style={[styles.tableRow, styles.tableHeader]} fixed>
-          <Text style={[styles.tableColHeader, { flex: 3 }]}>Serviço</Text>
-          <Text style={[styles.tableColHeader, { flex: 1 }]}>Resultado</Text>
-        </View>
-        {servicos.map((servico) => (
-          <View key={servico.key} style={styles.tableRow}>
-            <Text style={[styles.tableCol, { flex: 3, textAlign: "left" }]}>
-              {servico.label}
-            </Text>
-            <Text style={[styles.tableCol, { flex: 1 }]}>
-              {data[servico.key]?.toUpperCase() || "N/A"}
-            </Text>
-          </View>
-        ))}
-      </View>
+      {servicos.map(([key, value]) => (
+        <Text key={key} style={{ fontSize: 9, marginBottom: 4 }}>
+          - {serviceLabels[key] || key}: {value}
+        </Text>
+      ))}
     </View>
   );
 };
 
 const TabelaBancoDeBaterias = ({ componente, Html, stylesheet }) => {
   const tensaoColumns = [
-    { key: "id", label: "Bateria N°", width: 1 },
-    { key: "tensao", label: "Valor Medido (Vcc)", width: 2 },
+    { key: "bateria", label: "Bateria", width: 1 },
+    { key: "valorMedido", label: "Valor Medido (Vcc)", width: 2 },
+    { key: "valorReferencia", label: "Ref. (2,22 a 2,27 Vcc)", width: 2.5 },
   ];
 
   return (
     <View style={styles.container}>
       <ComponentInfoHeaderPdf component={componente} />
-      {componente.ensaios.map((ensaio) => {
-        const tensaoTotal = (ensaio.dados?.tabelaData || [])
-          .reduce(
-            (sum, row) =>
-              sum + (parseFloat(String(row.tensao).replace(",", ".")) || 0),
-            0
-          )
-          .toFixed(2);
+      {componente.ensaios.map((ensaio) => (
+        <View key={ensaio.id} style={styles.ensaioWrapper}>
+          <CondicoesEnsaioPdf ensaio={ensaio} />
 
-        return (
-          <View key={ensaio.id} style={styles.ensaioWrapper} wrap={true}>
-            <CondicoesEnsaioPdf ensaio={ensaio} />
+          <View style={styles.section} wrap={false}>
+            <Text
+              style={styles.subtitle}
+            >{`Tensão de Flutuação Individual (Total: ${
+              ensaio.dados?.tensaoTotal || "N/A"
+            } V)`}</Text>
+          </View>
 
-            <View style={styles.section} wrap={false}>
-              <Text
-                style={styles.subtitle}
-              >{`Tensão de Flutuação Individual (Total: ${tensaoTotal} V)`}</Text>
+          {/* A tabela agora pode quebrar */}
+          <View style={styles.table}>
+            {/* O cabeçalho fica fixo no topo da página se a tabela quebrar */}
+            <View style={[styles.tableRow, styles.tableHeader]} fixed>
+              {tensaoColumns.map((col) => (
+                <Text
+                  key={col.key}
+                  style={[styles.tableColHeader, { flex: col.width || 1 }]}
+                >
+                  {col.label}
+                </Text>
+              ))}
             </View>
-
-            {/* A tabela em si não permite quebra de página interna */}
-            <View style={styles.table} wrap={false}>
-              <View style={[styles.tableRow, styles.tableHeader]} fixed>
+            {/* As linhas da tabela podem quebrar */}
+            {(ensaio.dados?.tabelaData || []).map((row, index) => (
+              <View key={index} style={styles.tableRow} wrap={false}>
                 {tensaoColumns.map((col) => (
                   <Text
                     key={col.key}
-                    style={[styles.tableColHeader, { flex: col.width || 1 }]}
+                    style={[styles.tableCol, { flex: col.width || 1 }]}
                   >
-                    {col.label}
+                    {row[col.key] || "N/A"}
                   </Text>
                 ))}
               </View>
-              {(ensaio.dados?.tabelaData || []).map((row, index) => (
-                <View key={index} style={styles.tableRow}>
-                  {tensaoColumns.map((col) => (
-                    <Text
-                      key={col.key}
-                      style={[styles.tableCol, { flex: col.width || 1 }]}
-                    >
-                      {row[col.key] || "N/A"}
-                    </Text>
-                  ))}
-                </View>
-              ))}
-            </View>
-
-            {/* Cada uma destas secções pode agora quebrar a página antes de ser renderizada */}
-            <ServicosSection data={ensaio.dados?.servicos} />
-
-            {(ensaio.dados?.observacoes || ensaio.dados?.naoConforme) && (
-              <View style={styles.diagnosisSection} wrap={true}>
-                <Text style={styles.subtitle} wrap={false}>
-                  Observações e Diagnóstico do Ensaio
-                </Text>
-                {ensaio.dados.observacoes && (
-                  <Text style={styles.obsText} wrap={false}>
-                    "{ensaio.dados.observacoes}"
-                  </Text>
-                )}
-                {ensaio.dados.naoConforme && (
-                  <View
-                    style={[
-                      styles.obsText,
-                      { marginTop: ensaio.dados.observacoes ? 8 : 0 },
-                    ]}
-                    wrap={false}
-                  >
-                    <Text style={styles.obsLabel}>Diagnóstico: </Text>
-                    {Html && stylesheet ? (
-                      <Html stylesheet={stylesheet}>
-                        {ensaio.dados.naoConformeDetalhes || "Não Conforme"}
-                      </Html>
-                    ) : (
-                      <Text style={styles.nonConformityText}>
-                        {ensaio.dados.naoConformeDetalhes || "Não Conforme"}
-                      </Text>
-                    )}
-                  </View>
-                )}
-              </View>
-            )}
+            ))}
           </View>
-        );
-      })}
+
+          <ServicosSection data={ensaio.dados?.servicos} />
+
+          {(ensaio.dados?.observacoes || ensaio.dados?.naoConforme) && (
+            <View style={styles.diagnosisSection} wrap={false}>
+              <Text style={styles.subtitle}>
+                Observações e Diagnóstico do Ensaio
+              </Text>
+              {ensaio.dados.observacoes && (
+                <Text style={styles.obsText}>"{ensaio.dados.observacoes}"</Text>
+              )}
+              {ensaio.dados.naoConforme && (
+                <View
+                  style={[
+                    styles.obsText,
+                    { marginTop: ensaio.dados.observacoes ? 8 : 0 },
+                  ]}
+                >
+                  <Text style={styles.obsLabel}>Diagnóstico: </Text>
+                  {Html && stylesheet ? (
+                    <Html stylesheet={stylesheet}>
+                      {ensaio.dados.naoConformeDetalhes || "Não Conforme"}
+                    </Html>
+                  ) : (
+                    <Text style={styles.nonConformityText}>
+                      {ensaio.dados.naoConformeDetalhes || "Não Conforme"}
+                    </Text>
+                  )}
+                </View>
+              )}
+            </View>
+          )}
+        </View>
+      ))}
     </View>
   );
 };

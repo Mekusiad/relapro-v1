@@ -1,4 +1,4 @@
-// src/components/pdf/tabelas/TabelaDisjuntorMedia.jsx
+// src/components/pdf/tabelas/TabelaDisjuntorMedia.jsx (EXEMPLO A SER REPLICADO)
 
 import React from "react";
 import { Text, View, StyleSheet } from "@react-pdf/renderer";
@@ -84,7 +84,7 @@ const EnsaioTable = ({ title, data, columns }) => {
     <View style={styles.section}>
       <Text style={styles.subtitle}>{title}</Text>
       <View style={styles.table}>
-        <View style={[styles.tableRow, { backgroundColor: "#f1f5f9" }]} fixed>
+        <View style={styles.tableRow}>
           {columns.map((col) => (
             <Text
               key={col.key}
@@ -120,16 +120,8 @@ const EnsaioTable = ({ title, data, columns }) => {
 // Componente para a seção de serviços
 const ServicosSection = ({ data }) => {
   if (!data) return null;
-  const servicos = Object.entries(data).filter(
-    ([_, value]) => value && value !== "N/A" && value !== false
-  );
+  const servicos = Object.entries(data).filter(([_, value]) => value);
   if (servicos.length === 0) return null;
-
-  const serviceLabels = {
-    limpezaComponentes: "Limpeza dos componentes",
-    inspecaoVisual: "Inspeção Visual",
-    reapertoConexoes: "Reaperto das Conexões",
-  };
 
   return (
     <View style={styles.section}>
@@ -138,13 +130,12 @@ const ServicosSection = ({ data }) => {
         {servicos.map(([key, value]) => (
           <View key={key} style={styles.serviceItem}>
             <Text style={styles.serviceLabel}>
-              {serviceLabels[key] ||
-                key
-                  .replace(/([A-Z])/g, " $1")
-                  .replace(/^./, (str) => str.toUpperCase())}
+              {key
+                .replace(/([A-Z])/g, " $1")
+                .replace(/^./, (str) => str.toUpperCase())}
               :
             </Text>
-            <Text style={styles.serviceValue}>{String(value)}</Text>
+            <Text style={styles.serviceValue}>{value}</Text>
           </View>
         ))}
       </View>
@@ -173,6 +164,8 @@ const TabelaDisjuntorMedia = ({ componente, Html, stylesheet }) => {
 
   return (
     <View style={styles.container}>
+      <ComponentInfoHeaderPdf component={componente} />
+
       {componente.ensaios.map((ensaio, index) => {
         const ensaioData = ensaio.dados || {};
         const {
@@ -183,15 +176,9 @@ const TabelaDisjuntorMedia = ({ componente, Html, stylesheet }) => {
         } = ensaioData;
 
         return (
-          // O `break` garante que cada ensaio (se houver mais de um) comece numa nova página
-          <View key={ensaio.id} style={styles.ensaioWrapper} break={index > 0}>
-            {/* O `wrap={false}` agrupa o cabeçalho e as condições, impedindo que quebrem entre si */}
-            <View wrap={false}>
-              {index === 0 && <ComponentInfoHeaderPdf component={componente} />}
-              <CondicoesEnsaioPdf ensaio={ensaio} />
-            </View>
+          <View key={ensaio.id} style={styles.ensaioWrapper}>
+            <CondicoesEnsaioPdf ensaio={ensaio} />
 
-            {/* Cada tabela e seção abaixo pode quebrar a página antes de ser renderizada */}
             <EnsaioTable
               title="Resistência dos Contatos (µΩ)"
               data={resistenciaContato}

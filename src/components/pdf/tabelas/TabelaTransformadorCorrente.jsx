@@ -63,10 +63,10 @@ const styles = StyleSheet.create({
 const EnsaioTable = ({ title, data, columns }) => {
   if (!data || data.length === 0) return null;
   return (
-    <View style={styles.section}>
+    <View style={styles.section} wrap={false}>
       <Text style={styles.subtitle}>{title}</Text>
       <View style={styles.table}>
-        <View style={[styles.tableRow, { backgroundColor: "#f1f5f9" }]} fixed>
+        <View style={styles.tableRow}>
           {columns.map((col) => (
             <Text
               key={col.key}
@@ -118,12 +118,11 @@ const TabelaTransformadorCorrente = ({ componente, Html, stylesheet }) => {
 
   return (
     <View style={styles.container}>
-      {componente.ensaios.map((ensaio, index) => (
-        <View key={ensaio.id} style={styles.ensaioWrapper} break={index > 0}>
-          <View wrap={false}>
-            {index === 0 && <ComponentInfoHeaderPdf component={componente} />}
-            <CondicoesEnsaioPdf ensaio={ensaio} />
-          </View>
+      <ComponentInfoHeaderPdf component={componente} />
+
+      {componente.ensaios.map((ensaio) => (
+        <View key={ensaio.id} style={styles.ensaioWrapper}>
+          <CondicoesEnsaioPdf ensaio={ensaio} />
 
           <EnsaioTable
             title="Relação de Transformação e Resistência Ôhmica"
