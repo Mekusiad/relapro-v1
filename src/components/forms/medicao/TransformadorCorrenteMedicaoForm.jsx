@@ -241,7 +241,7 @@ function TransformadorCorrenteMedicaoForm({ data, onDataChange }) {
                     }
                   />
                 </td>
-                <td>
+                <td rowSpan="3">
                   <input
                     className="input"
                     value={row.temperatura}
