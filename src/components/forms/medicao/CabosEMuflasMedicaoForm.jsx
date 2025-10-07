@@ -4,10 +4,38 @@ import React from "react";
 
 // VALORES PREDEFINIDOS - Agora servem apenas como um modelo
 const initialIsolamentoState = [
-  { fase: "A", condicao: "A x Massa", tensaoEnsaio: "5000", valorMedido: "", valorReferencia: ">1000", tempo: "60" },
-  { fase: "B", condicao: "B x Massa", tensaoEnsaio: "5000", valorMedido: "", valorReferencia: ">1000", tempo: "60" },
-  { fase: "C", condicao: "C x Massa", tensaoEnsaio: "5000", valorMedido: "", valorReferencia: ">1000", tempo: "60" },
-  { fase: "RESERVA", condicao: "RESERVA x Massa", tensaoEnsaio: "5000", valorMedido: "", valorReferencia: ">1000", tempo: "60" },
+  {
+    fase: "A",
+    condicao: "A x Massa",
+    tensaoEnsaio: "5000",
+    valorMedido: "",
+    valorReferencia: ">1000",
+    tempo: "60",
+  },
+  {
+    fase: "B",
+    condicao: "B x Massa",
+    tensaoEnsaio: "5000",
+    valorMedido: "",
+    valorReferencia: ">1000",
+    tempo: "60",
+  },
+  {
+    fase: "C",
+    condicao: "C x Massa",
+    tensaoEnsaio: "5000",
+    valorMedido: "",
+    valorReferencia: ">1000",
+    tempo: "60",
+  },
+  {
+    fase: "RESERVA",
+    condicao: "RESERVA x Massa",
+    tensaoEnsaio: "5000",
+    valorMedido: "",
+    valorReferencia: ">1000",
+    tempo: "60",
+  },
 ];
 
 const initialServicosState = {
@@ -18,16 +46,18 @@ const initialServicosState = {
 
 // Função helper para criar uma cópia profunda (deep copy) dos dados iniciais.
 const getInitialState = (existingData) => ({
-    ...existingData,
-    resistenciaIsolamento: existingData?.resistenciaIsolamento || JSON.parse(JSON.stringify(initialIsolamentoState)),
-    servicos: existingData?.servicos || { ...initialServicosState },
+  ...existingData,
+  resistenciaIsolamento:
+    existingData?.resistenciaIsolamento ||
+    JSON.parse(JSON.stringify(initialIsolamentoState)),
+  servicos: existingData?.servicos || { ...initialServicosState },
 });
 
 function CabosEMuflasMedicaoForm({ data, onDataChange }) {
   // Garantimos que cada formulário trabalhe com sua própria cópia dos dados.
   const formData = getInitialState(data);
-  const { resistenciaIsolamento: isolamentoData, servicos: servicosData } = formData;
-
+  const { resistenciaIsolamento: isolamentoData, servicos: servicosData } =
+    formData;
 
   // Função geral para atualizar campos simples
   const handleChange = (e) => {
@@ -40,10 +70,10 @@ function CabosEMuflasMedicaoForm({ data, onDataChange }) {
   // =========================================================================
   const handleTableChange = (index, field, value) => {
     const updatedData = isolamentoData.map((row, i) => {
-        if (i === index) {
-            return { ...row, [field]: value };
-        }
-        return row;
+      if (i === index) {
+        return { ...row, [field]: value };
+      }
+      return row;
     });
     onDataChange({ resistenciaIsolamento: updatedData });
   };
@@ -270,6 +300,18 @@ function CabosEMuflasMedicaoForm({ data, onDataChange }) {
         </div>
       </div>
 
+      <div className="form-group">
+        <label>OBSERVAÇÕES</label>
+        <textarea
+          name="observacoes"
+          rows="4"
+          placeholder="Resultados dos ensaios considerados satisfatórios."
+          value={formData.observacoes || ""}
+          onChange={handleChange}
+          className="input"
+        ></textarea>
+      </div>
+
       <div className="form-group-inline-checkbox">
         <input
           type="checkbox"
@@ -278,9 +320,9 @@ function CabosEMuflasMedicaoForm({ data, onDataChange }) {
           checked={formData.naoConforme || false}
           onChange={handleChange}
         />
-         <label htmlFor="naoConforme">
-          EQUIPAMENTO NÃO CONFORME (se houver, selecione a caixa e
-          descreva as informações na caixa abaixo)
+        <label htmlFor="naoConforme">
+          EQUIPAMENTO NÃO CONFORME (se houver, selecione a caixa e descreva as
+          informações na caixa abaixo)
         </label>
       </div>
       {formData.naoConforme && (
