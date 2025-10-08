@@ -15,7 +15,7 @@
   .container {
     padding: 1.5rem;
   }
-  
+
   /* 1. Esconde a sidebar fora da tela por padrão */
   .sidebar {
     transform: translateX(-100%);
@@ -27,15 +27,15 @@
   .sidebar.sidebar-mobile-open {
     transform: translateX(0);
   }
-  
+
   /* Garante que o texto dos botões apareça quando o menu estiver aberto */
   .sidebar.sidebar-mobile-open .nav-text {
     display: inline;
   }
-  
+
   /* Esconde o texto apenas se a sidebar NÃO estiver aberta em telas menores */
   .sidebar:not(.sidebar-mobile-open) .nav-text {
-      display: none; 
+    display: none;
   }
 
   /* 3. Zera a margem do conteúdo principal */
@@ -72,7 +72,7 @@
     color: var(--primary-dark);
     padding: 0.5rem;
   }
-  
+
   .mobile-logo {
     font-weight: 700;
     color: var(--primary-dark);
@@ -92,12 +92,12 @@
     pointer-events: none;
     transition: opacity 0.3s ease-in-out;
   }
-  
+
   .sidebar.sidebar-mobile-open + .sidebar-overlay {
     opacity: 1;
     pointer-events: auto;
   }
-  
+
   .hero-content h2 {
     font-size: 2rem;
   }
@@ -160,7 +160,7 @@
     flex: 1 1 calc(50% - 1rem);
     min-width: unset;
   }
-  
+
   /* Ajustes para a página de Serviços OS */
   .filter-bar {
     grid-template-columns: 1fr;
@@ -299,7 +299,7 @@
   .os-results-table thead {
     display: none;
   }
-  
+
   .os-results-table tr {
     display: block;
     margin-bottom: 1rem;
@@ -330,7 +330,7 @@
     font-weight: bold;
     color: var(--primary-dark);
   }
-  
+
   .os-results-table td:last-child {
     border-bottom: none;
     padding-top: 1rem;

@@ -16,7 +16,7 @@
 }
 
 .sidebar-main-content {
-    flex-grow: 1;
+  flex-grow: 1;
 }
 
 .logo-container-split {
@@ -71,12 +71,12 @@
 }
 
 .sidebar-footer {
-    padding-top: 1rem;
-    border-top: 1px solid color-mix(in srgb, var(--primary-dark) 70%, white);
+  padding-top: 1rem;
+  border-top: 1px solid color-mix(in srgb, var(--primary-dark) 70%, white);
 }
 
 .logout-button {
-    justify-content: flex-start;
+  justify-content: flex-start;
 }
 
 /* Estilos para Animação do Logo */

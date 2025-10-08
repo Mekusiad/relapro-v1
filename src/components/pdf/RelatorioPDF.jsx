@@ -46,6 +46,7 @@ function RelatorioPDF({
   onRenderCallback,
   pageNumbers,
 }) {
+  console.log(osData);
   const sections = useMemo(() => {
     const hasMeasurements = osData.subestacoes?.some((sub) =>
       sub.componentes?.some((comp) => comp.ensaios && comp.ensaios.length > 0)

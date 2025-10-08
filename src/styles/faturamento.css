@@ -41,9 +41,15 @@
   color: var(--white);
 }
 
-.icon-faturado { background-color: var(--success); }
-.icon-liquido { background-color: var(--primary-color); }
-.icon-pendente { background-color: var(--warning); }
+.icon-faturado {
+  background-color: var(--success);
+}
+.icon-liquido {
+  background-color: var(--primary-color);
+}
+.icon-pendente {
+  background-color: var(--warning);
+}
 
 .summary-info .card-value {
   font-size: 1.75rem;
@@ -110,6 +116,6 @@
 }
 
 .table-actions {
-    display: flex;
-    gap: 0.5rem;
+  display: flex;
+  gap: 0.5rem;
 }

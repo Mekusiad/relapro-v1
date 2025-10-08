@@ -1,10 +1,10 @@
 // src/components/ConfirmationModal.jsx - REFATORADO
 
-import React from 'react';
-import AnimatedModal from '../ui/AnimatedModal.jsx'; // Importa o novo componente
-import Button from '../ui/Button.jsx';
+import React from "react";
+import AnimatedModal from "../ui/AnimatedModal.jsx"; // Importa o novo componente
+import Button from "../ui/Button.jsx";
 
-import '../../styles/modals.css';
+import "../../styles/modals.css";
 
 function ConfirmationModal({ isOpen, onClose, onConfirm, title, message }) {
   return (

@@ -48,7 +48,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  border-left: 4px solid var(--primary-color);
+  border-left: 5px solid var(--primary-color);
 }
 
 .stat-card-new .stat-icon {
@@ -67,37 +67,37 @@
 
 /* Gráfico e Lista de OS */
 .dashboard-main-content {
-    display: flex; /* Usar flexbox para empilhamento */
-    flex-direction: column; /* Direção vertical */
-    gap: 1.5rem;
+  display: flex; /* Usar flexbox para empilhamento */
+  flex-direction: column; /* Direção vertical */
+  gap: 1.5rem;
 }
 
 .chart-container {
-    grid-column: span 12;
-    background-color: var(--white);
-    padding: 1.5rem;
-    border-radius: var(--border-radius-lg);
-    box-shadow: var(--shadow-sm);
+  grid-column: span 12;
+  background-color: var(--white);
+  padding: 1.5rem;
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-sm);
 }
 
 .recent-os-container {
-    grid-column: span 12;
+  grid-column: span 12;
 }
 
 @media (min-width: 1024px) {
-    .chart-container {
-        grid-column: span 7;
-    }
-    .recent-os-container {
-        grid-column: span 5;
-    }
+  .chart-container {
+    grid-column: span 7;
+  }
+  .recent-os-container {
+    grid-column: span 5;
+  }
 }
 
 .content-card {
-     background-color: var(--white);
-    padding: 1.5rem;
-    border-radius: var(--border-radius-lg);
-    box-shadow: var(--shadow-sm);
+  background-color: var(--white);
+  padding: 1.5rem;
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-sm);
 }
 
 .content-card h2 {
@@ -112,20 +112,21 @@
   border-collapse: collapse;
 }
 
-.os-list-table th, .os-list-table td {
+.os-list-table th,
+.os-list-table td {
   padding: 0.75rem;
   text-align: left;
   border-bottom: 1px solid var(--gray-light);
 }
 
 .os-list-table th {
-    font-size: 0.8rem;
-    color: var(--gray-dark);
-    text-transform: uppercase;
+  font-size: 0.8rem;
+  color: var(--gray-dark);
+  text-transform: uppercase;
 }
 
 .os-list-table .os-client-info {
-    font-weight: 500;
+  font-weight: 500;
 }
 
 /* ==================================================== */
@@ -159,9 +160,15 @@
 }
 
 /* Cores para diferentes tipos de ícones */
-.activity-icon.user { background-color: #3b82f6; } /* Azul */
-.activity-icon.os-update { background-color: #f59e0b; } /* Amarelo */
-.activity-icon.os-new { background-color: #10b981; } /* Verde */
+.activity-icon.user {
+  background-color: #3b82f6;
+} /* Azul */
+.activity-icon.os-update {
+  background-color: #f59e0b;
+} /* Amarelo */
+.activity-icon.os-new {
+  background-color: #10b981;
+} /* Verde */
 
 .activity-content {
   flex-grow: 1;
@@ -208,8 +215,8 @@
 }
 
 .billing-card:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow-md);
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-md);
 }
 
 .billing-icon {
@@ -224,9 +231,15 @@
 }
 
 /* Cores de fundo para cada ícone */
-.billing-icon.revenue { background-color: #2ecc71; } /* success */
-.billing-icon.completed { background-color: #3498db; } /* info */
-.billing-icon.new-clients { background-color: #9b59b6; } /* roxo */
+.billing-icon.revenue {
+  background-color: #2ecc71;
+} /* success */
+.billing-icon.completed {
+  background-color: #3498db;
+} /* info */
+.billing-icon.new-clients {
+  background-color: #9b59b6;
+} /* roxo */
 
 .billing-info .billing-value {
   font-size: 1.75rem;
@@ -275,10 +288,8 @@
 }
 
 .os-table-container {
-    overflow-x: auto; /* Garante responsividade em telas pequenas */
+  overflow-x: auto; /* Garante responsividade em telas pequenas */
 }
-
-
 
 .stats-grid {
   display: grid;
@@ -298,8 +309,8 @@
 }
 
 .stat-card-v2:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow-md);
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-md);
 }
 
 .stat-icon-v2 {
@@ -314,10 +325,18 @@
 }
 
 /* Cores de fundo para cada ícone */
-.stat-icon-v2.abertas { background-color: var(--warning); }
-.stat-icon-v2.andamento { background-color: var(--info); }
-.stat-icon-v2.finalizadas { background-color: var(--success); }
-.stat-icon-v2.faturamento { background-color: var(--primary-dark); }
+.stat-icon-v2.abertas {
+  background-color: var(--warning);
+}
+.stat-icon-v2.andamento {
+  background-color: var(--info);
+}
+.stat-icon-v2.finalizadas {
+  background-color: var(--success);
+}
+.stat-icon-v2.faturamento {
+  background-color: var(--primary-dark);
+}
 
 .stat-info .stat-value {
   font-size: 1.75rem;

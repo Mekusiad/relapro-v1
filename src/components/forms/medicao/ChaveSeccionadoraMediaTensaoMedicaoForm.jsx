@@ -2,15 +2,57 @@ import React from "react";
 
 // VALORES PREDEFINIDOS - Agora servem apenas como um modelo
 const initialContatoState = [
-  { polo: "A", condicao: "Entrada - Saída", corrente: "10", valorMedido: "", valorReferencia: "≤300", tempo: "60" },
-  { polo: "B", condicao: "Entrada - Saída", corrente: "10", valorMedido: "", valorReferencia: "≤300", tempo: "60" },
-  { polo: "C", condicao: "Entrada - Saída", corrente: "10", valorMedido: "", valorReferencia: "≤300", tempo: "60" },
+  {
+    polo: "A",
+    condicao: "Entrada - Saída",
+    corrente: "10",
+    valorMedido: "",
+    valorReferencia: "≤300",
+    tempo: "60",
+  },
+  {
+    polo: "B",
+    condicao: "Entrada - Saída",
+    corrente: "10",
+    valorMedido: "",
+    valorReferencia: "≤300",
+    tempo: "60",
+  },
+  {
+    polo: "C",
+    condicao: "Entrada - Saída",
+    corrente: "10",
+    valorMedido: "",
+    valorReferencia: "≤300",
+    tempo: "60",
+  },
 ];
 
 const initialIsolamentoState = [
-  { polo: "A", condicao: "A x Massa", tensaoEnsaio: "5", valorMedido: "", valorReferencia: ">1000", tempo: "60" },
-  { polo: "B", condicao: "B x Massa", tensaoEnsaio: "5", valorMedido: "", valorReferencia: ">1000", tempo: "60" },
-  { polo: "C", condicao: "C x Massa", tensaoEnsaio: "5", valorMedido: "", valorReferencia: ">1000", tempo: "60" },
+  {
+    polo: "A",
+    condicao: "A x Massa",
+    tensaoEnsaio: "5",
+    valorMedido: "",
+    valorReferencia: ">1000",
+    tempo: "60",
+  },
+  {
+    polo: "B",
+    condicao: "B x Massa",
+    tensaoEnsaio: "5",
+    valorMedido: "",
+    valorReferencia: ">1000",
+    tempo: "60",
+  },
+  {
+    polo: "C",
+    condicao: "C x Massa",
+    tensaoEnsaio: "5",
+    valorMedido: "",
+    valorReferencia: ">1000",
+    tempo: "60",
+  },
 ];
 
 const initialServicosState = {
@@ -22,16 +64,24 @@ const initialServicosState = {
 
 // Função helper para criar uma cópia profunda (deep copy) dos dados iniciais.
 const getInitialState = (existingData) => ({
-    ...existingData,
-    resistenciaContato: existingData?.resistenciaContato || JSON.parse(JSON.stringify(initialContatoState)),
-    resistenciaIsolamento: existingData?.resistenciaIsolamento || JSON.parse(JSON.stringify(initialIsolamentoState)),
-    servicos: existingData?.servicos || { ...initialServicosState },
+  ...existingData,
+  resistenciaContato:
+    existingData?.resistenciaContato ||
+    JSON.parse(JSON.stringify(initialContatoState)),
+  resistenciaIsolamento:
+    existingData?.resistenciaIsolamento ||
+    JSON.parse(JSON.stringify(initialIsolamentoState)),
+  servicos: existingData?.servicos || { ...initialServicosState },
 });
 
 function ChaveSeccionadoraMediaTensaoMedicaoForm({ data, onDataChange }) {
   // Garantimos que cada formulário trabalhe com sua própria cópia dos dados.
   const formData = getInitialState(data);
-  const { resistenciaContato: contatoData, resistenciaIsolamento: isolamentoData, servicos: servicosData } = formData;
+  const {
+    resistenciaContato: contatoData,
+    resistenciaIsolamento: isolamentoData,
+    servicos: servicosData,
+  } = formData;
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -43,20 +93,20 @@ function ChaveSeccionadoraMediaTensaoMedicaoForm({ data, onDataChange }) {
   // =========================================================================
   const handleContatoChange = (index, field, value) => {
     const updatedData = contatoData.map((row, i) => {
-        if (i === index) {
-            return { ...row, [field]: value };
-        }
-        return row;
+      if (i === index) {
+        return { ...row, [field]: value };
+      }
+      return row;
     });
     onDataChange({ resistenciaContato: updatedData });
   };
 
   const handleIsolamentoChange = (index, field, value) => {
     const updatedData = isolamentoData.map((row, i) => {
-        if (i === index) {
-            return { ...row, [field]: value };
-        }
-        return row;
+      if (i === index) {
+        return { ...row, [field]: value };
+      }
+      return row;
     });
     onDataChange({ resistenciaIsolamento: updatedData });
   };
@@ -130,7 +180,7 @@ function ChaveSeccionadoraMediaTensaoMedicaoForm({ data, onDataChange }) {
                   <input
                     value={row.corrente}
                     onChange={(e) =>
-                     handleContatoChange(index, "corrente", e.target.value)
+                      handleContatoChange(index, "corrente", e.target.value)
                     }
                     className="input"
                   />
@@ -148,7 +198,11 @@ function ChaveSeccionadoraMediaTensaoMedicaoForm({ data, onDataChange }) {
                   <input
                     value={row.valorReferencia}
                     onChange={(e) =>
-                      handleContatoChange(index, "valorReferencia", e.target.value)
+                      handleContatoChange(
+                        index,
+                        "valorReferencia",
+                        e.target.value
+                      )
                     }
                     className="input"
                   />
@@ -157,7 +211,7 @@ function ChaveSeccionadoraMediaTensaoMedicaoForm({ data, onDataChange }) {
                   <input
                     value={row.tempo}
                     onChange={(e) =>
-                       handleContatoChange(index, "tempo", e.target.value)
+                      handleContatoChange(index, "tempo", e.target.value)
                     }
                     className="input"
                   />
@@ -190,7 +244,11 @@ function ChaveSeccionadoraMediaTensaoMedicaoForm({ data, onDataChange }) {
                   <input
                     value={row.tensaoEnsaio}
                     onChange={(e) =>
-                       handleIsolamentoChange(index, "tensaoEnsaio", e.target.value)
+                      handleIsolamentoChange(
+                        index,
+                        "tensaoEnsaio",
+                        e.target.value
+                      )
                     }
                     className="input"
                   />
@@ -199,7 +257,11 @@ function ChaveSeccionadoraMediaTensaoMedicaoForm({ data, onDataChange }) {
                   <input
                     value={row.valorMedido}
                     onChange={(e) =>
-                      handleIsolamentoChange(index, "valorMedido", e.target.value)
+                      handleIsolamentoChange(
+                        index,
+                        "valorMedido",
+                        e.target.value
+                      )
                     }
                     className="input"
                   />
@@ -208,7 +270,11 @@ function ChaveSeccionadoraMediaTensaoMedicaoForm({ data, onDataChange }) {
                   <input
                     value={row.valorReferencia}
                     onChange={(e) =>
-                     handleIsolamentoChange(index, "valorReferencia", e.target.value)
+                      handleIsolamentoChange(
+                        index,
+                        "valorReferencia",
+                        e.target.value
+                      )
                     }
                     className="input"
                   />
@@ -394,9 +460,9 @@ function ChaveSeccionadoraMediaTensaoMedicaoForm({ data, onDataChange }) {
           checked={formData.naoConforme || false}
           onChange={handleChange}
         />
-       <label htmlFor="naoConforme">
-          EQUIPAMENTO NÃO CONFORME (se houver, selecione a caixa e
-          descreva as informações na caixa abaixo)
+        <label htmlFor="naoConforme">
+          EQUIPAMENTO NÃO CONFORME (se houver, selecione a caixa e descreva as
+          informações na caixa abaixo)
         </label>
       </div>
       {formData.naoConforme && (

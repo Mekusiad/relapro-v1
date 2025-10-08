@@ -1,8 +1,15 @@
-// src/pages/LoginPage.jsx
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react"; // Adicionado useRef e useEffect
 import { useNavigate, useLocation } from "react-router-dom";
-import { useAuth } from "../contexts/AuthContext"; // A fonte da verdade para autenticação
-import { User, Lock, ArrowRight } from "lucide-react";
+import { useAuth } from "../contexts/AuthContext";
+import {
+  User,
+  Lock,
+  ArrowRight,
+  ClipboardList,
+  Eye,
+  EyeOff,
+} from "lucide-react";
+
 import "../styles/login.css";
 
 function LoginPage() {
@@ -10,104 +17,129 @@ function LoginPage() {
   const [senha, setSenha] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const navigate = useNavigate();
   const location = useLocation();
-  const { login } = useAuth(); // Pegamos a função de login diretamente do nosso contexto
+  const { login } = useAuth();
+  
+  // ==================================
+  // INÍCIO DA MUDANÇA (Efeito de Brilho)
+  // ==================================
+  const sidebarRef = useRef(null);
 
-  // Define para onde o usuário deve ser redirecionado após o login.
-  // Se ele tentou acessar uma página privada antes, será enviado para lá.
-  // Caso contrário, vai para o dashboard.
+  useEffect(() => {
+    const sidebar = sidebarRef.current;
+    if (!sidebar) return;
+
+    const handleMouseMove = (e) => {
+      const rect = sidebar.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      sidebar.style.setProperty('--x', `${x}px`);
+      sidebar.style.setProperty('--y', `${y}px`);
+    };
+
+    sidebar.addEventListener('mousemove', handleMouseMove);
+
+    return () => {
+      sidebar.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, []);
+  // ==================================
+  // FIM DA MUDANÇA
+  // ==================================
+
   const from = location.state?.from?.pathname || "/dashboard";
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (loading) return; // Impede múltiplos envios
-
+    if (loading) return;
     setLoading(true);
     setError("");
-
     try {
-      // Chama a função de login do AuthContext
       await login(usuario, senha);
-      // Navega para a rota de destino em caso de sucesso
       navigate(from, { replace: true });
     } catch (err) {
-      // Captura e exibe o erro retornado pelo contexto
-      setError(err.message || "Falha no login. Verifique suas credenciais.");
+      setError(err.message || "Usuário ou senha inválidos");
     } finally {
-      // Garante que o estado de loading seja desativado, mesmo se der erro
       setLoading(false);
     }
   };
 
   return (
     <div className="login-screen-wrapper">
-      <div className="login-sidebar">
-        <div className="sidebar-content">
-          <h1>Nexus Control</h1>
-          <p>Gestão Inteligente de Ordens de Serviço e Ativos Elétricos.</p>
-        </div>
-      </div>
-
-      <main className="login-main">
-        <div className="login-form-container">
-          <div className="login-header">
-            <h2>Bem-vindo de volta!</h2>
-            <p>Faça login para acessar seu painel de controle.</p>
+      <div className="login-card">
+        <aside className="login-sidebar" ref={sidebarRef}> {/* Adicionado ref aqui */}
+          <div className="sidebar-content">
+            <h1 className="logo">
+              <ClipboardList size={40} />
+              <span>Nexus Control</span>
+            </h1>
+            <p className="subtitle">
+              Gestão Inteligente de Ordens de Serviço e Ativos Elétricos.
+            </p>
           </div>
+        </aside>
 
-          <form id="loginForm" className="login-form" onSubmit={handleSubmit}>
-            <div className="form-group-icon">
-              <User className="input-icon" size={20} />
-              <input
-                type="text"
-                id="usuario"
-                placeholder="Usuário"
-                autoComplete="username"
-                required
-                value={usuario}
-                onChange={(e) => setUsuario(e.target.value)}
-                disabled={loading}
-              />
-            </div>
+        <main className="login-content">
+          <div className="login-box">
+            <h2 className="title">Bem-vindo de volta!</h2>
+            <p className="welcome-message">
+              Faça login para acessar seu painel de controle.
+            </p>
 
-            <div className="form-group-icon">
-              <Lock className="input-icon" size={20} />
-              <input
-                type="password"
-                id="senha"
-                placeholder="Senha"
-                autoComplete="current-password"
-                required
-                value={senha}
-                onChange={(e) => setSenha(e.target.value)}
-                disabled={loading}
-              />
-            </div>
+            <form onSubmit={handleSubmit} className="login-form">
+              <div className="form-group-icon">
+                <User size={20} className="input-icon" />
+                <input
+                  type="text"
+                  placeholder="Usuário"
+                  autoComplete="username"
+                  required
+                  value={usuario}
+                  onChange={(e) => setUsuario(e.target.value)}
+                  disabled={loading}
+                />
+              </div>
 
-            {error && <p className="error-message">{error}</p>}
+              <div className="form-group-icon">
+                <Lock size={20} className="input-icon" />
+                <input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Senha"
+                  autoComplete="current-password"
+                  required
+                  value={senha}
+                  onChange={(e) => setSenha(e.target.value)}
+                  disabled={loading}
+                />
+                <div
+                  className="password-toggle-icon"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? <Eye size={20} /> : <EyeOff size={20} />}
+                </div>
+              </div>
 
-            <div className="form-options">
-              <label className="checkbox-container">
-                <input type="checkbox" /> Lembrar-me
-              </label>
-              <a href="#" className="forgot-password-link">
-                Esqueceu a senha?
-              </a>
-            </div>
+              {error && <p className="error-message">{error}</p>}
 
-            <button
-              type="submit"
-              className="btn btn-primary btn-login"
-              disabled={loading}
-            >
-              {loading ? "Entrando..." : "Entrar"}
-              {!loading && <ArrowRight size={20} />}
-            </button>
-          </form>
-        </div>
-      </main>
+              <div className="form-options">
+                <label className="checkbox-container">
+                  <input type="checkbox" /> Lembrar-me
+                </label>
+                <a href="#" className="forgot-password-link">
+                  Esqueceu a senha?
+                </a>
+              </div>
+
+              <button type="submit" className="btn-login" disabled={loading}>
+                {loading ? "Entrando..." : "Entrar"}
+              </button>
+            </form>
+          </div>
+        </main>
+      </div>
     </div>
   );
 }

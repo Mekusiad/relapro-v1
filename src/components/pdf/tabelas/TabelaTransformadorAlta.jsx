@@ -3,6 +3,8 @@
 import React from "react";
 import { Text, View, StyleSheet } from "@react-pdf/renderer";
 import ComponentInfoHeaderPdf from "./ComponentInfoHeaderPdf.jsx";
+import EnsaioEquipamentosPdf from "./EnsaioEquipamentosPdf.jsx";
+import EnsaioFotosPdf from "./EnsaioFotosPdf.jsx";
 import CondicoesEnsaioPdf from "./CondicoesEnsaioPdf.jsx";
 
 const styles = StyleSheet.create({
@@ -247,6 +249,9 @@ const TabelaTransformadorAlta = ({ componente, Html, stylesheet }) => {
                 )}
               </View>
             )}
+
+            <EnsaioEquipamentosPdf equipamentos={ensaio.equipamentos} />
+            <EnsaioFotosPdf fotos={ensaio.fotos} />
           </View>
         );
       })}

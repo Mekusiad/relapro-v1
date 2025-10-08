@@ -26,7 +26,7 @@
 
 .technicians-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
   gap: 1.5rem;
   margin-top: 1.5rem;
 }
@@ -117,6 +117,43 @@
   align-items: center; /* Alinha os itens verticalmente ao centro */
   justify-content: center; /* Opcional: Alinha os botões horizontalmente ao centro */
   transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.screen-header.with-filter {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.search-bar-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+  align-self: flex-start;
+}
+
+.search-icon {
+  position: absolute;
+  top: 50%;
+  left: 12px;
+  transform: translateY(-50%);
+  color: #9ca3af;
+  pointer-events: none;
+}
+
+.search-input {
+  width: 100%;
+  padding-left: 40px !important;
+  font-size: 1rem;
+  border-radius: 8px;
 }
 
 .btn-edit-tech {

@@ -1,5 +1,3 @@
-// src/components/pdf/RelatorioFotografico.jsx
-
 import React from "react";
 import { Page, Text, View, Image, StyleSheet } from "@react-pdf/renderer";
 import Footer from "./Footer.jsx";
@@ -10,37 +8,59 @@ const styles = StyleSheet.create({
     fontFamily: "Roboto",
   },
   mainTitle: {
-    fontSize: 24,
+    fontSize: 18,
     fontWeight: "bold",
-    color: "#1e293b",
+    color: "#ffffff",
+    backgroundColor: "#164e63",
     textAlign: "center",
+    padding: "12px 0",
+    borderRadius: 4,
     marginBottom: 25,
   },
   gridContainer: {
+    display: "flex",
     flexDirection: "row",
     flexWrap: "wrap",
-    justifyContent: "space-between",
+    // ==================================================
+    // INÍCIO DA CORREÇÃO
+    // Espaçamento ajustado para 3 colunas
+    // ==================================================
+    gap: 15,
+    // ==================================================
+    // FIM DA CORREÇÃO
+    // ==================================================
   },
   photoWrapper: {
-    width: "48%",
-    marginBottom: 15,
+    // ==================================================
+    // INÍCIO DA CORREÇÃO
+    // Largura ajustada para 3 fotos por linha
+    // ==================================================
+    width: "31%",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
+    gap: 5,
+    // ==================================================
+    // FIM DA CORREÇÃO
+    // ==================================================
   },
   image: {
     width: "100%",
-    height: 180,
-    objectFit: "cover",
+    // ==================================================
+    // INÍCIO DA CORREÇÃO
+    // 'height' removida e 'objectFit' alterado para 'contain'
+    // ==================================================
+    objectFit: "contain",
+    // ==================================================
+    // FIM DA CORREÇÃO
+    // ==================================================
     border: "1px solid #e2e8f0",
     borderRadius: 3,
-    marginBottom: 5,
   },
   caption: {
     fontSize: 8,
     color: "#475569",
     textAlign: "center",
-    paddingHorizontal: 5,
   },
 });
 
@@ -57,39 +77,34 @@ const RelatorioFotografico = ({ title, photos, bookmarkId }) => {
     return null;
   }
 
-  const photoChunks = chunkPhotos(photos, 4);
+  // Ajusta a quantidade de fotos por página para 6 (2 linhas de 3)
+  const photoChunks = chunkPhotos(photos, 6);
 
   return (
     <>
       {photoChunks.map((chunk, pageIndex) => (
-        // --- CORREÇÃO APLICADA AQUI ---
-        // A propriedade bookmark é adicionada condicionalmente à Page.
-        // Se for a primeira página (index 0), o objeto bookmark é criado.
-        // Se não, nenhuma propriedade bookmark é adicionada.
         <Page
           key={pageIndex}
           size="A4"
+          id={bookmarkId}
           style={styles.page}
           {...(pageIndex === 0 && { bookmark: { title, id: bookmarkId } })}
         >
-          {/* O título visual continua aparecendo apenas na primeira página */}
           {pageIndex === 0 && <Text style={styles.mainTitle}>{title}</Text>}
 
           <View style={styles.gridContainer}>
-            {chunk.map((photo, photoIndex) => (
-              <View key={photo.id || photoIndex} style={styles.photoWrapper}>
-                <Image
-                  src={photo.fotoUrl || photo.preview}
-                  style={styles.image}
-                />
+            {chunk.map((photo) => (
+              <View
+                key={photo.id || photo.cloudinaryId}
+                style={styles.photoWrapper}
+              >
+                <Image src={photo.fotoUrl} style={styles.image} />
                 <Text style={styles.caption}>
-                  {photo.descricao ||
-                    `Imagem ${pageIndex * 4 + photoIndex + 1}`}
+                  {photo.descricao || "Sem descrição"}
                 </Text>
               </View>
             ))}
           </View>
-
           <Footer />
         </Page>
       ))}

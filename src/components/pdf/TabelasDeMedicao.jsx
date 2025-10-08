@@ -131,11 +131,11 @@ function TabelasDeMedicao({ subestacoes, Html, stylesheet }) {
             size="A4"
             style={styles.page}
             break={index > 0}
-            bookmark={pageBookmark}
           >
-            {/* ... resto do seu componente Page ... */}
+            <View id={`ancora_comp_${component.id}`} />
+
             {index === 0 && (
-              <Text style={styles.mainTitle}>4. Medições dos Equipamentos</Text>
+              <Text style={styles.mainTitle}>Medições dos Equipamentos</Text>
             )}
             <Text style={styles.substationTitle}>
               Subestação: {component.nomeSubestacao}

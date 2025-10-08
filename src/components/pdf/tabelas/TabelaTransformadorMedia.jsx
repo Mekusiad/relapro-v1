@@ -4,6 +4,8 @@ import React from "react";
 import { Text, View, StyleSheet } from "@react-pdf/renderer";
 import ComponentInfoHeaderPdf from "./ComponentInfoHeaderPdf.jsx";
 import CondicoesEnsaioPdf from "./CondicoesEnsaioPdf.jsx";
+import EnsaioEquipamentosPdf from "./EnsaioEquipamentosPdf.jsx";
+import EnsaioFotosPdf from "./EnsaioFotosPdf.jsx";
 
 const styles = StyleSheet.create({
   container: { fontFamily: "Roboto" },
@@ -79,10 +81,10 @@ const styles = StyleSheet.create({
 const EnsaioTable = ({ title, data, columns }) => {
   if (!data || data.length === 0) return null;
   return (
-    <View style={styles.section}>
+    <View style={styles.section} wrap={false}>
       <Text style={styles.subtitle}>{title}</Text>
       <View style={styles.table}>
-        <View style={styles.tableRow}>
+        <View style={styles.tableRow} fixed>
           {columns.map((col) => (
             <Text
               key={col.key}
@@ -136,22 +138,44 @@ const ServicosSection = ({ data }) => {
 };
 
 const TabelaTransformadorMedia = ({ componente, Html, stylesheet }) => {
+  // =============================================================================
+  // CORREÇÃO: As 'keys' agora correspondem aos nomes dos campos no JSON/formulário.
+  // =============================================================================
   const relacaoColumns = [
-    { key: "tap", label: "TAP" },
-    { key: "faseA", label: "Fase A (V)" },
-    { key: "faseB", label: "Fase B (V)" },
-    { key: "faseC", label: "Fase C (V)" },
+    { key: "tap_comutador_at", label: "Tap AT" },
+    { key: "tap_comutador_bt", label: "Tap BT" },
+    { key: "tensao_v_at", label: "Tensão AT (V)" },
+    { key: "tensao_v_bt", label: "Tensão BT (V)" },
+    { key: "rel_calc", label: "Relação Calc." },
+    { key: "rel_med_h1h3x1x0", label: "H1-H3/X1-X0" },
+    { key: "rel_med_h2h1x2x0", label: "H2-H1/X2-X0" },
+    { key: "rel_med_h3h2x3x0", label: "H3-H2/X3-X0" },
   ];
-  const resistenciaOhmicaColumns = [
-    { key: "tap", label: "TAP" },
-    { key: "faseA", label: "Fase A (mΩ)" },
-    { key: "faseB", label: "Fase B (mΩ)" },
-    { key: "faseC", label: "Fase C (mΩ)" },
+
+  const resistenciaOhmicaATColumns = [
+    { key: "tap_comutador", label: "Tap" },
+    { key: "tensao_at", label: "Tensão AT (V)" },
+    { key: "h1h3", label: "H1-H3 (Ω)" },
+    { key: "h2h1", label: "H2-H1 (Ω)" },
+    { key: "h3h2", label: "H3-H2 (Ω)" },
   ];
+
+  const resistenciaOhmicaBTColumns = [
+    { key: "tap_comutador", label: "Tap" },
+    { key: "tensao_bt", label: "Tensão BT (V)" },
+    { key: "x1x0", label: "X1-X0 (mΩ)" },
+    { key: "x2x0", label: "X2-X0 (mΩ)" },
+    { key: "x3x0", label: "X3-X0 (mΩ)" },
+  ];
+
   const isolamentoColumns = [
-    { key: "configuracao", label: "Configuração" },
-    { key: "valorMedido", label: "Medido (MΩ)" },
+    { key: "terminais", label: "Terminais de Medição" },
+    { key: "tensao_ensaio", label: "Tensão (Vcc)" },
+    { key: "val_medido", label: "Medido (MΩ)" },
+    { key: "tempo_s", label: "Tempo (s)" },
   ];
+
+  // Mantido para Fator de Potência, caso seja usado
   const fpColumns = [
     { key: "configuracao", label: "Configuração" },
     { key: "valorMedido", label: "Medido (%)" },
@@ -159,21 +183,13 @@ const TabelaTransformadorMedia = ({ componente, Html, stylesheet }) => {
 
   return (
     <View style={styles.container}>
-      {/* ============================================================================= */}
-      {/* CORREÇÃO DA QUEBRA DE CABEÇALHO APLICADA AQUI */}
-      {/* O cabeçalho agora é renderizado junto com o primeiro ensaio, e o 
-          agrupamento com `wrap={false}` garante que eles não se separem. */}
-      {/* ============================================================================= */}
       {componente.ensaios.map((ensaio, index) => (
         <View key={ensaio.id} style={styles.ensaioWrapper} break={index > 0}>
-          {/* Agrupa o cabeçalho principal e as condições do ensaio */}
           <View wrap={false}>
-            {/* O cabeçalho do componente só é exibido uma vez, no topo do primeiro ensaio. */}
             {index === 0 && <ComponentInfoHeaderPdf component={componente} />}
             <CondicoesEnsaioPdf ensaio={ensaio} />
           </View>
 
-          {/* As tabelas podem quebrar entre páginas se forem muito longas */}
           <EnsaioTable
             title="Relação de Transformação"
             data={ensaio.dados?.relacaoData}
@@ -182,12 +198,12 @@ const TabelaTransformadorMedia = ({ componente, Html, stylesheet }) => {
           <EnsaioTable
             title="Resistência Ôhmica dos Enrolamentos de AT"
             data={ensaio.dados?.resistenciaAT}
-            columns={resistenciaOhmicaColumns}
+            columns={resistenciaOhmicaATColumns}
           />
           <EnsaioTable
             title="Resistência Ôhmica dos Enrolamentos de BT"
             data={ensaio.dados?.resistenciaBT}
-            columns={resistenciaOhmicaColumns}
+            columns={resistenciaOhmicaBTColumns}
           />
           <EnsaioTable
             title="Resistência de Isolamento"
@@ -231,6 +247,8 @@ const TabelaTransformadorMedia = ({ componente, Html, stylesheet }) => {
               )}
             </View>
           )}
+          <EnsaioEquipamentosPdf equipamentos={ensaio.equipamentos} />
+          <EnsaioFotosPdf fotos={ensaio.fotos} />
         </View>
       ))}
     </View>

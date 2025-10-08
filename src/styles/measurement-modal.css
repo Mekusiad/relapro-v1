@@ -5,5 +5,5 @@
 
 .measurement-modal .modal-content {
   max-width: 1100px; /* Aumenta a largura máxima para acomodar tabelas complexas */
-  width: 95vw;      /* Garante que o modal seja responsivo em telas menores */
+  width: 95vw; /* Garante que o modal seja responsivo em telas menores */
 }

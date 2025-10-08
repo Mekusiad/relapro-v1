@@ -161,9 +161,10 @@ function ServicosOsPage() {
     setIsGeneratingPdf(os.id);
     const toastId = toast.loading("Gerando relatório PDF...");
     try {
+      //return console.log(os)
       const [osDetails, allTechnicians] = await Promise.all([
         generateDadosPDF(user.matricula, os.id),
-        getTechnicians(user.matricula), // Assumindo que getTechnicians precisa da matrícula
+        getTechnicians(), // Assumindo que getTechnicians precisa da matrícula
       ]);
 
       await gerarRelatorioPDF(osDetails.data, allTechnicians.funcionarios);

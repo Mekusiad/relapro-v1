@@ -1,44 +1,44 @@
 /* src/styles/component-info-header.css */
 
 .component-info-header {
-    background-color: var(--background-light);
-    border: 1px solid var(--gray-light);
-    border-radius: var(--border-radius);
-    padding: 1rem 1.5rem;
-    margin-bottom: 2rem;
+  background-color: var(--background-light);
+  border: 1px solid var(--gray-light);
+  border-radius: var(--border-radius);
+  padding: 1rem 1.5rem;
+  margin-bottom: 2rem;
 }
 
 .component-info-header .header-title {
-    margin-top: 0;
-    margin-bottom: 1rem;
-    font-size: 1.2rem;
-    font-weight: 500;
-    color: var(--primary-dark);
-    border-bottom: 1px solid var(--gray-medium);
-    padding-bottom: 0.75rem;
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: var(--primary-dark);
+  border-bottom: 1px solid var(--gray-medium);
+  padding-bottom: 0.75rem;
 }
 
 .component-info-header .header-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 0.75rem 1.5rem; /* Espaçamento vertical e horizontal */
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.75rem 1.5rem; /* Espaçamento vertical e horizontal */
 }
 
 .component-info-header .info-field {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .component-info-header .info-label {
-    font-size: 0.75rem;
-    font-weight: 500;
-    color: var(--gray-dark);
-    text-transform: uppercase;
-    margin-bottom: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--gray-dark);
+  text-transform: uppercase;
+  margin-bottom: 0.25rem;
 }
 
 .component-info-header .info-value {
-    font-size: 0.95rem;
-    color: var(--text-primary);
-    font-weight: 400;
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  font-weight: 400;
 }

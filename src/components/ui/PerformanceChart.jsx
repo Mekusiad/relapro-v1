@@ -1,7 +1,7 @@
 // src/components/ui/PerformanceChart.jsx
 
-import React from 'react';
-import { Bar } from 'react-chartjs-2';
+import React from "react";
+import { Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -10,7 +10,7 @@ import {
   Title,
   Tooltip,
   Legend,
-} from 'chart.js';
+} from "chart.js";
 
 ChartJS.register(
   CategoryScale,
@@ -23,13 +23,13 @@ ChartJS.register(
 
 function PerformanceChart() {
   const data = {
-    labels: ['Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set'],
+    labels: ["Abr", "Mai", "Jun", "Jul", "Ago", "Set"],
     datasets: [
       {
-        label: 'OS Concluídas',
+        label: "OS Concluídas",
         data: [12, 19, 15, 22, 18, 25],
-        backgroundColor: 'rgba(42, 122, 79, 0.5)',
-        borderColor: 'rgba(42, 122, 79, 1)',
+        backgroundColor: "rgba(42, 122, 79, 0.5)",
+        borderColor: "rgba(42, 122, 79, 1)",
         borderWidth: 1,
         borderRadius: 5,
       },
@@ -52,7 +52,7 @@ function PerformanceChart() {
   };
 
   return (
-    <div style={{ height: '300px' }}>
+    <div style={{ height: "300px" }}>
       <Bar data={data} options={options} />
     </div>
   );

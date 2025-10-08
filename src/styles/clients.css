@@ -14,7 +14,7 @@
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
-  border-top: 4px solid var(--primary-color);
+  border-left: 5px solid var(--primary-color);
   transition: var(--transition);
 }
 

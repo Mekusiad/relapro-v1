@@ -3,7 +3,7 @@
 import React from "react";
 
 function ResistorAterramentoMedicaoForm({ data, onDataChange }) {
-    const formData = data || {};
+  const formData = data || {};
 
   // Função genérica para atualizar campos simples e comunicar ao pai.
   const handleChange = (e) => {
@@ -104,7 +104,7 @@ function ResistorAterramentoMedicaoForm({ data, onDataChange }) {
         ></textarea>
       </div>
 
-            <div className="form-group-inline-checkbox">
+      <div className="form-group-inline-checkbox">
         <input
           type="checkbox"
           id="naoConforme"

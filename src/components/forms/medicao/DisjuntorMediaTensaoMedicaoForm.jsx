@@ -4,21 +4,84 @@ import React from "react";
 
 // VALORES PREDEFINIDOS - Agora servem apenas como um modelo
 const initialContatoState = [
-  { polo: "A", disjuntor: "Entrada - Saída", corrente: "10", medido: "", referencia: "< 120", tempo: "60" },
-  { polo: "B", disjuntor: "Entrada - Saída", corrente: "10", medido: "", referencia: "< 120", tempo: "60" },
-  { polo: "C", disjuntor: "Entrada - Saída", corrente: "10", medido: "", referencia: "< 120", tempo: "60" },
+  {
+    polo: "A",
+    disjuntor: "Entrada - Saída",
+    corrente: "10",
+    medido: "",
+    referencia: "< 120",
+    tempo: "60",
+  },
+  {
+    polo: "B",
+    disjuntor: "Entrada - Saída",
+    corrente: "10",
+    medido: "",
+    referencia: "< 120",
+    tempo: "60",
+  },
+  {
+    polo: "C",
+    disjuntor: "Entrada - Saída",
+    corrente: "10",
+    medido: "",
+    referencia: "< 120",
+    tempo: "60",
+  },
 ];
 
 const initialIsolamentoAbertoState = [
-  { polo: "A", disjuntor: "Entrada - Saída", tensao: "5000", medido: "", referencia: ">1000", tempo: "60" },
-  { polo: "B", disjuntor: "Entrada - Saída", tensao: "5000", medido: "", referencia: ">1000", tempo: "60" },
-  { polo: "C", disjuntor: "Entrada - Saída", tensao: "5000", medido: "", referencia: ">1000", tempo: "60" },
+  {
+    polo: "A",
+    disjuntor: "Entrada - Saída",
+    tensao: "5000",
+    medido: "",
+    referencia: ">1000",
+    tempo: "60",
+  },
+  {
+    polo: "B",
+    disjuntor: "Entrada - Saída",
+    tensao: "5000",
+    medido: "",
+    referencia: ">1000",
+    tempo: "60",
+  },
+  {
+    polo: "C",
+    disjuntor: "Entrada - Saída",
+    tensao: "5000",
+    medido: "",
+    referencia: ">1000",
+    tempo: "60",
+  },
 ];
 
 const initialIsolamentoFechadoState = [
-  { polo: "A", disjuntor: "A x Massa", tensao: "5000", medido: "", referencia: ">1000", tempo: "60" },
-  { polo: "B", disjuntor: "B x Massa", tensao: "5000", medido: "", referencia: ">1000", tempo: "60" },
-  { polo: "C", disjuntor: "C x Massa", tensao: "5000", medido: "", referencia: ">1000", tempo: "60" },
+  {
+    polo: "A",
+    disjuntor: "A x Massa",
+    tensao: "5000",
+    medido: "",
+    referencia: ">1000",
+    tempo: "60",
+  },
+  {
+    polo: "B",
+    disjuntor: "B x Massa",
+    tensao: "5000",
+    medido: "",
+    referencia: ">1000",
+    tempo: "60",
+  },
+  {
+    polo: "C",
+    disjuntor: "C x Massa",
+    tensao: "5000",
+    medido: "",
+    referencia: ">1000",
+    tempo: "60",
+  },
 ];
 
 const initialServicosState = {
@@ -31,17 +94,27 @@ const initialServicosState = {
 // Isso garante que cada formulário tenha sua própria versão dos dados.
 const getInitialState = (existingData) => ({
   ...existingData,
-  tabelaContato: existingData?.tabelaContato || JSON.parse(JSON.stringify(initialContatoState)),
-  tabelaIsolamentoAberto: existingData?.tabelaIsolamentoAberto || JSON.parse(JSON.stringify(initialIsolamentoAbertoState)),
-  tabelaIsolamentoFechado: existingData?.tabelaIsolamentoFechado || JSON.parse(JSON.stringify(initialIsolamentoFechadoState)),
+  tabelaContato:
+    existingData?.tabelaContato ||
+    JSON.parse(JSON.stringify(initialContatoState)),
+  tabelaIsolamentoAberto:
+    existingData?.tabelaIsolamentoAberto ||
+    JSON.parse(JSON.stringify(initialIsolamentoAbertoState)),
+  tabelaIsolamentoFechado:
+    existingData?.tabelaIsolamentoFechado ||
+    JSON.parse(JSON.stringify(initialIsolamentoFechadoState)),
   servicos: existingData?.servicos || { ...initialServicosState },
 });
-
 
 function DisjuntorMediaTensaoMedicaoForm({ data, onDataChange }) {
   // Garantimos que cada formulário trabalhe com sua própria cópia dos dados.
   const formData = getInitialState(data);
-  const { tabelaContato, tabelaIsolamentoAberto, tabelaIsolamentoFechado, servicos: servicosData } = formData;
+  const {
+    tabelaContato,
+    tabelaIsolamentoAberto,
+    tabelaIsolamentoFechado,
+    servicos: servicosData,
+  } = formData;
 
   // Função genérica para atualizar campos simples, comunicando ao pai
   const handleChange = (e) => {
@@ -92,7 +165,6 @@ function DisjuntorMediaTensaoMedicaoForm({ data, onDataChange }) {
     const updatedServicos = { ...servicosData, [name]: value };
     onDataChange({ servicos: updatedServicos });
   };
-
 
   return (
     <>
@@ -151,14 +223,54 @@ function DisjuntorMediaTensaoMedicaoForm({ data, onDataChange }) {
             </tr>
           </thead>
           <tbody>
-          {tabelaContato.map((row, index) => (
+            {tabelaContato.map((row, index) => (
               <tr key={index}>
                 <td>{row.polo}</td>
-                <td><input value={row.disjuntor || ""} onChange={(e) => handleContatoChange(index, "disjuntor", e.target.value)} className="input" /></td>
-                <td><input value={row.corrente || ""} onChange={(e) => handleContatoChange(index, "corrente", e.target.value)} className="input" /></td>
-                <td><input value={row.medido || ""} onChange={(e) => handleContatoChange(index, "medido", e.target.value)} className="input" /></td>
-                <td><input value={row.referencia || ""} onChange={(e) => handleContatoChange(index, "referencia", e.target.value)} className="input" /></td>
-                <td><input value={row.tempo || ""} onChange={(e) => handleContatoChange(index, "tempo", e.target.value)} className="input" /></td>
+                <td>
+                  <input
+                    value={row.disjuntor || ""}
+                    onChange={(e) =>
+                      handleContatoChange(index, "disjuntor", e.target.value)
+                    }
+                    className="input"
+                  />
+                </td>
+                <td>
+                  <input
+                    value={row.corrente || ""}
+                    onChange={(e) =>
+                      handleContatoChange(index, "corrente", e.target.value)
+                    }
+                    className="input"
+                  />
+                </td>
+                <td>
+                  <input
+                    value={row.medido || ""}
+                    onChange={(e) =>
+                      handleContatoChange(index, "medido", e.target.value)
+                    }
+                    className="input"
+                  />
+                </td>
+                <td>
+                  <input
+                    value={row.referencia || ""}
+                    onChange={(e) =>
+                      handleContatoChange(index, "referencia", e.target.value)
+                    }
+                    className="input"
+                  />
+                </td>
+                <td>
+                  <input
+                    value={row.tempo || ""}
+                    onChange={(e) =>
+                      handleContatoChange(index, "tempo", e.target.value)
+                    }
+                    className="input"
+                  />
+                </td>
               </tr>
             ))}
           </tbody>
@@ -182,16 +294,76 @@ function DisjuntorMediaTensaoMedicaoForm({ data, onDataChange }) {
             </tr>
           </thead>
           <tbody>
-        {tabelaIsolamentoAberto.map((row, index) => (
-                    <tr key={index}>
-                        <td>{row.polo}</td>
-                        <td><input value={row.disjuntor || ""} onChange={(e) => handleIsolamentoAbertoChange(index, "disjuntor", e.target.value)} className="input" /></td>
-                        <td><input value={row.tensao || ""} onChange={(e) => handleIsolamentoAbertoChange(index, "tensao", e.target.value)} className="input" /></td>
-                        <td><input value={row.medido || ""} onChange={(e) => handleIsolamentoAbertoChange(index, "medido", e.target.value)} className="input" /></td>
-                        <td><input value={row.referencia || ""} onChange={(e) => handleIsolamentoAbertoChange(index, "referencia", e.target.value)} className="input" /></td>
-                        <td><input value={row.tempo || ""} onChange={(e) => handleIsolamentoAbertoChange(index, "tempo", e.target.value)} className="input" /></td>
-                    </tr>
-                ))}
+            {tabelaIsolamentoAberto.map((row, index) => (
+              <tr key={index}>
+                <td>{row.polo}</td>
+                <td>
+                  <input
+                    value={row.disjuntor || ""}
+                    onChange={(e) =>
+                      handleIsolamentoAbertoChange(
+                        index,
+                        "disjuntor",
+                        e.target.value
+                      )
+                    }
+                    className="input"
+                  />
+                </td>
+                <td>
+                  <input
+                    value={row.tensao || ""}
+                    onChange={(e) =>
+                      handleIsolamentoAbertoChange(
+                        index,
+                        "tensao",
+                        e.target.value
+                      )
+                    }
+                    className="input"
+                  />
+                </td>
+                <td>
+                  <input
+                    value={row.medido || ""}
+                    onChange={(e) =>
+                      handleIsolamentoAbertoChange(
+                        index,
+                        "medido",
+                        e.target.value
+                      )
+                    }
+                    className="input"
+                  />
+                </td>
+                <td>
+                  <input
+                    value={row.referencia || ""}
+                    onChange={(e) =>
+                      handleIsolamentoAbertoChange(
+                        index,
+                        "referencia",
+                        e.target.value
+                      )
+                    }
+                    className="input"
+                  />
+                </td>
+                <td>
+                  <input
+                    value={row.tempo || ""}
+                    onChange={(e) =>
+                      handleIsolamentoAbertoChange(
+                        index,
+                        "tempo",
+                        e.target.value
+                      )
+                    }
+                    className="input"
+                  />
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
@@ -210,15 +382,75 @@ function DisjuntorMediaTensaoMedicaoForm({ data, onDataChange }) {
           </thead>
           <tbody>
             {tabelaIsolamentoFechado.map((row, index) => (
-                    <tr key={index}>
-                        <td>{row.polo}</td>
-                        <td><input value={row.disjuntor || ""} onChange={(e) => handleIsolamentoFechadoChange(index, "disjuntor", e.target.value)} className="input" /></td>
-                        <td><input value={row.tensao || ""} onChange={(e) => handleIsolamentoFechadoChange(index, "tensao", e.target.value)} className="input" /></td>
-                        <td><input value={row.medido || ""} onChange={(e) => handleIsolamentoFechadoChange(index, "medido", e.target.value)} className="input" /></td>
-                        <td><input value={row.referencia || ""} onChange={(e) => handleIsolamentoFechadoChange(index, "referencia", e.target.value)} className="input" /></td>
-                        <td><input value={row.tempo || ""} onChange={(e) => handleIsolamentoFechadoChange(index, "tempo", e.target.value)} className="input" /></td>
-                    </tr>
-                ))}
+              <tr key={index}>
+                <td>{row.polo}</td>
+                <td>
+                  <input
+                    value={row.disjuntor || ""}
+                    onChange={(e) =>
+                      handleIsolamentoFechadoChange(
+                        index,
+                        "disjuntor",
+                        e.target.value
+                      )
+                    }
+                    className="input"
+                  />
+                </td>
+                <td>
+                  <input
+                    value={row.tensao || ""}
+                    onChange={(e) =>
+                      handleIsolamentoFechadoChange(
+                        index,
+                        "tensao",
+                        e.target.value
+                      )
+                    }
+                    className="input"
+                  />
+                </td>
+                <td>
+                  <input
+                    value={row.medido || ""}
+                    onChange={(e) =>
+                      handleIsolamentoFechadoChange(
+                        index,
+                        "medido",
+                        e.target.value
+                      )
+                    }
+                    className="input"
+                  />
+                </td>
+                <td>
+                  <input
+                    value={row.referencia || ""}
+                    onChange={(e) =>
+                      handleIsolamentoFechadoChange(
+                        index,
+                        "referencia",
+                        e.target.value
+                      )
+                    }
+                    className="input"
+                  />
+                </td>
+                <td>
+                  <input
+                    value={row.tempo || ""}
+                    onChange={(e) =>
+                      handleIsolamentoFechadoChange(
+                        index,
+                        "tempo",
+                        e.target.value
+                      )
+                    }
+                    className="input"
+                  />
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
@@ -353,8 +585,8 @@ function DisjuntorMediaTensaoMedicaoForm({ data, onDataChange }) {
           onChange={handleChange}
         />
         <label htmlFor="naoConforme">
-          EQUIPAMENTO NÃO CONFORME (se houver, selecione a caixa e
-          descreva as informações na caixa abaixo)
+          EQUIPAMENTO NÃO CONFORME (se houver, selecione a caixa e descreva as
+          informações na caixa abaixo)
         </label>
       </div>
       {formData.naoConforme && (

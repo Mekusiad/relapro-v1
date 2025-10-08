@@ -1,8 +1,15 @@
 // src/components/ui/Button.jsx
-import React from 'react';
-import { motion } from 'framer-motion';
+import React from "react";
+import { motion } from "framer-motion";
 
-function Button({ children, onClick, variant = 'primary', type = 'button', disabled = false, ...props }) {
+function Button({
+  children,
+  onClick,
+  variant = "primary",
+  type = "button",
+  disabled = false,
+  ...props
+}) {
   const className = `btn btn-${variant}`;
 
   return (
@@ -13,7 +20,7 @@ function Button({ children, onClick, variant = 'primary', type = 'button', disab
       disabled={disabled}
       whileHover={{ scale: 1.05, y: -2 }} // Aumenta e levanta um pouco no hover
       whileTap={{ scale: 0.95 }} // Diminui um pouco ao clicar
-      transition={{ type: 'spring', stiffness: 400, damping: 17 }}
+      transition={{ type: "spring", stiffness: 400, damping: 17 }}
       {...props}
     >
       {children}

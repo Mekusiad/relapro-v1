@@ -270,7 +270,7 @@ function OSFormPage() {
       component: component,
       ensaioId: ensaioExistente?.id || null,
       dadosMedicaoExistente: ensaioExistente?.dados || {},
-      equipamentosUtilizados: ensaioExistente?.equipamentos || [],
+      equipamentos: ensaioExistente?.equipamentos || [],
       // --- CORREÇÃO APLICADA AQUI ---
       // Extrai a matrícula do responsável do ensaio existente e a passa para o modal.
       // O 'optional chaining' (?.) garante que não quebre se não houver ensaio ou responsável.

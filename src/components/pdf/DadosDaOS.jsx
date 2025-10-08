@@ -96,6 +96,7 @@ const DadosDaOS = ({ osData, allTechnicians, bookmarkId }) => {
     <Page
       size="A4"
       style={styles.page}
+      id={bookmarkId}
       bookmark={{ title: "Dados da OS", id: bookmarkId }}
     >
       <Text style={styles.mainTitle}>1. Dados da Ordem de Serviço</Text>

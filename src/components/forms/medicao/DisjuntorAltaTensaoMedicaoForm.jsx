@@ -1,4 +1,6 @@
-import React from "react";
+// src/components/forms/medicao/DisjuntorAltaTensaoMedicaoForm.jsx
+
+import React, { useMemo } from "react";
 
 // Estados iniciais para as tabelas com os valores predefinidos
 const initialContatoState = [
@@ -154,61 +156,86 @@ const initialFpFechadoState = [
   },
 ];
 
-const initialServicosState = {
-  limpezaGeral: "N/A",
-  lubrificacao: "N/A",
-  testesAcionamento: "N/A",
-  reapertoConexoes: "N/A",
-};
+// ==================================================================
+// ALTERAÇÃO 1: O estado inicial dos serviços agora é um array de objetos
+// ==================================================================
+const defaultServicos = [
+  { label: "Limpeza geral", valor: "N/A" },
+  { label: "Lubrificação dos componentes", valor: "N/A" },
+  { label: "Testes de acionamento elétricos", valor: "N/A" },
+  { label: "Reaperto das Conexões elétricas", valor: "N/A" },
+];
 
 function DisjuntorAltaTensaoMedicaoForm({ data, onDataChange }) {
- // Os dados são lidos diretamente das props
   const formData = data || {};
-  const tabelaContato = data?.tabelaContato || initialContatoState;
-  const tabelaIsolamentoAberto = data?.tabelaIsolamentoAberto || initialIsolamentoAbertoState;
-  const tabelaIsolamentoFechado = data?.tabelaIsolamentoFechado || initialIsolamentoFechadoState;
-  const tabelaFpAberto = data?.tabelaFpAberto || initialFpAbertoState;
-  const tabelaFpFechado = data?.tabelaFpFechado || initialFpFechadoState;
-  const servicosData = data?.servicos || initialServicosState;
+  const tabelaContato = useMemo(
+    () => data?.tabelaContato || initialContatoState,
+    [data?.tabelaContato]
+  );
+  const tabelaIsolamentoAberto = useMemo(
+    () => data?.tabelaIsolamentoAberto || initialIsolamentoAbertoState,
+    [data?.tabelaIsolamentoAberto]
+  );
+  const tabelaIsolamentoFechado = useMemo(
+    () => data?.tabelaIsolamentoFechado || initialIsolamentoFechadoState,
+    [data?.tabelaIsolamentoFechado]
+  );
+  const tabelaFpAberto = useMemo(
+    () => data?.tabelaFpAberto || initialFpAbertoState,
+    [data?.tabelaFpAberto]
+  );
+  const tabelaFpFechado = useMemo(
+    () => data?.tabelaFpFechado || initialFpFechadoState,
+    [data?.tabelaFpFechado]
+  );
+
+  // O estado dos serviços agora usa o novo array como padrão
+  const servicos = useMemo(
+    () => data?.servicos || defaultServicos,
+    [data?.servicos]
+  );
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     onDataChange({ [name]: type === "checkbox" ? checked : value });
   };
 
-   const handleContatoChange = (index, field, value) => {
-    const updatedData = [...tabelaContato];
+  const handleTableChange = (setter, tableKey, index, field, value) => {
+    const updatedData = [...setter];
     updatedData[index][field] = value;
-    onDataChange({ tabelaContato: updatedData });
+    onDataChange({ [tableKey]: updatedData });
   };
 
-  const handleIsolamentoAbertoChange = (index, field, value) => {
-    const updatedData = [...tabelaIsolamentoAberto];
-    updatedData[index][field] = value;
-    onDataChange({ tabelaIsolamentoAberto: updatedData });
-  };
+  // Handlers específicos para cada tabela para clareza
+  const handleContatoChange = (index, field, value) =>
+    handleTableChange(tabelaContato, "tabelaContato", index, field, value);
+  const handleIsolamentoAbertoChange = (index, field, value) =>
+    handleTableChange(
+      tabelaIsolamentoAberto,
+      "tabelaIsolamentoAberto",
+      index,
+      field,
+      value
+    );
+  const handleIsolamentoFechadoChange = (index, field, value) =>
+    handleTableChange(
+      tabelaIsolamentoFechado,
+      "tabelaIsolamentoFechado",
+      index,
+      field,
+      value
+    );
+  const handleFpAbertoChange = (index, field, value) =>
+    handleTableChange(tabelaFpAberto, "tabelaFpAberto", index, field, value);
+  const handleFpFechadoChange = (index, field, value) =>
+    handleTableChange(tabelaFpFechado, "tabelaFpFechado", index, field, value);
 
-  const handleIsolamentoFechadoChange = (index, field, value) => {
-    const updatedData = [...tabelaIsolamentoFechado];
-    updatedData[index][field] = value;
-    onDataChange({ tabelaIsolamentoFechado: updatedData });
-  };
-
-  const handleFpAbertoChange = (index, field, value) => {
-    const updatedData = [...tabelaFpAberto];
-    updatedData[index][field] = value;
-    onDataChange({ tabelaFpAberto: updatedData });
-  };
-
-  const handleFpFechadoChange = (index, field, value) => {
-    const updatedData = [...tabelaFpFechado];
-    updatedData[index][field] = value;
-    onDataChange({ tabelaFpFechado: updatedData });
-  };
-
-  const handleServiceChange = (e) => {
-    const { name, value } = e.target;
-    const updatedServicos = { ...servicosData, [name]: value };
+  // ==================================================================
+  // ALTERAÇÃO 2: O handler de serviços foi atualizado para trabalhar com o array
+  // ==================================================================
+  const handleServiceChange = (index, value) => {
+    const updatedServicos = [...servicos];
+    updatedServicos[index] = { ...updatedServicos[index], valor: value };
     onDataChange({ servicos: updatedServicos });
   };
 
@@ -284,7 +311,7 @@ function DisjuntorAltaTensaoMedicaoForm({ data, onDataChange }) {
                   <input
                     value={row.corrente}
                     onChange={(e) =>
-                       handleContatoChange(index, "corrente", e.target.value)
+                      handleContatoChange(index, "corrente", e.target.value)
                     }
                     className="input"
                   />
@@ -293,7 +320,7 @@ function DisjuntorAltaTensaoMedicaoForm({ data, onDataChange }) {
                   <input
                     value={row.medido}
                     onChange={(e) =>
-                        handleContatoChange(index, "medido", e.target.value)
+                      handleContatoChange(index, "medido", e.target.value)
                     }
                     className="input"
                   />
@@ -346,7 +373,11 @@ function DisjuntorAltaTensaoMedicaoForm({ data, onDataChange }) {
                   <input
                     value={row.disjuntor}
                     onChange={(e) =>
-                      handleIsolamentoAbertoChange(index, "disjuntor", e.target.value)
+                      handleIsolamentoAbertoChange(
+                        index,
+                        "disjuntor",
+                        e.target.value
+                      )
                     }
                     className="input"
                   />
@@ -355,7 +386,11 @@ function DisjuntorAltaTensaoMedicaoForm({ data, onDataChange }) {
                   <input
                     value={row.tensao}
                     onChange={(e) =>
-                     handleIsolamentoAbertoChange(index, "tensao", e.target.value)
+                      handleIsolamentoAbertoChange(
+                        index,
+                        "tensao",
+                        e.target.value
+                      )
                     }
                     className="input"
                   />
@@ -364,7 +399,11 @@ function DisjuntorAltaTensaoMedicaoForm({ data, onDataChange }) {
                   <input
                     value={row.medido}
                     onChange={(e) =>
-                     handleIsolamentoAbertoChange(index, "medido", e.target.value)
+                      handleIsolamentoAbertoChange(
+                        index,
+                        "medido",
+                        e.target.value
+                      )
                     }
                     className="input"
                   />
@@ -373,7 +412,11 @@ function DisjuntorAltaTensaoMedicaoForm({ data, onDataChange }) {
                   <input
                     value={row.referencia}
                     onChange={(e) =>
-                    handleIsolamentoAbertoChange(index, "referencia", e.target.value)
+                      handleIsolamentoAbertoChange(
+                        index,
+                        "referencia",
+                        e.target.value
+                      )
                     }
                     className="input"
                   />
@@ -382,7 +425,11 @@ function DisjuntorAltaTensaoMedicaoForm({ data, onDataChange }) {
                   <input
                     value={row.tempo}
                     onChange={(e) =>
-                      handleIsolamentoAbertoChange(index, "tempo", e.target.value)
+                      handleIsolamentoAbertoChange(
+                        index,
+                        "tempo",
+                        e.target.value
+                      )
                     }
                     className="input"
                   />
@@ -413,7 +460,11 @@ function DisjuntorAltaTensaoMedicaoForm({ data, onDataChange }) {
                   <input
                     value={row.disjuntor}
                     onChange={(e) =>
-                     handleIsolamentoFechadoChange(index, "disjuntor", e.target.value)
+                      handleIsolamentoFechadoChange(
+                        index,
+                        "disjuntor",
+                        e.target.value
+                      )
                     }
                     className="input"
                   />
@@ -422,7 +473,11 @@ function DisjuntorAltaTensaoMedicaoForm({ data, onDataChange }) {
                   <input
                     value={row.tensao}
                     onChange={(e) =>
-                       handleIsolamentoFechadoChange(index, "tensao", e.target.value)
+                      handleIsolamentoFechadoChange(
+                        index,
+                        "tensao",
+                        e.target.value
+                      )
                     }
                     className="input"
                   />
@@ -431,7 +486,11 @@ function DisjuntorAltaTensaoMedicaoForm({ data, onDataChange }) {
                   <input
                     value={row.medido}
                     onChange={(e) =>
-                      handleIsolamentoFechadoChange(index, "medido", e.target.value)
+                      handleIsolamentoFechadoChange(
+                        index,
+                        "medido",
+                        e.target.value
+                      )
                     }
                     className="input"
                   />
@@ -440,7 +499,11 @@ function DisjuntorAltaTensaoMedicaoForm({ data, onDataChange }) {
                   <input
                     value={row.referencia}
                     onChange={(e) =>
-                     handleIsolamentoFechadoChange(index, "referencia", e.target.value)
+                      handleIsolamentoFechadoChange(
+                        index,
+                        "referencia",
+                        e.target.value
+                      )
                     }
                     className="input"
                   />
@@ -449,7 +512,11 @@ function DisjuntorAltaTensaoMedicaoForm({ data, onDataChange }) {
                   <input
                     value={row.tempo}
                     onChange={(e) =>
-                      handleIsolamentoFechadoChange(index, "tempo", e.target.value)
+                      handleIsolamentoFechadoChange(
+                        index,
+                        "tempo",
+                        e.target.value
+                      )
                     }
                     className="input"
                   />
@@ -499,7 +566,7 @@ function DisjuntorAltaTensaoMedicaoForm({ data, onDataChange }) {
                   <input
                     value={row.lvr}
                     onChange={(e) =>
-                     handleFpAbertoChange(index, "lvr", e.target.value)
+                      handleFpAbertoChange(index, "lvr", e.target.value)
                     }
                     className="input"
                   />
@@ -508,7 +575,7 @@ function DisjuntorAltaTensaoMedicaoForm({ data, onDataChange }) {
                   <input
                     value={row.ch}
                     onChange={(e) =>
-                       handleFpAbertoChange(index, "ch", e.target.value)
+                      handleFpAbertoChange(index, "ch", e.target.value)
                     }
                     className="input"
                   />
@@ -526,7 +593,7 @@ function DisjuntorAltaTensaoMedicaoForm({ data, onDataChange }) {
                   <input
                     value={row.watts}
                     onChange={(e) =>
-                     handleFpAbertoChange(index, "watts", e.target.value)
+                      handleFpAbertoChange(index, "watts", e.target.value)
                     }
                     className="input"
                   />
@@ -535,7 +602,7 @@ function DisjuntorAltaTensaoMedicaoForm({ data, onDataChange }) {
                   <input
                     value={row.fpMed}
                     onChange={(e) =>
-                       handleFpAbertoChange(index, "fpMed", e.target.value)
+                      handleFpAbertoChange(index, "fpMed", e.target.value)
                     }
                     className="input"
                   />
@@ -544,7 +611,7 @@ function DisjuntorAltaTensaoMedicaoForm({ data, onDataChange }) {
                   <input
                     value={row.fpCorr}
                     onChange={(e) =>
-                       handleFpAbertoChange(index, "fpCorr", e.target.value)
+                      handleFpAbertoChange(index, "fpCorr", e.target.value)
                     }
                     className="input"
                   />
@@ -553,7 +620,7 @@ function DisjuntorAltaTensaoMedicaoForm({ data, onDataChange }) {
                   <input
                     value={row.cap}
                     onChange={(e) =>
-                       handleFpAbertoChange(index, "cap", e.target.value)
+                      handleFpAbertoChange(index, "cap", e.target.value)
                     }
                     className="input"
                   />
@@ -594,7 +661,7 @@ function DisjuntorAltaTensaoMedicaoForm({ data, onDataChange }) {
                   <input
                     value={row.hv}
                     onChange={(e) =>
-                     handleFpFechadoChange(index, "hv", e.target.value)
+                      handleFpFechadoChange(index, "hv", e.target.value)
                     }
                     className="input"
                   />
@@ -612,7 +679,7 @@ function DisjuntorAltaTensaoMedicaoForm({ data, onDataChange }) {
                   <input
                     value={row.ch}
                     onChange={(e) =>
-                       handleFpFechadoChange(index, "ch", e.target.value)
+                      handleFpFechadoChange(index, "ch", e.target.value)
                     }
                     className="input"
                   />
@@ -639,7 +706,7 @@ function DisjuntorAltaTensaoMedicaoForm({ data, onDataChange }) {
                   <input
                     value={row.fpMed}
                     onChange={(e) =>
-                       handleFpFechadoChange(index, "fpMed", e.target.value)
+                      handleFpFechadoChange(index, "fpMed", e.target.value)
                     }
                     className="input"
                   />
@@ -657,7 +724,7 @@ function DisjuntorAltaTensaoMedicaoForm({ data, onDataChange }) {
                   <input
                     value={row.cap}
                     onChange={(e) =>
-                       handleFpFechadoChange(index, "cap", e.target.value)
+                      handleFpFechadoChange(index, "cap", e.target.value)
                     }
                     className="input"
                   />
@@ -668,147 +735,49 @@ function DisjuntorAltaTensaoMedicaoForm({ data, onDataChange }) {
         </table>
       </div>
 
-      <h3 className="form-section-title">SERVIÇOS</h3>
-      <div className="servicos-list" style={{ marginBottom: "1rem" }}>
-        <div className="servico-item">
-          <label>Limpeza geral</label>
-          <div className="servico-options">
-            <label>
-              <input
-                type="radio"
-                name="limpezaGeral"
-                value="sim"
-                checked={servicosData.limpezaGeral === "sim"}
-                onChange={handleServiceChange}
-              />{" "}
-              Sim
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="limpezaGeral"
-                value="nao"
-                checked={servicosData.limpezaGeral === "nao"}
-                onChange={handleServiceChange}
-              />{" "}
-              Não
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="limpezaGeral"
-                value="N/A"
-                checked={servicosData.limpezaGeral === "N/A"}
-                onChange={handleServiceChange}
-              />{" "}
-              N/A
-            </label>
-          </div>
-        </div>
-        <div className="servico-item">
-          <label>Lubrificação dos componentes</label>
-          <div className="servico-options">
-            <label>
-              <input
-                type="radio"
-                name="lubrificacao"
-                value="sim"
-                checked={servicosData.lubrificacao === "sim"}
-                onChange={handleServiceChange}
-              />{" "}
-              Sim
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="lubrificacao"
-                value="nao"
-                checked={servicosData.lubrificacao === "nao"}
-                onChange={handleServiceChange}
-              />{" "}
-              Não
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="lubrificacao"
-                value="N/A"
-                checked={servicosData.lubrificacao === "N/A"}
-                onChange={handleServiceChange}
-              />{" "}
-              N/A
-            </label>
-          </div>
-        </div>
-        <div className="servico-item">
-          <label>Testes de acionamento elétricos</label>
-          <div className="servico-options">
-            <label>
-              <input
-                type="radio"
-                name="testesAcionamento"
-                value="sim"
-                checked={servicosData.testesAcionamento === "sim"}
-                onChange={handleServiceChange}
-              />{" "}
-              Sim
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="testesAcionamento"
-                value="nao"
-                checked={servicosData.testesAcionamento === "nao"}
-                onChange={handleServiceChange}
-              />{" "}
-              Não
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="testesAcionamento"
-                value="N/A"
-                checked={servicosData.testesAcionamento === "N/A"}
-                onChange={handleServiceChange}
-              />{" "}
-              N/A
-            </label>
-          </div>
-        </div>
-        <div className="servico-item">
-          <label>Reaperto das Conexões elétricas</label>
-          <div className="servico-options">
-            <label>
-              <input
-                type="radio"
-                name="reapertoConexoes"
-                value="sim"
-                checked={servicosData.reapertoConexoes === "sim"}
-                onChange={handleServiceChange}
-              />{" "}
-              Sim
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="reapertoConexoes"
-                value="nao"
-                checked={servicosData.reapertoConexoes === "nao"}
-                onChange={handleServiceChange}
-              />{" "}
-              Não
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="reapertoConexoes"
-                value="N/A"
-                checked={servicosData.reapertoConexoes === "N/A"}
-                onChange={handleServiceChange}
-              />{" "}
-              N/A
-            </label>
-          </div>
+      {/* ================================================================== */}
+      {/* ALTERAÇÃO 3: O JSX foi atualizado para renderizar o array de serviços */}
+      {/* ================================================================== */}
+      <div className="form-section-sm" style={{ marginTop: "2rem" }}>
+        <h4 className="section-title">SERVIÇOS</h4>
+        <div className="servicos-list">
+          {servicos.map((servico, index) => (
+            <div className="servico-item" key={index}>
+              <label>{servico.label}</label>
+              <div className="servico-options">
+                <label>
+                  <input
+                    type="radio"
+                    name={`servico_${index}`}
+                    value="SIM"
+                    checked={servico.valor === "SIM"}
+                    onChange={() => handleServiceChange(index, "SIM")}
+                  />{" "}
+                  Sim
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    name={`servico_${index}`}
+                    value="NAO"
+                    checked={servico.valor === "NAO"}
+                    onChange={() => handleServiceChange(index, "NAO")}
+                  />{" "}
+                  Não
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    name={`servico_${index}`}
+                    value="N/A"
+                    checked={servico.valor === "N/A"}
+                    onChange={() => handleServiceChange(index, "N/A")}
+                  />{" "}
+                  N/A
+                </label>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
 
@@ -833,8 +802,8 @@ function DisjuntorAltaTensaoMedicaoForm({ data, onDataChange }) {
           onChange={handleChange}
         />
         <label htmlFor="naoConforme">
-          EQUIPAMENTO NÃO CONFORME (se houver, selecione a caixa e
-          descreva as informações na caixa abaixo)
+          EQUIPAMENTO NÃO CONFORME (se houver, selecione a caixa e descreva as
+          informações na caixa abaixo)
         </label>
       </div>
       {formData.naoConforme && (

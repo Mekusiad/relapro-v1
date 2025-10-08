@@ -3,6 +3,8 @@
 import React from "react";
 import { Text, View, StyleSheet } from "@react-pdf/renderer";
 import ComponentInfoHeaderPdf from "./ComponentInfoHeaderPdf.jsx";
+import EnsaioEquipamentosPdf from "./EnsaioEquipamentosPdf.jsx";
+import EnsaioFotosPdf from "./EnsaioFotosPdf.jsx";
 import CondicoesEnsaioPdf from "./CondicoesEnsaioPdf.jsx";
 
 const styles = StyleSheet.create({
@@ -47,129 +49,189 @@ const styles = StyleSheet.create({
     textAlign: "center",
     borderRight: "1px solid #e2e8f0",
   },
-  diagnosisSection: { marginTop: 12 },
+  serviceGrid: {
+    display: "flex",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 8,
+  },
+  serviceItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#f8fafc",
+    padding: "4px 8px",
+    borderRadius: 4,
+    fontSize: 9,
+    width: "48%",
+  },
+  serviceLabel: { flex: 1 },
+  serviceValue: { fontWeight: "bold" },
+  diagnosisSection: { marginTop: 15 },
   obsText: {
     fontSize: 9,
     fontStyle: "italic",
     color: "#475569",
-    backgroundColor: "#f8fafc",
-    padding: "8px 12px",
-    borderRadius: 4,
-    borderLeft: "3px solid #cbd5e1",
+    lineHeight: 1.4,
   },
-  obsLabel: { fontWeight: "bold", color: "#1e293b" },
-  nonConformityText: { color: "#be123c", fontWeight: "bold" },
+  obsLabel: { fontWeight: "bold" },
+  nonConformityText: { color: "#dc2626" },
 });
 
 const ServicosSection = ({ data }) => {
-  if (!data) return null;
-  const servicos = Object.entries(data).filter(
-    ([_, value]) => value && value !== "N/A"
-  );
-  if (servicos.length === 0) return null;
-
-  const serviceLabels = {
-    inspecaoVisualGeral: "Inspeção visual geral",
-    limpezaSeco: "Limpeza a seco",
-    reapertoConexoes: "Reaperto de conexões",
-    inspecaoFiacao: "Inspeção de fiação",
-  };
-
+  if (!data || data.length === 0) return null;
   return (
-    <View style={styles.section} wrap={false}>
-      <Text style={styles.subtitle}>Serviços Executados</Text>
-      {servicos.map(([key, value]) => (
-        <Text key={key} style={{ fontSize: 9, marginBottom: 4 }}>
-          - {serviceLabels[key] || key}: {value}
-        </Text>
-      ))}
+    <View style={styles.section}>
+      <Text style={styles.subtitle}>Serviços Efetuados</Text>
+      <View style={styles.serviceGrid}>
+        {data.map(
+          (servico, index) =>
+            servico.valor !== "N/A" && (
+              <View key={index} style={styles.serviceItem}>
+                <Text style={styles.serviceLabel}>{servico.label}:</Text>
+                <Text style={styles.serviceValue}>{servico.valor}</Text>
+              </View>
+            )
+        )}
+      </View>
     </View>
   );
 };
 
 const TabelaBancoDeBaterias = ({ componente, Html, stylesheet }) => {
+  // ==================================================================
+  // ALTERAÇÃO 1: Definição de colunas simplificada
+  // ==================================================================
   const tensaoColumns = [
     { key: "bateria", label: "Bateria", width: 1 },
     { key: "valorMedido", label: "Valor Medido (Vcc)", width: 2 },
-    { key: "valorReferencia", label: "Ref. (2,22 a 2,27 Vcc)", width: 2.5 },
   ];
 
   return (
     <View style={styles.container}>
       <ComponentInfoHeaderPdf component={componente} />
-      {componente.ensaios.map((ensaio) => (
-        <View key={ensaio.id} style={styles.ensaioWrapper}>
-          <CondicoesEnsaioPdf ensaio={ensaio} />
+      {componente.ensaios.map((ensaio) => {
+        const tabelaDeTensoes = ensaio.dados?.tabelaData || [];
+        const tensaoTotalCalculada = tabelaDeTensoes
+          .reduce((soma, linha) => {
+            const valorNumerico =
+              parseFloat(String(linha.tensao).replace(",", ".")) || 0;
+            return soma + valorNumerico;
+          }, 0)
+          .toFixed(2);
 
-          <View style={styles.section} wrap={false}>
-            <Text
-              style={styles.subtitle}
-            >{`Tensão de Flutuação Individual (Total: ${
-              ensaio.dados?.tensaoTotal || "N/A"
-            } V)`}</Text>
-          </View>
+        return (
+          <View key={ensaio.id} style={styles.ensaioWrapper}>
+            <CondicoesEnsaioPdf ensaio={ensaio} />
 
-          {/* A tabela agora pode quebrar */}
-          <View style={styles.table}>
-            {/* O cabeçalho fica fixo no topo da página se a tabela quebrar */}
-            <View style={[styles.tableRow, styles.tableHeader]} fixed>
-              {tensaoColumns.map((col) => (
-                <Text
-                  key={col.key}
-                  style={[styles.tableColHeader, { flex: col.width || 1 }]}
-                >
-                  {col.label}
-                </Text>
-              ))}
+            <View style={styles.section} wrap={false}>
+              <Text
+                style={styles.subtitle}
+              >{`Tensão de Flutuação Individual (Total: ${tensaoTotalCalculada} V)`}</Text>
             </View>
-            {/* As linhas da tabela podem quebrar */}
-            {(ensaio.dados?.tabelaData || []).map((row, index) => (
-              <View key={index} style={styles.tableRow} wrap={false}>
+
+            <View style={styles.table}>
+              {/* Cabeçalho da Tabela */}
+              <View style={[styles.tableRow, styles.tableHeader]} fixed>
                 {tensaoColumns.map((col) => (
                   <Text
                     key={col.key}
-                    style={[styles.tableCol, { flex: col.width || 1 }]}
+                    style={[styles.tableColHeader, { flex: col.width || 1 }]}
                   >
-                    {row[col.key] || "N/A"}
+                    {col.label}
                   </Text>
                 ))}
               </View>
-            ))}
-          </View>
 
-          <ServicosSection data={ensaio.dados?.servicos} />
-
-          {(ensaio.dados?.observacoes || ensaio.dados?.naoConforme) && (
-            <View style={styles.diagnosisSection} wrap={false}>
-              <Text style={styles.subtitle}>
-                Observações e Diagnóstico do Ensaio
-              </Text>
-              {ensaio.dados.observacoes && (
-                <Text style={styles.obsText}>"{ensaio.dados.observacoes}"</Text>
-              )}
-              {ensaio.dados.naoConforme && (
+              {/* Corpo da Tabela */}
+              {tabelaDeTensoes.map((row, index) => (
                 <View
+                  key={row.id || index}
+                  style={styles.tableRow}
+                  wrap={false}
+                >
+                  {/* Coluna Bateria */}
+                  <Text
+                    style={[
+                      styles.tableCol,
+                      { flex: tensaoColumns[0].width || 1 },
+                    ]}
+                  >
+                    {row.id || "N/A"}
+                  </Text>
+                  {/* Coluna Valor Medido */}
+                  <Text
+                    style={[
+                      styles.tableCol,
+                      { flex: tensaoColumns[1].width || 1 },
+                    ]}
+                  >
+                    {row.tensao || "N/A"}
+                  </Text>
+                </View>
+              ))}
+
+              {/* ================================================================== */}
+              {/* ALTERAÇÃO 2: Rodapé da tabela com o total */}
+              {/* ================================================================== */}
+              <View style={[styles.tableRow, styles.tableFooter]} fixed>
+                <Text
                   style={[
-                    styles.obsText,
-                    { marginTop: ensaio.dados.observacoes ? 8 : 0 },
+                    styles.tableCol,
+                    { flex: tensaoColumns[0].width || 1, fontWeight: "bold" },
                   ]}
                 >
-                  <Text style={styles.obsLabel}>Diagnóstico: </Text>
-                  {Html && stylesheet ? (
-                    <Html stylesheet={stylesheet}>
-                      {ensaio.dados.naoConformeDetalhes || "Não Conforme"}
-                    </Html>
-                  ) : (
-                    <Text style={styles.nonConformityText}>
-                      {ensaio.dados.naoConformeDetalhes || "Não Conforme"}
-                    </Text>
-                  )}
-                </View>
-              )}
+                  Total
+                </Text>
+                <Text
+                  style={[
+                    styles.tableCol,
+                    { flex: tensaoColumns[1].width || 1, fontWeight: "bold" },
+                  ]}
+                >
+                  {tensaoTotalCalculada}
+                </Text>
+              </View>
+              {/* ================================================================== */}
             </View>
-          )}
-        </View>
-      ))}
+
+            <ServicosSection data={ensaio.dados?.servicos} />
+
+            {(ensaio.dados?.observacoes || ensaio.dados?.naoConforme) && (
+              <View style={styles.diagnosisSection} wrap={false}>
+                <Text style={styles.subtitle}>
+                  Observações e Diagnóstico do Ensaio
+                </Text>
+                {ensaio.dados.observacoes && (
+                  <Text style={styles.obsText}>
+                    "{ensaio.dados.observacoes}"
+                  </Text>
+                )}
+                {ensaio.dados.naoConforme && (
+                  <View
+                    style={[
+                      styles.obsText,
+                      { marginTop: ensaio.dados.observacoes ? 8 : 0 },
+                    ]}
+                  >
+                    <Text style={styles.obsLabel}>Diagnóstico: </Text>
+                    {Html && stylesheet ? (
+                      <Html stylesheet={stylesheet}>
+                        {ensaio.dados.naoConformeDetalhes || "Não Conforme"}
+                      </Html>
+                    ) : (
+                      <Text style={styles.nonConformityText}>
+                        {ensaio.dados.naoConformeDetalhes || "Não Conforme"}
+                      </Text>
+                    )}
+                  </View>
+                )}
+              </View>
+            )}
+            <EnsaioEquipamentosPdf equipamentos={ensaio.equipamentos} />
+            <EnsaioFotosPdf fotos={ensaio.fotos} />
+          </View>
+        );
+      })}
     </View>
   );
 };

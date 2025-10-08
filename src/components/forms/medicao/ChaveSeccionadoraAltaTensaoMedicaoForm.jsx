@@ -62,7 +62,7 @@ const initialServicosState = {
 };
 
 function ChaveSeccionadoraAltaTensaoMedicaoForm({ data, onDataChange }) {
- const formData = data || {};
+  const formData = data || {};
   const contatoData = data?.resistenciaContato || initialContatoState;
   const isolamentoData = data?.resistenciaIsolamento || initialIsolamentoState;
   const servicosData = data?.servicos || initialServicosState;
@@ -79,7 +79,7 @@ function ChaveSeccionadoraAltaTensaoMedicaoForm({ data, onDataChange }) {
     updatedData[index][field] = value;
     onDataChange({ resistenciaContato: updatedData });
   };
-  
+
   const handleIsolamentoChange = (index, field, value) => {
     const updatedData = [...isolamentoData];
     updatedData[index][field] = value;
@@ -173,7 +173,11 @@ function ChaveSeccionadoraAltaTensaoMedicaoForm({ data, onDataChange }) {
                   <input
                     value={row.valorReferencia}
                     onChange={(e) =>
-                     handleContatoChange(index, "valorReferencia", e.target.value)
+                      handleContatoChange(
+                        index,
+                        "valorReferencia",
+                        e.target.value
+                      )
                     }
                     className="input"
                   />
@@ -215,7 +219,11 @@ function ChaveSeccionadoraAltaTensaoMedicaoForm({ data, onDataChange }) {
                   <input
                     value={row.tensaoEnsaio}
                     onChange={(e) =>
-                      handleIsolamentoChange(index, "tensaoEnsaio", e.target.value)
+                      handleIsolamentoChange(
+                        index,
+                        "tensaoEnsaio",
+                        e.target.value
+                      )
                     }
                     className="input"
                   />
@@ -224,7 +232,11 @@ function ChaveSeccionadoraAltaTensaoMedicaoForm({ data, onDataChange }) {
                   <input
                     value={row.valorMedido}
                     onChange={(e) =>
-                     handleIsolamentoChange(index, "valorMedido", e.target.value)
+                      handleIsolamentoChange(
+                        index,
+                        "valorMedido",
+                        e.target.value
+                      )
                     }
                     className="input"
                   />
@@ -233,7 +245,11 @@ function ChaveSeccionadoraAltaTensaoMedicaoForm({ data, onDataChange }) {
                   <input
                     value={row.valorReferencia}
                     onChange={(e) =>
-                     handleIsolamentoChange(index, "valorReferencia", e.target.value)
+                      handleIsolamentoChange(
+                        index,
+                        "valorReferencia",
+                        e.target.value
+                      )
                     }
                     className="input"
                   />
@@ -242,7 +258,7 @@ function ChaveSeccionadoraAltaTensaoMedicaoForm({ data, onDataChange }) {
                   <input
                     value={row.tempo}
                     onChange={(e) =>
-                     handleIsolamentoChange(index, "tempo", e.target.value)
+                      handleIsolamentoChange(index, "tempo", e.target.value)
                     }
                     className="input"
                   />
@@ -420,8 +436,8 @@ function ChaveSeccionadoraAltaTensaoMedicaoForm({ data, onDataChange }) {
           onChange={handleChange}
         />
         <label htmlFor="naoConforme">
-          EQUIPAMENTO NÃO CONFORME (se houver, selecione a caixa e
-          descreva as informações na caixa abaixo)
+          EQUIPAMENTO NÃO CONFORME (se houver, selecione a caixa e descreva as
+          informações na caixa abaixo)
         </label>
       </div>
       {formData.naoConforme && (

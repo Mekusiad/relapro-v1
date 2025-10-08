@@ -2,39 +2,41 @@
 import React, { useMemo } from "react";
 import Button from "../../ui/Button.jsx";
 
-// Estado inicial para a nova seção de serviços
-const initialServicosState = {
-  inspecaoVisual: "N/A",
-  limpezaSeco: "N/A",
-  reapertoConexoes: "N/A",
-  inspecaoFios: "N/A",
-};
+// ==================================================================
+// ALTERAÇÃO 1: O estado inicial dos serviços agora é um array de objetos
+// ==================================================================
+const defaultServicos = [
+  {
+    label: "Inspeção visual geral de cada célula do banco de baterias",
+    valor: "N/A",
+  },
+  { label: "Realizar limpeza a seco do banco de baterias", valor: "N/A" },
+  { label: "Reaperto de todas as conexões", valor: "N/A" },
+  {
+    label:
+      "Inspeção da fiação e parafusos quanto à corrosão e contato elétrico",
+    valor: "N/A",
+  },
+];
 
 function BancoDeBateriasMedicaoForm({ data, onDataChange }) {
-   const formData = data || {};
-  
-  // CORREÇÃO APLICADA AQUI:
-  // Envolvemos a inicialização em useMemo para garantir que 'tabelaData'
-  // tenha uma referência estável, evitando re-renderizações desnecessárias.
+  const formData = data || {};
   const tabelaData = useMemo(() => data?.tabelaData || [], [data?.tabelaData]);
-  
-  // Boa prática: Aplicamos a mesma lógica para 'servicosData'
-  const servicosData = useMemo(() => data?.servicos || initialServicosState, [data?.servicos]);
+
+  // O estado dos serviços agora usa o novo array como padrão
+  const servicos = useMemo(
+    () => data?.servicos || defaultServicos,
+    [data?.servicos]
+  );
 
   const handleGerarTabela = () => {
     const novaQuantidade = parseInt(data.numBaterias, 10);
-
     if (novaQuantidade > 0 && novaQuantidade <= 100) {
       const tabelaAntiga = tabelaData || [];
-      const novaTabela = Array.from({ length: novaQuantidade }, (_, i) => {
-        // Se já existe uma bateria nesta posição, mantém os seus dados.
-        // Senão, cria uma nova com tensão vazia.
-        return {
-          id: i + 1,
-          tensao: tabelaAntiga[i]?.tensao || "",
-        };
-      });
-      // Comunica a nova tabela (com os dados preservados) para o componente pai
+      const novaTabela = Array.from({ length: novaQuantidade }, (_, i) => ({
+        id: i + 1,
+        tensao: tabelaAntiga[i]?.tensao || "",
+      }));
       onDataChange({ tabelaData: novaTabela });
     }
   };
@@ -42,7 +44,6 @@ function BancoDeBateriasMedicaoForm({ data, onDataChange }) {
   const handleTableChange = (index, value) => {
     const updatedData = [...tabelaData];
     updatedData[index].tensao = value;
-    // Comunica a tabela atualizada para o pai
     onDataChange({ tabelaData: updatedData });
   };
 
@@ -58,16 +59,17 @@ function BancoDeBateriasMedicaoForm({ data, onDataChange }) {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    // Comunica a alteração de um campo simples para o pai
     onDataChange({ [name]: type === "checkbox" ? checked : value });
   };
 
-    const handleServiceChange = (e) => {
-        const { name, value } = e.target;
-        // Comunica a alteração nos serviços para o pai
-        const updatedServicos = { ...servicosData, [name]: value };
-        onDataChange({ servicos: updatedServicos });
-    };
+  // ==================================================================
+  // ALTERAÇÃO 2: O handler de serviços foi atualizado para trabalhar com o array
+  // ==================================================================
+  const handleServiceChange = (index, value) => {
+    const updatedServicos = [...servicos];
+    updatedServicos[index] = { ...updatedServicos[index], valor: value };
+    onDataChange({ servicos: updatedServicos });
+  };
 
   return (
     <>
@@ -116,7 +118,7 @@ function BancoDeBateriasMedicaoForm({ data, onDataChange }) {
           <label>Quantidade de Baterias</label>
           <input
             type="number"
-            name="numBaterias" // Adicionado o 'name' para o handleChange funcionar
+            name="numBaterias"
             value={formData.numBaterias || 10}
             onChange={handleChange}
             className="input"
@@ -164,151 +166,46 @@ function BancoDeBateriasMedicaoForm({ data, onDataChange }) {
         </table>
       </div>
 
-      <h3 className="form-section-title">SERVIÇOS</h3>
-      <div className="servicos-list" style={{ marginBottom: "1rem" }}>
-        <div className="servico-item">
-          <label>
-            Inspeção visual geral de cada célula do banco de baterias
-          </label>
-          <div className="servico-options">
-            <label>
-              <input
-                type="radio"
-                name="inspecaoVisual"
-                value="sim"
-                checked={servicosData.inspecaoVisual === "sim"}
-                onChange={handleServiceChange}
-              />{" "}
-              Sim
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="inspecaoVisual"
-                value="nao"
-                checked={servicosData.inspecaoVisual === "nao"}
-                onChange={handleServiceChange}
-              />{" "}
-              Não
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="inspecaoVisual"
-                value="N/A"
-                checked={servicosData.inspecaoVisual === "N/A"}
-                onChange={handleServiceChange}
-              />{" "}
-              N/A
-            </label>
-          </div>
-        </div>
-        <div className="servico-item">
-          <label>Realizar limpeza a seco do banco de baterias</label>
-          <div className="servico-options">
-            <label>
-              <input
-                type="radio"
-                name="limpezaSeco"
-                value="sim"
-                checked={servicosData.limpezaSeco === "sim"}
-                onChange={handleServiceChange}
-              />{" "}
-              Sim
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="limpezaSeco"
-                value="nao"
-                checked={servicosData.limpezaSeco === "nao"}
-                onChange={handleServiceChange}
-              />{" "}
-              Não
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="limpezaSeco"
-                value="N/A"
-                checked={servicosData.limpezaSeco === "N/A"}
-                onChange={handleServiceChange}
-              />{" "}
-              N/A
-            </label>
-          </div>
-        </div>
-        <div className="servico-item">
-          <label>Reaperto de todas as conexões</label>
-          <div className="servico-options">
-            <label>
-              <input
-                type="radio"
-                name="reapertoConexoes"
-                value="sim"
-                checked={servicosData.reapertoConexoes === "sim"}
-                onChange={handleServiceChange}
-              />{" "}
-              Sim
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="reapertoConexoes"
-                value="nao"
-                checked={servicosData.reapertoConexoes === "nao"}
-                onChange={handleServiceChange}
-              />{" "}
-              Não
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="reapertoConexoes"
-                value="N/A"
-                checked={servicosData.reapertoConexoes === "N/A"}
-                onChange={handleServiceChange}
-              />{" "}
-              N/A
-            </label>
-          </div>
-        </div>
-        <div className="servico-item">
-          <label>
-            Inspeção da fiação e parafusos quanto à corrosão e contato elétrico
-          </label>
-          <div className="servico-options">
-            <label>
-              <input
-                type="radio"
-                name="inspecaoFios"
-                value="sim"
-                checked={servicosData.inspecaoFios === "sim"}
-                onChange={handleServiceChange}
-              />{" "}
-              Sim
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="inspecaoFios"
-                value="nao"
-                checked={servicosData.inspecaoFios === "nao"}
-                onChange={handleServiceChange}
-              />{" "}
-              Não
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="inspecaoFios"
-                value="N/A"
-                checked={servicosData.inspecaoFios === "N/A"}
-                onChange={handleServiceChange}
-              />{" "}
-              N/A
-            </label>
-          </div>
+      <div className="form-section-sm" style={{ marginTop: "2rem" }}>
+        <h4 className="section-title">SERVIÇOS</h4>
+        <div className="servicos-list">
+          {servicos?.map((servico, index) => (
+            <div className="servico-item" key={index}>
+              <label>{servico.label}</label>
+              <div className="servico-options">
+                <label>
+                  <input
+                    type="radio"
+                    name={`servico_${index}`}
+                    value="SIM"
+                    checked={servico.valor === "SIM"}
+                    onChange={() => handleServiceChange(index, "SIM")}
+                  />{" "}
+                  Sim
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    name={`servico_${index}`}
+                    value="NAO"
+                    checked={servico.valor === "NAO"}
+                    onChange={() => handleServiceChange(index, "NAO")}
+                  />{" "}
+                  Não
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    name={`servico_${index}`}
+                    value="N/A"
+                    checked={servico.valor === "N/A"}
+                    onChange={() => handleServiceChange(index, "N/A")}
+                  />{" "}
+                  N/A
+                </label>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
 
@@ -333,9 +230,9 @@ function BancoDeBateriasMedicaoForm({ data, onDataChange }) {
           onChange={handleChange}
         />
         <label htmlFor="naoConforme">
-          EQUIPAMENTO NÃO CONFORME (se houver, selecione a caixa e
-          descreva as informações na caixa abaixo)
-        </label> 
+          EQUIPAMENTO NÃO CONFORME (se houver, selecione a caixa e descreva as
+          informações na caixa abaixo)
+        </label>
       </div>
       {formData.naoConforme && (
         <div className="form-group">
@@ -354,4 +251,3 @@ function BancoDeBateriasMedicaoForm({ data, onDataChange }) {
 }
 
 export default BancoDeBateriasMedicaoForm;
-

@@ -1,9 +1,18 @@
-// src/components/pdf/tabelas/TabelaDisjuntorMedia.jsx (EXEMPLO A SER REPLICADO)
+// frontend/src/components/pdf/tabelas/TabelaDisjuntorMedia.jsx
 
 import React from "react";
 import { Text, View, StyleSheet } from "@react-pdf/renderer";
 import ComponentInfoHeaderPdf from "./ComponentInfoHeaderPdf.jsx";
 import CondicoesEnsaioPdf from "./CondicoesEnsaioPdf.jsx";
+// ==================================================
+// INÍCIO DA CORREÇÃO
+// 1. Importar os novos componentes
+// ==================================================
+import EnsaioEquipamentosPdf from "./EnsaioEquipamentosPdf.jsx";
+import EnsaioFotosPdf from "./EnsaioFotosPdf.jsx";
+// ==================================================
+// FIM DA CORREÇÃO
+// ==================================================
 
 // Estilos (sem alterações)
 const styles = StyleSheet.create({
@@ -49,65 +58,54 @@ const styles = StyleSheet.create({
     textAlign: "center",
     borderRight: "1px solid #e2e8f0",
   },
-  serviceGrid: {
-    display: "flex",
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: 8,
-  },
-  serviceItem: {
-    flexDirection: "row",
-    alignItems: "center",
+  diagnosisSection: {
+    marginTop: 15,
     backgroundColor: "#f8fafc",
-    padding: "4px 8px",
+    border: "1px solid #e2e8f0",
+    padding: 10,
     borderRadius: 4,
-    fontSize: 9,
-    width: "48%",
   },
-  serviceLabel: { flex: 1 },
-  serviceValue: { fontWeight: "bold" },
-  diagnosisSection: { marginTop: 15 },
-  obsText: {
-    fontSize: 9,
-    fontStyle: "italic",
-    color: "#475569",
-    lineHeight: 1.4,
+  obsText: { fontSize: 9, color: "#475569", fontStyle: "italic" },
+  obsLabel: { fontWeight: "bold", color: "#334155" },
+  nonConformityText: { color: "#be123c", fontWeight: "bold" },
+  // Estilos para a lista de serviços
+  servicosList: {
+    marginTop: 10,
+    display: "flex",
+    flexDirection: "column",
+    gap: 4,
   },
-  obsLabel: { fontWeight: "bold" },
-  nonConformityText: { color: "#dc2626" },
+  servicoItem: { fontSize: 9, color: "#475569" },
 });
 
-// Componente para renderizar tabelas genéricas
+// Componentes auxiliares (sem alterações)
 const EnsaioTable = ({ title, data, columns }) => {
   if (!data || data.length === 0) return null;
   return (
-    <View style={styles.section}>
+    <View style={styles.section} wrap={false}>
       <Text style={styles.subtitle}>{title}</Text>
       <View style={styles.table}>
-        <View style={styles.tableRow}>
+        <View style={[styles.tableRow, { backgroundColor: "#f1f5f9" }]}>
           {columns.map((col) => (
             <Text
-              key={col.key}
-              style={{ ...styles.tableColHeader, flex: col.width || 1 }}
+              key={col.accessor}
+              style={[styles.tableColHeader, { flex: col.width || 1 }]}
             >
-              {col.label}
+              {col.Header}
             </Text>
           ))}
         </View>
-        {data.map((row, rowIndex) => (
+        {data.map((row, i) => (
           <View
-            key={rowIndex}
-            style={[
-              styles.tableRow,
-              rowIndex % 2 === 0 ? styles.tableRowZebra : {},
-            ]}
+            key={row.id || i}
+            style={[styles.tableRow, i % 2 === 0 ? styles.tableRowZebra : {}]}
           >
             {columns.map((col) => (
               <Text
-                key={col.key}
-                style={{ ...styles.tableCol, flex: col.width || 1 }}
+                key={col.accessor}
+                style={[styles.tableCol, { flex: col.width || 1 }]}
               >
-                {row[col.key] || "N/A"}
+                {row[col.accessor] || "N/A"}
               </Text>
             ))}
           </View>
@@ -117,56 +115,50 @@ const EnsaioTable = ({ title, data, columns }) => {
   );
 };
 
-// Componente para a seção de serviços
 const ServicosSection = ({ data }) => {
-  if (!data) return null;
-  const servicos = Object.entries(data).filter(([_, value]) => value);
-  if (servicos.length === 0) return null;
+  if (!data || Object.keys(data).length === 0) return null;
+  const servicosRealizados = Object.entries(data).filter(
+    ([, value]) => value === "sim"
+  );
+  if (servicosRealizados.length === 0) return null;
 
   return (
-    <View style={styles.section}>
-      <Text style={styles.subtitle}>Serviços Efetuados</Text>
-      <View style={styles.serviceGrid}>
-        {servicos.map(([key, value]) => (
-          <View key={key} style={styles.serviceItem}>
-            <Text style={styles.serviceLabel}>
-              {key
-                .replace(/([A-Z])/g, " $1")
-                .replace(/^./, (str) => str.toUpperCase())}
-              :
+    <View style={styles.section} wrap={false}>
+      <Text style={styles.subtitle}>Serviços Executados</Text>
+      <View style={styles.servicosList}>
+        {servicosRealizados.map(([key]) => {
+          const label = key
+            .replace(/([A-Z])/g, " $1")
+            .replace(/^./, (str) => str.toUpperCase());
+          return (
+            <Text key={key} style={styles.servicoItem}>
+              • {label}
             </Text>
-            <Text style={styles.serviceValue}>{value}</Text>
-          </View>
-        ))}
+          );
+        })}
       </View>
     </View>
   );
 };
 
-// Componente principal da tabela de Disjuntor de Média
+// --- Colunas das Tabelas (sem alterações) ---
+const contatoColumns = [
+  /* ... */
+];
+const isolamentoColumns = [
+  /* ... */
+];
+
+// --- Componente Principal ---
 const TabelaDisjuntorMedia = ({ componente, Html, stylesheet }) => {
-  const contatoColumns = [
-    { key: "polo", label: "Pólo" },
-    { key: "disjuntor", label: "Disjuntor" },
-    { key: "corrente", label: "Corrente (A)" },
-    { key: "medido", label: "Valor Medido (µΩ)" },
-    { key: "referencia", label: "Valor Ref. (µΩ)" },
-    { key: "tempo", label: "Tempo (s)" },
-  ];
-  const isolamentoColumns = [
-    { key: "polo", label: "Pólo" },
-    { key: "disjuntor", label: "Disjuntor" },
-    { key: "tensao", label: "Tensão (V)" },
-    { key: "medido", label: "Valor Medido (MΩ)" },
-    { key: "referencia", label: "Valor Ref. (MΩ)" },
-    { key: "tempo", label: "Tempo (s)" },
-  ];
+  if (!componente || !componente.ensaios || componente.ensaios.length === 0)
+    return null;
 
   return (
     <View style={styles.container}>
       <ComponentInfoHeaderPdf component={componente} />
 
-      {componente.ensaios.map((ensaio, index) => {
+      {componente.ensaios.map((ensaio) => {
         const ensaioData = ensaio.dados || {};
         const {
           resistenciaContato,
@@ -176,11 +168,10 @@ const TabelaDisjuntorMedia = ({ componente, Html, stylesheet }) => {
         } = ensaioData;
 
         return (
-          <View key={ensaio.id} style={styles.ensaioWrapper}>
+          <View key={ensaio.id} style={styles.ensaioWrapper} wrap={false}>
             <CondicoesEnsaioPdf ensaio={ensaio} />
-
             <EnsaioTable
-              title="Resistência dos Contatos (µΩ)"
+              title="Resistência de Contato (µΩ)"
               data={resistenciaContato}
               columns={contatoColumns}
             />
@@ -226,6 +217,9 @@ const TabelaDisjuntorMedia = ({ componente, Html, stylesheet }) => {
                 )}
               </View>
             )}
+
+            <EnsaioEquipamentosPdf equipamentos={ensaio.equipamentos} />
+            <EnsaioFotosPdf fotos={ensaio.fotos} />
           </View>
         );
       })}

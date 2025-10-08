@@ -53,13 +53,27 @@ const initialExcitacaoState = [
 ];
 
 function TransformadorAltaTensaoMedicaoForm({ data, onDataChange }) {
-   const formData = data || {};
-  const relacaoData = data?.relacaoData || createInitialRows(1, () => ({ id: Date.now() }));
-  const resistenciaAT = data?.resistenciaAT || createInitialRows(1, () => ({ id: Date.now() }));
-  const resistenciaBT = data?.resistenciaBT || createInitialRows(1, () => ({ id: Date.now() }));
-  const fpTrafoData = data?.fpTrafoData || createInitialRows(1, () => ({ id: Date.now() }));
-  const resistenciaIsolamento = data?.resistenciaIsolamento || createInitialRows(3, (i) => ({ id: i, terminais: ["AT x BT", "AT x MASSA (BT ATERRADO)", "BT x MASSA (AT ATERRADO)"][i] }));
-  const fpBuchaData = data?.fpBuchaData || createInitialRows(6, (i) => ({ id: i }));
+  const formData = data || {};
+  const relacaoData =
+    data?.relacaoData || createInitialRows(1, () => ({ id: Date.now() }));
+  const resistenciaAT =
+    data?.resistenciaAT || createInitialRows(1, () => ({ id: Date.now() }));
+  const resistenciaBT =
+    data?.resistenciaBT || createInitialRows(1, () => ({ id: Date.now() }));
+  const fpTrafoData =
+    data?.fpTrafoData || createInitialRows(1, () => ({ id: Date.now() }));
+  const resistenciaIsolamento =
+    data?.resistenciaIsolamento ||
+    createInitialRows(3, (i) => ({
+      id: i,
+      terminais: [
+        "AT x BT",
+        "AT x MASSA (BT ATERRADO)",
+        "BT x MASSA (AT ATERRADO)",
+      ][i],
+    }));
+  const fpBuchaData =
+    data?.fpBuchaData || createInitialRows(6, (i) => ({ id: i }));
   const excitacaoData = data?.excitacaoData || initialExcitacaoState;
   const servicos = data?.servicos || defaultServicos;
 
@@ -67,7 +81,7 @@ function TransformadorAltaTensaoMedicaoForm({ data, onDataChange }) {
     const { name, value, type, checked } = e.target;
     onDataChange({ [name]: type === "checkbox" ? checked : value });
   };
-  
+
   const addRow = (tableName) => {
     const currentTable = data[tableName] || [];
     const updatedTable = [...currentTable, { id: Date.now() }];
@@ -98,7 +112,6 @@ function TransformadorAltaTensaoMedicaoForm({ data, onDataChange }) {
     onDataChange({ resistenciaBT: updatedData });
   };
 
-  
   const handleIsolamentoChange = (index, field, value) => {
     const updatedData = [...resistenciaIsolamento];
     updatedData[index][field] = value;
@@ -121,7 +134,7 @@ function TransformadorAltaTensaoMedicaoForm({ data, onDataChange }) {
     const updatedData = [...excitacaoData];
     updatedData[index][field] = value;
     onDataChange({ excitacaoData: updatedData });
-  }; 
+  };
 
   const handleServiceChange = (index, value) => {
     const updatedServicos = [...servicos];
@@ -214,7 +227,11 @@ function TransformadorAltaTensaoMedicaoForm({ data, onDataChange }) {
                     className="input"
                     value={row.tap_comutador_at || ""}
                     onChange={(e) =>
-                      handleRelacaoChange(index, "tap_comutador_at", e.target.value)
+                      handleRelacaoChange(
+                        index,
+                        "tap_comutador_at",
+                        e.target.value
+                      )
                     }
                   />
                 </td>
@@ -223,7 +240,11 @@ function TransformadorAltaTensaoMedicaoForm({ data, onDataChange }) {
                     className="input"
                     value={row.tap_comutador_bt || ""}
                     onChange={(e) =>
-                       handleRelacaoChange(index, "tap_comutador_bt", e.target.value)
+                      handleRelacaoChange(
+                        index,
+                        "tap_comutador_bt",
+                        e.target.value
+                      )
                     }
                   />
                 </td>
@@ -232,7 +253,7 @@ function TransformadorAltaTensaoMedicaoForm({ data, onDataChange }) {
                     className="input"
                     value={row.tensao_v_at || ""}
                     onChange={(e) =>
-                       handleRelacaoChange(index, "tensao_v_at", e.target.value)
+                      handleRelacaoChange(index, "tensao_v_at", e.target.value)
                     }
                   />
                 </td>
@@ -241,7 +262,7 @@ function TransformadorAltaTensaoMedicaoForm({ data, onDataChange }) {
                     className="input"
                     value={row.tensao_v_bt || ""}
                     onChange={(e) =>
-                       handleRelacaoChange(index, "tensao_v_bt", e.target.value)
+                      handleRelacaoChange(index, "tensao_v_bt", e.target.value)
                     }
                   />
                 </td>
@@ -250,7 +271,7 @@ function TransformadorAltaTensaoMedicaoForm({ data, onDataChange }) {
                     className="input"
                     value={row.rel_calc || ""}
                     onChange={(e) =>
-                       handleRelacaoChange(index, "rel_calc", e.target.value)
+                      handleRelacaoChange(index, "rel_calc", e.target.value)
                     }
                   />
                 </td>
@@ -259,7 +280,11 @@ function TransformadorAltaTensaoMedicaoForm({ data, onDataChange }) {
                     className="input"
                     value={row.rel_med_h1h3x1x0 || ""}
                     onChange={(e) =>
-                       handleRelacaoChange(index, "rel_med_h1h3x1x0", e.target.value)
+                      handleRelacaoChange(
+                        index,
+                        "rel_med_h1h3x1x0",
+                        e.target.value
+                      )
                     }
                   />
                 </td>
@@ -268,7 +293,11 @@ function TransformadorAltaTensaoMedicaoForm({ data, onDataChange }) {
                     className="input"
                     value={row.rel_med_h2h1x2x0 || ""}
                     onChange={(e) =>
-                       handleRelacaoChange(index, "rel_med_h2h1x2x0", e.target.value)
+                      handleRelacaoChange(
+                        index,
+                        "rel_med_h2h1x2x0",
+                        e.target.value
+                      )
                     }
                   />
                 </td>
@@ -277,7 +306,11 @@ function TransformadorAltaTensaoMedicaoForm({ data, onDataChange }) {
                     className="input"
                     value={row.rel_med_h3h2x3x0 || ""}
                     onChange={(e) =>
-                       handleRelacaoChange(index, "rel_med_h3h2x3x0", e.target.value)
+                      handleRelacaoChange(
+                        index,
+                        "rel_med_h3h2x3x0",
+                        e.target.value
+                      )
                     }
                   />
                 </td>
@@ -305,7 +338,7 @@ function TransformadorAltaTensaoMedicaoForm({ data, onDataChange }) {
           <Button
             type="button"
             variant="secondary"
-            onClick={() => addRow('resistenciaAT')}
+            onClick={() => addRow("resistenciaAT")}
             size="sm"
           >
             <Plus size={16} /> Adicionar Tap
@@ -330,7 +363,11 @@ function TransformadorAltaTensaoMedicaoForm({ data, onDataChange }) {
                     className="input"
                     value={row.tap_comutador || ""}
                     onChange={(e) =>
-                       handleResistenciaATChange(index, "tap_comutador", e.target.value)
+                      handleResistenciaATChange(
+                        index,
+                        "tap_comutador",
+                        e.target.value
+                      )
                     }
                   />
                 </td>
@@ -339,7 +376,11 @@ function TransformadorAltaTensaoMedicaoForm({ data, onDataChange }) {
                     className="input"
                     value={row.tensao_at || ""}
                     onChange={(e) =>
-                     handleResistenciaATChange(index, "tensao_at", e.target.value)
+                      handleResistenciaATChange(
+                        index,
+                        "tensao_at",
+                        e.target.value
+                      )
                     }
                   />
                 </td>
@@ -357,7 +398,7 @@ function TransformadorAltaTensaoMedicaoForm({ data, onDataChange }) {
                     className="input"
                     value={row.h2h1 || ""}
                     onChange={(e) =>
-                     handleResistenciaATChange(index, "h2h1", e.target.value)
+                      handleResistenciaATChange(index, "h2h1", e.target.value)
                     }
                   />
                 </td>
@@ -419,7 +460,11 @@ function TransformadorAltaTensaoMedicaoForm({ data, onDataChange }) {
                     className="input"
                     value={row.tap_comutador || ""}
                     onChange={(e) =>
-                      handleResistenciaBTChange(index, "tap_comutador", e.target.value)
+                      handleResistenciaBTChange(
+                        index,
+                        "tap_comutador",
+                        e.target.value
+                      )
                     }
                   />
                 </td>
@@ -428,7 +473,11 @@ function TransformadorAltaTensaoMedicaoForm({ data, onDataChange }) {
                     className="input"
                     value={row.tensao_bt || ""}
                     onChange={(e) =>
-                       handleResistenciaBTChange(index, "tensao_bt", e.target.value)
+                      handleResistenciaBTChange(
+                        index,
+                        "tensao_bt",
+                        e.target.value
+                      )
                     }
                   />
                 </td>
@@ -437,7 +486,7 @@ function TransformadorAltaTensaoMedicaoForm({ data, onDataChange }) {
                     className="input"
                     value={row.x1x0 || ""}
                     onChange={(e) =>
-                     handleResistenciaBTChange(index, "x1x0", e.target.value)
+                      handleResistenciaBTChange(index, "x1x0", e.target.value)
                     }
                   />
                 </td>
@@ -495,7 +544,11 @@ function TransformadorAltaTensaoMedicaoForm({ data, onDataChange }) {
                     className="input"
                     value={row.tensao_ensaio || ""}
                     onChange={(e) =>
-                       handleIsolamentoChange(index, "tensao_ensaio", e.target.value)
+                      handleIsolamentoChange(
+                        index,
+                        "tensao_ensaio",
+                        e.target.value
+                      )
                     }
                   />
                 </td>
@@ -504,7 +557,11 @@ function TransformadorAltaTensaoMedicaoForm({ data, onDataChange }) {
                     className="input"
                     value={row.val_medido || ""}
                     onChange={(e) =>
-                      handleIsolamentoChange(index, "val_medido", e.target.value)
+                      handleIsolamentoChange(
+                        index,
+                        "val_medido",
+                        e.target.value
+                      )
                     }
                   />
                 </td>
@@ -513,7 +570,7 @@ function TransformadorAltaTensaoMedicaoForm({ data, onDataChange }) {
                     className="input"
                     value={row.tempo_s || ""}
                     onChange={(e) =>
-                     handleIsolamentoChange(index, "tempo_s", e.target.value)
+                      handleIsolamentoChange(index, "tempo_s", e.target.value)
                     }
                   />
                 </td>
@@ -573,11 +630,7 @@ function TransformadorAltaTensaoMedicaoForm({ data, onDataChange }) {
                     className="input"
                     value={row.n || ""}
                     onChange={(e) =>
-                      handleFpTrafoChange(
-                        index,
-                        "n",
-                        e.target.value
-                      )
+                      handleFpTrafoChange(index, "n", e.target.value)
                     }
                   />
                 </td>
@@ -586,11 +639,7 @@ function TransformadorAltaTensaoMedicaoForm({ data, onDataChange }) {
                     className="input"
                     value={row.hv || ""}
                     onChange={(e) =>
-                      handleFpTrafoChange(
-                        index,
-                        "hv",
-                        e.target.value
-                      )
+                      handleFpTrafoChange(index, "hv", e.target.value)
                     }
                   />
                 </td>
@@ -599,11 +648,7 @@ function TransformadorAltaTensaoMedicaoForm({ data, onDataChange }) {
                     className="input"
                     value={row.lv_r || ""}
                     onChange={(e) =>
-                      handleFpTrafoChange(
-                        index,
-                        "lv_r",
-                        e.target.value
-                      )
+                      handleFpTrafoChange(index, "lv_r", e.target.value)
                     }
                   />
                 </td>
@@ -612,11 +657,7 @@ function TransformadorAltaTensaoMedicaoForm({ data, onDataChange }) {
                     className="input"
                     value={row.guard || ""}
                     onChange={(e) =>
-                      handleFpTrafoChange(
-                        index,
-                        "guard",
-                        e.target.value
-                      )
+                      handleFpTrafoChange(index, "guard", e.target.value)
                     }
                   />
                 </td>
@@ -625,11 +666,7 @@ function TransformadorAltaTensaoMedicaoForm({ data, onDataChange }) {
                     className="input"
                     value={row.ch_pos || ""}
                     onChange={(e) =>
-                      handleFpTrafoChange(
-                        index,
-                        "ch_pos",
-                        e.target.value
-                      )
+                      handleFpTrafoChange(index, "ch_pos", e.target.value)
                     }
                   />
                 </td>
@@ -638,11 +675,7 @@ function TransformadorAltaTensaoMedicaoForm({ data, onDataChange }) {
                     className="input"
                     value={row.ma || ""}
                     onChange={(e) =>
-                      handleFpTrafoChange(
-                        index,
-                        "ma",
-                        e.target.value
-                      )
+                      handleFpTrafoChange(index, "ma", e.target.value)
                     }
                   />
                 </td>
@@ -651,11 +684,7 @@ function TransformadorAltaTensaoMedicaoForm({ data, onDataChange }) {
                     className="input"
                     value={row.watts || ""}
                     onChange={(e) =>
-                      handleFpTrafoChange(
-                        index,
-                        "watts",
-                        e.target.value
-                      )
+                      handleFpTrafoChange(index, "watts", e.target.value)
                     }
                   />
                 </td>
@@ -664,11 +693,7 @@ function TransformadorAltaTensaoMedicaoForm({ data, onDataChange }) {
                     className="input"
                     value={row.fp_med || ""}
                     onChange={(e) =>
-                      handleFpTrafoChange(
-                        index,
-                        "fp_med",
-                        e.target.value
-                      )
+                      handleFpTrafoChange(index, "fp_med", e.target.value)
                     }
                   />
                 </td>
@@ -677,11 +702,7 @@ function TransformadorAltaTensaoMedicaoForm({ data, onDataChange }) {
                     className="input"
                     value={row.fp_corr || ""}
                     onChange={(e) =>
-                      handleFpTrafoChange(
-                        index,
-                        "fp_corr",
-                        e.target.value
-                      )
+                      handleFpTrafoChange(index, "fp_corr", e.target.value)
                     }
                   />
                 </td>
@@ -690,11 +711,7 @@ function TransformadorAltaTensaoMedicaoForm({ data, onDataChange }) {
                     className="input"
                     value={row.cap_med || ""}
                     onChange={(e) =>
-                      handleFpTrafoChange(
-                        index,
-                        "cap_med",
-                        e.target.value
-                      )
+                      handleFpTrafoChange(index, "cap_med", e.target.value)
                     }
                   />
                 </td>
@@ -703,11 +720,7 @@ function TransformadorAltaTensaoMedicaoForm({ data, onDataChange }) {
                     className="input"
                     value={row.cap_fab || ""}
                     onChange={(e) =>
-                      handleFpTrafoChange(
-                        index,
-                        "cap_fab",
-                        e.target.value
-                      )
+                      handleFpTrafoChange(index, "cap_fab", e.target.value)
                     }
                   />
                 </td>
@@ -760,11 +773,7 @@ function TransformadorAltaTensaoMedicaoForm({ data, onDataChange }) {
                     className="input"
                     value={row.n_serie || ""}
                     onChange={(e) =>
-                      handleFpBuchaChange(
-                        index,
-                        "n_serie",
-                        e.target.value
-                      )
+                      handleFpBuchaChange(index, "n_serie", e.target.value)
                     }
                   />
                 </td>
@@ -773,11 +782,7 @@ function TransformadorAltaTensaoMedicaoForm({ data, onDataChange }) {
                     className="input"
                     value={row.hv || ""}
                     onChange={(e) =>
-                       handleFpBuchaChange(
-                        index,
-                        "hv",
-                        e.target.value
-                      )
+                      handleFpBuchaChange(index, "hv", e.target.value)
                     }
                   />
                 </td>
@@ -786,11 +791,7 @@ function TransformadorAltaTensaoMedicaoForm({ data, onDataChange }) {
                     className="input"
                     value={row.lv_r || ""}
                     onChange={(e) =>
-                       handleFpBuchaChange(
-                        index,
-                        "lv_r",
-                        e.target.value
-                      )
+                      handleFpBuchaChange(index, "lv_r", e.target.value)
                     }
                   />
                 </td>
@@ -799,11 +800,7 @@ function TransformadorAltaTensaoMedicaoForm({ data, onDataChange }) {
                     className="input"
                     value={row.ch_pos || ""}
                     onChange={(e) =>
-                       handleFpBuchaChange(
-                        index,
-                        "ch_pos",
-                        e.target.value
-                      )
+                      handleFpBuchaChange(index, "ch_pos", e.target.value)
                     }
                   />
                 </td>
@@ -812,11 +809,7 @@ function TransformadorAltaTensaoMedicaoForm({ data, onDataChange }) {
                     className="input"
                     value={row.ma || ""}
                     onChange={(e) =>
-                       handleFpBuchaChange(
-                        index,
-                        "ma",
-                        e.target.value
-                      )
+                      handleFpBuchaChange(index, "ma", e.target.value)
                     }
                   />
                 </td>
@@ -825,11 +818,7 @@ function TransformadorAltaTensaoMedicaoForm({ data, onDataChange }) {
                     className="input"
                     value={row.watts || ""}
                     onChange={(e) =>
-                       handleFpBuchaChange(
-                        index,
-                        "watts",
-                        e.target.value
-                      )
+                      handleFpBuchaChange(index, "watts", e.target.value)
                     }
                   />
                 </td>
@@ -838,11 +827,7 @@ function TransformadorAltaTensaoMedicaoForm({ data, onDataChange }) {
                     className="input"
                     value={row.fp_med || ""}
                     onChange={(e) =>
-                       handleFpBuchaChange(
-                        index,
-                        "fp_med",
-                        e.target.value
-                      )
+                      handleFpBuchaChange(index, "fp_med", e.target.value)
                     }
                   />
                 </td>
@@ -851,11 +836,7 @@ function TransformadorAltaTensaoMedicaoForm({ data, onDataChange }) {
                     className="input"
                     value={row.fp_corr || ""}
                     onChange={(e) =>
-                       handleFpBuchaChange(
-                        index,
-                        "fp_corr",
-                        e.target.value
-                      )
+                      handleFpBuchaChange(index, "fp_corr", e.target.value)
                     }
                   />
                 </td>
@@ -864,11 +845,7 @@ function TransformadorAltaTensaoMedicaoForm({ data, onDataChange }) {
                     className="input"
                     value={row.cap_med || ""}
                     onChange={(e) =>
-                       handleFpBuchaChange(
-                        index,
-                        "cap_med",
-                        e.target.value
-                      )
+                      handleFpBuchaChange(index, "cap_med", e.target.value)
                     }
                   />
                 </td>
@@ -877,11 +854,7 @@ function TransformadorAltaTensaoMedicaoForm({ data, onDataChange }) {
                     className="input"
                     value={row.cap_fab || ""}
                     onChange={(e) =>
-                       handleFpBuchaChange(
-                        index,
-                        "cap_fab",
-                        e.target.value
-                      )
+                      handleFpBuchaChange(index, "cap_fab", e.target.value)
                     }
                   />
                 </td>
@@ -911,11 +884,7 @@ function TransformadorAltaTensaoMedicaoForm({ data, onDataChange }) {
                     className="input"
                     value={row.tensao_kv || ""}
                     onChange={(e) =>
-                      handleExcitacaoChange(
-                        index,
-                        "tensao_kv",
-                        e.target.value
-                      )
+                      handleExcitacaoChange(index, "tensao_kv", e.target.value)
                     }
                   />
                 </td>
@@ -924,11 +893,7 @@ function TransformadorAltaTensaoMedicaoForm({ data, onDataChange }) {
                     className="input"
                     value={row.ma || ""}
                     onChange={(e) =>
-                       handleExcitacaoChange(
-                        index,
-                        "ma",
-                        e.target.value
-                      )
+                      handleExcitacaoChange(index, "ma", e.target.value)
                     }
                   />
                 </td>
@@ -999,9 +964,9 @@ function TransformadorAltaTensaoMedicaoForm({ data, onDataChange }) {
           checked={formData.naoConforme || false}
           onChange={handleChange}
         />
-       <label htmlFor="naoConforme">
-          EQUIPAMENTO NÃO CONFORME (se houver, selecione a caixa e
-          descreva as informações na caixa abaixo)
+        <label htmlFor="naoConforme">
+          EQUIPAMENTO NÃO CONFORME (se houver, selecione a caixa e descreva as
+          informações na caixa abaixo)
         </label>
       </div>
       {formData.naoConforme && (

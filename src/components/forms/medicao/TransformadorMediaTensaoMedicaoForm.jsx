@@ -19,10 +19,18 @@ const defaultServicos = [
 function TransformadorMediaTensaoMedicaoForm({ data, onDataChange }) {
   // Os dados são lidos diretamente das props, sem estado local
   const formData = data || {};
-  const relacaoData = data?.relacaoData || createInitialRows(1, () => ({ id: Date.now() }));
-  const resistenciaAT = data?.resistenciaAT || createInitialRows(1, () => ({ id: Date.now() }));
-  const resistenciaBT = data?.resistenciaBT || createInitialRows(1, () => ({ id: Date.now() }));
-  const resistenciaIsolamento = data?.resistenciaIsolamento || createInitialRows(3, (i) => ({ id: i, terminais: ["AT x BT", "AT x MASSA (BT)", "BT x MASSA (AT)"][i] }));
+  const relacaoData =
+    data?.relacaoData || createInitialRows(1, () => ({ id: Date.now() }));
+  const resistenciaAT =
+    data?.resistenciaAT || createInitialRows(1, () => ({ id: Date.now() }));
+  const resistenciaBT =
+    data?.resistenciaBT || createInitialRows(1, () => ({ id: Date.now() }));
+  const resistenciaIsolamento =
+    data?.resistenciaIsolamento ||
+    createInitialRows(3, (i) => ({
+      id: i,
+      terminais: ["AT x BT", "AT x MASSA (BT)", "BT x MASSA (AT)"][i],
+    }));
   const servicos = data?.servicos || defaultServicos;
 
   const handleChange = (e) => {
@@ -48,14 +56,13 @@ function TransformadorMediaTensaoMedicaoForm({ data, onDataChange }) {
     onDataChange({ resistenciaBT: updatedData });
   };
 
-  
   const handleIsolamentoChange = (index, field, value) => {
     const updatedData = [...resistenciaIsolamento];
     updatedData[index][field] = value;
     onDataChange({ resistenciaIsolamento: updatedData });
   };
 
-    const handleServiceChange = (index, value) => {
+  const handleServiceChange = (index, value) => {
     const updatedServicos = [...servicos];
     updatedServicos[index] = { ...updatedServicos[index], valor: value };
     onDataChange({ servicos: updatedServicos });
@@ -72,8 +79,6 @@ function TransformadorMediaTensaoMedicaoForm({ data, onDataChange }) {
     const updatedTable = currentTable.filter((row) => row.id !== id);
     onDataChange({ [tableName]: updatedTable });
   };
-
-
 
   return (
     <>
@@ -186,11 +191,7 @@ function TransformadorMediaTensaoMedicaoForm({ data, onDataChange }) {
                     className="input"
                     value={row.tensao_v_at || ""}
                     onChange={(e) =>
-                      handleRelacaoChange(
-                        index,
-                        "tensao_v_at",
-                        e.target.value
-                      )
+                      handleRelacaoChange(index, "tensao_v_at", e.target.value)
                     }
                   />
                 </td>
@@ -199,11 +200,7 @@ function TransformadorMediaTensaoMedicaoForm({ data, onDataChange }) {
                     className="input"
                     value={row.tensao_v_bt || ""}
                     onChange={(e) =>
-                      handleRelacaoChange(
-                        index,
-                        "tensao_v_bt",
-                        e.target.value
-                      )
+                      handleRelacaoChange(index, "tensao_v_bt", e.target.value)
                     }
                   />
                 </td>
@@ -212,11 +209,7 @@ function TransformadorMediaTensaoMedicaoForm({ data, onDataChange }) {
                     className="input"
                     value={row.rel_calc || ""}
                     onChange={(e) =>
-                      handleRelacaoChange(
-                        index,
-                        "rel_calc",
-                        e.target.value
-                      )
+                      handleRelacaoChange(index, "rel_calc", e.target.value)
                     }
                   />
                 </td>
@@ -334,11 +327,7 @@ function TransformadorMediaTensaoMedicaoForm({ data, onDataChange }) {
                     className="input"
                     value={row.h1h3 || ""}
                     onChange={(e) =>
-                      handleResistenciaATChange(
-                        index,
-                        "h1h3",
-                        e.target.value
-                      )
+                      handleResistenciaATChange(index, "h1h3", e.target.value)
                     }
                   />
                 </td>
@@ -347,11 +336,7 @@ function TransformadorMediaTensaoMedicaoForm({ data, onDataChange }) {
                     className="input"
                     value={row.h2h1 || ""}
                     onChange={(e) =>
-                      handleResistenciaATChange(
-                        index,
-                        "h2h1",
-                        e.target.value
-                      )
+                      handleResistenciaATChange(index, "h2h1", e.target.value)
                     }
                   />
                 </td>
@@ -360,11 +345,7 @@ function TransformadorMediaTensaoMedicaoForm({ data, onDataChange }) {
                     className="input"
                     value={row.h3h2 || ""}
                     onChange={(e) =>
-                      handleResistenciaATChange(
-                        index,
-                        "h3h2",
-                        e.target.value
-                      )
+                      handleResistenciaATChange(index, "h3h2", e.target.value)
                     }
                   />
                 </td>
@@ -443,11 +424,7 @@ function TransformadorMediaTensaoMedicaoForm({ data, onDataChange }) {
                     className="input"
                     value={row.x1x0 || ""}
                     onChange={(e) =>
-                      handleResistenciaBTChange(
-                        index,
-                        "x1x0",
-                        e.target.value
-                      )
+                      handleResistenciaBTChange(index, "x1x0", e.target.value)
                     }
                   />
                 </td>
@@ -456,11 +433,7 @@ function TransformadorMediaTensaoMedicaoForm({ data, onDataChange }) {
                     className="input"
                     value={row.x2x0 || ""}
                     onChange={(e) =>
-                      handleResistenciaBTChange(
-                        index,
-                        "x2x0",
-                        e.target.value
-                      )
+                      handleResistenciaBTChange(index, "x2x0", e.target.value)
                     }
                   />
                 </td>
@@ -469,11 +442,7 @@ function TransformadorMediaTensaoMedicaoForm({ data, onDataChange }) {
                     className="input"
                     value={row.x3x0 || ""}
                     onChange={(e) =>
-                      handleResistenciaBTChange(
-                        index,
-                        "x3x0",
-                        e.target.value
-                      )
+                      handleResistenciaBTChange(index, "x3x0", e.target.value)
                     }
                   />
                 </td>
@@ -539,11 +508,7 @@ function TransformadorMediaTensaoMedicaoForm({ data, onDataChange }) {
                     className="input"
                     value={row.tempo_s || ""}
                     onChange={(e) =>
-                      handleIsolamentoChange(
-                        index,
-                        "tempo_s",
-                        e.target.value
-                      )
+                      handleIsolamentoChange(index, "tempo_s", e.target.value)
                     }
                   />
                 </td>
@@ -615,10 +580,10 @@ function TransformadorMediaTensaoMedicaoForm({ data, onDataChange }) {
           checked={formData.naoConforme || false}
           onChange={handleChange}
         />
-       <label htmlFor="naoConforme">
-          EQUIPAMENTO NÃO CONFORME (se houver, selecione a caixa e
-          descreva as informações na caixa abaixo)
-        </label>  
+        <label htmlFor="naoConforme">
+          EQUIPAMENTO NÃO CONFORME (se houver, selecione a caixa e descreva as
+          informações na caixa abaixo)
+        </label>
       </div>
       {formData.naoConforme && (
         <div className="form-group">

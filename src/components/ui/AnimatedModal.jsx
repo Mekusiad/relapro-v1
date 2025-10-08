@@ -1,9 +1,9 @@
-import React from 'react';
-import ReactModal from 'react-modal';
-import { motion, AnimatePresence } from 'framer-motion';
-import '../../styles/modals.css'; 
+import React from "react";
+import ReactModal from "react-modal";
+import { motion, AnimatePresence } from "framer-motion";
+import "../../styles/modals.css";
 
-ReactModal.setAppElement('#root');
+ReactModal.setAppElement("#root");
 
 const modalVariants = {
   hidden: {
@@ -15,7 +15,7 @@ const modalVariants = {
     scale: 1,
     transition: {
       duration: 0.2,
-      ease: 'easeOut',
+      ease: "easeOut",
     },
   },
   exit: {
@@ -23,7 +23,7 @@ const modalVariants = {
     scale: 0.95,
     transition: {
       duration: 0.2,
-      ease: 'easeIn',
+      ease: "easeIn",
     },
   },
 };
@@ -31,7 +31,7 @@ const modalVariants = {
 // CORRIGIDO: Agora aceita e utiliza a prop 'className'
 function AnimatedModal({ isOpen, onRequestClose, children, style, className }) {
   // Combina a classe padrão 'modal-overlay' com a classe customizada passada
-  const overlayClasses = `modal-overlay ${className || ''}`.trim();
+  const overlayClasses = `modal-overlay ${className || ""}`.trim();
 
   return (
     <AnimatePresence>
@@ -39,7 +39,7 @@ function AnimatedModal({ isOpen, onRequestClose, children, style, className }) {
         <ReactModal
           isOpen={isOpen}
           onRequestClose={onRequestClose}
-          className="modal-content-placeholder" 
+          className="modal-content-placeholder"
           overlayClassName={overlayClasses} // Utiliza as classes combinadas
           closeTimeoutMS={300}
           style={style}

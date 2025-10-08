@@ -1,103 +1,125 @@
-/* src/styles/login.css */
+/* src/styles/login.css - VERSÃO FINAL COM EFEITO DE VIDRO */
+
+/* 1. Novo fundo da página: um gradiente abstrato e suave */
+body {
+  font-family: "Roboto", sans-serif;
+  background-color: #eef2f7;
+  /* Gradiente complexo para um fundo mais rico */
+  background-image: radial-gradient(
+      at 0% 0%,
+      hsla(212, 90%, 95%, 1) 0px,
+      transparent 50%
+    ),
+    radial-gradient(at 95% 20%, hsla(266, 90%, 95%, 1) 0px, transparent 50%),
+    radial-gradient(at 20% 95%, hsla(320, 90%, 95%, 1) 0px, transparent 50%);
+}
 
 .login-screen-wrapper {
   display: flex;
-  width: 100vw;
-  height: 100vh;
-  overflow: hidden;
-  background-color: var(--white);
-}
-
-/* Painel Lateral Esquerdo */
-.login-sidebar {
-  width: 45%;
-  background-image: url('/src/assets/background-relapro.jpeg'); /* Adicione o caminho para sua imagem */
-  background-size: cover;
-  background-position: center;
-  position: relative;
-  display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--white);
-  text-align: center;
+  min-height: 100vh;
   padding: 2rem;
+  animation: fadeIn 0.6s ease-out forwards;
 }
 
-.login-sidebar::before {
-  content: '';
+.login-card {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 1000px;
+  min-height: 620px;
+  /* O fundo do card em si é removido para que o efeito de vidro apareça */
+  border-radius: 1.25rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 30, 80, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  overflow: hidden;
+}
+
+/* ============================ */
+/* PAINEL ESQUERDO (VISUAL) */
+/* ============================ */
+.login-sidebar {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 3rem;
+  color: white;
+  background: linear-gradient(165deg, #164e63, #0e7490);
+  overflow: hidden;
+}
+
+.login-sidebar::after {
+  content: "";
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(to top, rgba(14, 116, 144, 0.8), rgba(22, 78, 99, 0.9));
-  z-index: 1;
+  top: var(--y, -50%);
+  left: var(--x, -50%);
+  transform: translate(-50%, -50%);
+  width: 300px;
+  height: 300px;
+  background-image: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.1),
+    transparent 70%
+  );
+  pointer-events: none;
+  transition: top 0.2s ease-out, left 0.2s ease-out;
 }
 
 .sidebar-content {
   position: relative;
-  z-index: 2;
-  animation: slideInLeft 0.8s ease-out forwards;
+  text-align: center;
 }
 
-.sidebar-content h1 {
-  font-size: 3.5rem;
+.sidebar-content .logo {
+  font-size: 2.5rem;
   font-weight: 700;
-  color: var(--white);
-  margin: 0;
-  text-shadow: 2px 2px 8px rgba(0,0,0,0.3);
-}
-
-.sidebar-content p {
-  font-size: 1.2rem;
-  max-width: 400px;
-  margin-top: 1rem;
-  line-height: 1.6;
-  color: rgba(255, 255, 255, 0.9);
-}
-
-@keyframes slideInLeft {
-  from {
-    opacity: 0;
-    transform: translateX(-50px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-/* Painel Principal Direito */
-.login-main {
-  width: 55%;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 2rem;
-  animation: fadeIn 1s ease-out forwards;
+  gap: 1rem;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  margin-bottom: 1.5rem;
 }
 
-.login-form-container {
+.sidebar-content .subtitle {
+  font-size: 1.1rem;
+  font-weight: 300;
+  line-height: 1.7;
+  opacity: 0.9;
   max-width: 400px;
-  width: 100%;
+  margin: 0 auto;
 }
 
-.login-header {
-  text-align: left;
-  margin-bottom: 2.5rem;
+/* ============================ */
+/* PAINEL DIREITO (FORMULÁRIO) */
+/* ============================ */
+.login-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 2rem;
+  /* ================================== */
+  /* INÍCIO DA MUDANÇA (Efeito de Vidro) */
+  /* ================================== */
+  background-color: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px); /* Para compatibilidade com Safari */
+  /* ================================== */
+  /* FIM DA MUDANÇA                     */
+  /* ================================== */
 }
 
-.login-header h2 {
-  font-size: 2.2rem;
+.login-box .title {
+  font-size: 2rem;
   font-weight: 700;
-  color: var(--black);
-  margin: 0;
+  color: var(--primary-dark);
 }
 
-.login-header p {
+.login-box .welcome-message {
   color: var(--gray-dark);
-  margin-top: 0.5rem;
-  font-size: 1rem;
+  margin-bottom: 3rem;
 }
 
 .login-form {
@@ -106,82 +128,142 @@
   gap: 1.5rem;
 }
 
-/* Campos de formulário com ícones */
 .form-group-icon {
   position: relative;
 }
-
-.form-group-icon .input-icon {
+.form-group-icon .input-icon,
+.form-group-icon .password-toggle-icon {
   position: absolute;
   top: 50%;
-  left: 1rem;
   transform: translateY(-50%);
-  color: var(--gray-dark);
+  color: #9ca3af;
+  z-index: 1;
+}
+.form-group-icon .input-icon {
+  left: 1rem;
   pointer-events: none;
+}
+.form-group-icon .password-toggle-icon {
+  right: 1rem;
+  cursor: pointer;
 }
 
 .form-group-icon input {
-  padding-left: 3rem;
-  height: 50px;
+  width: 100%;
+  height: 54px;
+  /* Fundo do input semi-transparente para combinar com o "vidro" */
+  background-color: rgba(249, 250, 251, 0.8);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: var(--border-radius);
+  padding: 0.75rem 1rem 0.75rem 3.2rem;
+  font-size: 1rem;
+  transition: all 0.2s ease-in-out;
 }
 
+.form-group-icon input:focus {
+  outline: none;
+  background-color: var(--white);
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px
+    color-mix(in srgb, var(--primary-color) 20%, transparent);
+}
+
+.error-message,
+.form-options,
+.checkbox-container,
+.forgot-password-link,
+.btn-login {
+  /* Os estilos desses elementos permanecem os mesmos da ETAPA 23 */
+  /* ... */
+}
 .error-message {
   color: var(--danger);
-  background-color: #fee2e2;
-  padding: 0.75rem;
-  border-radius: var(--border-radius);
   text-align: center;
   font-size: 0.9rem;
+  font-weight: 500;
 }
-
-/* Opções (Lembrar-me, Esqueceu senha) */
 .form-options {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  font-size: 0.9rem;
+  justify-content: space-between;
+  font-size: 0.875rem;
 }
-
 .checkbox-container {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: var(--gray-dark);
-  cursor: pointer;
+  color: #475569;
 }
-
 .checkbox-container input {
-  width: auto;
   accent-color: var(--primary-color);
 }
-
 .forgot-password-link {
+  font-weight: 500;
   color: var(--primary-color);
   text-decoration: none;
-  font-weight: 500;
 }
 .forgot-password-link:hover {
   text-decoration: underline;
 }
-
-/* Botão de Login */
 .btn-login {
-  height: 50px;
-  font-size: 1.1rem;
+  width: 100%;
+  padding: 0.85rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--white);
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  background-image: linear-gradient(
+    to right,
+    var(--primary-light),
+    var(--primary-color)
+  );
+  transition: all 0.3s ease;
+}
+.btn-login:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 7px 20px
+    color-mix(in srgb, var(--primary-color) 40%, transparent);
+}
+.btn-login:disabled {
+  opacity: 0.6;
+  cursor: wait;
+  transform: none;
+  box-shadow: none;
 }
 
-/* Animação geral de fade-in */
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-/* Responsividade */
-@media (max-width: 900px) {
-  .login-sidebar {
-    display: none;
+/* ============================ */
+/* RESPONSIVIDADE */
+/* ============================ */
+@media (min-width: 900px) {
+  .login-card {
+    flex-direction: row;
   }
-  .login-main {
-    width: 100%;
+  .login-sidebar {
+    width: 40%;
+    border-radius: 1.25rem 0 0 1.25rem;
+  }
+  .login-content {
+    width: 60%;
+    padding: 4.5rem;
+  }
+  .sidebar-content {
+    text-align: left;
+  }
+  .sidebar-content .logo {
+    justify-content: flex-start;
+  }
+}
+
+/* Animações */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
   }
 }

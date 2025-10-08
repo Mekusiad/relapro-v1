@@ -21,10 +21,15 @@ const styles = StyleSheet.create({
   tocLink: { textDecoration: "none", color: "#334155" },
   tocText: { fontSize: 11 },
   mainItemText: { fontWeight: "bold" },
-  equipmentTypeText: { paddingLeft: 15, fontStyle: "italic", color: "#475569" },
-  // Estilo ajustado para os sub-itens
+  substationItemText: {
+    paddingLeft: 15,
+    fontStyle: "italic",
+    color: "#475569",
+    fontWeight: "bold",
+  },
   componentItemContainer: {
     flexDirection: "row",
+    alignItems: "flex-end",
     paddingLeft: 30,
     marginTop: 4,
   },
@@ -50,28 +55,37 @@ const TocItem = ({ text, page, link, style }) => (
 );
 
 function Sumario({ osData, sections, pageNumbers }) {
-  const getPage = (id) => pageNumbers?.[id];
+  // A função getPage agora procura pela âncora
+  const getPage = (id) => pageNumbers?.[`ancora_${id}`];
 
-  const groupedComponents = (osData.subestacoes || [])
-    .flatMap(
-      (sub) =>
-        sub.componentes?.filter(
-          (comp) => comp.ensaios && comp.ensaios.length > 0
-        ) || []
-    )
-    .reduce((acc, comp) => {
-      const key = comp.nomeEquipamento;
-      if (!acc[key]) {
-        acc[key] = [];
+  const substationsWithMeasurements = (osData.subestacoes || [])
+    .map((substation) => {
+      const componentsWithEssays = (substation.componentes || []).filter(
+        (comp) => comp.ensaios && comp.ensaios.length > 0
+      );
+      const uniqueComponentsByType = Object.values(
+        componentsWithEssays.reduce((acc, comp) => {
+          const key = comp.nomeEquipamento;
+          if (!acc[key]) {
+            acc[key] = comp;
+          }
+          return acc;
+        }, {})
+      );
+      if (uniqueComponentsByType.length > 0) {
+        return {
+          id: substation.id,
+          nome: substation.nome,
+          componentes: uniqueComponentsByType,
+        };
       }
-      acc[key].push(comp);
-      return acc;
-    }, {});
+      return null;
+    })
+    .filter((sub) => sub !== null);
 
   if (!osData) return null;
 
   return (
-    // BOOKMARK ADICIONADO AQUI
     <Page
       size="A4"
       style={styles.page}
@@ -80,23 +94,24 @@ function Sumario({ osData, sections, pageNumbers }) {
       <Text style={styles.mainTitle}>Sumário</Text>
 
       <View style={styles.tocContainer}>
+        {/* Os links estáticos não precisam de âncora, mas podemos padronizar */}
         <TocItem
           text="1. DADOS DA ORDEM DE SERVIÇO"
-          page={getPage("dados_os")}
+          page={pageNumbers?.["dados_os"]}
           link="#dados_os"
           style={styles.mainItemText}
         />
         {sections.hasRecommendations && (
           <TocItem
             text="2. RECOMENDAÇÕES TÉCNICAS"
-            page={getPage("recomendacoes")}
+            page={pageNumbers?.["recomendacoes"]}
             link="#recomendacoes"
             style={styles.mainItemText}
           />
         )}
         <TocItem
           text="3. METODOLOGIA APLICADA"
-          page={getPage("metodologia")}
+          page={pageNumbers?.["metodologia"]}
           link="#metodologia"
           style={styles.mainItemText}
         />
@@ -106,58 +121,67 @@ function Sumario({ osData, sections, pageNumbers }) {
             <TocItem
               text="4. MEDIÇÕES DOS EQUIPAMENTOS"
               page={getPage("medicoes")}
-              link="#medicoes"
+              link="#ancora_medicoes"
               style={styles.mainItemText}
             />
 
-            {Object.entries(groupedComponents).map(
-              ([equipmentName, components]) => (
-                <View key={equipmentName}>
-                  <TocItem
-                    text={equipmentName}
-                    page={getPage(`comp_${components[0].id}`)}
-                    link={`#comp_${components[0].id}`}
-                    style={styles.equipmentTypeText}
-                  />
-                  {components.map((comp) => (
-                    <View key={comp.id} style={styles.componentItemContainer}>
-                      <Link src={`#comp_${comp.id}`} style={styles.tocLink}>
-                        <Text style={styles.componentItemText}>{comp.tag}</Text>
-                      </Link>
-                    </View>
-                  ))}
-                </View>
-              )
-            )}
+            {substationsWithMeasurements.map((substation) => (
+              <View key={substation.id}>
+                <TocItem
+                  text={substation.nome}
+                  page={getPage(`comp_${substation.componentes[0].id}`)}
+                  link={`#ancora_comp_${substation.componentes[0].id}`}
+                  style={styles.substationItemText}
+                />
+
+                {substation.componentes.map((comp) => (
+                  <View key={comp.id} style={styles.componentItemContainer}>
+                    <Link
+                      src={`#ancora_comp_${comp.id}`}
+                      style={styles.tocLink}
+                    >
+                      <Text style={styles.componentItemText}>
+                        {comp.nomeEquipamento}
+                      </Text>
+                    </Link>
+                    <Text style={styles.dots} />
+                    <Text style={styles.pageNumber}>
+                      {getPage(`comp_${comp.id}`)}
+                    </Text>
+                  </View>
+                ))}
+              </View>
+            ))}
           </>
         )}
 
+        {/* Restante do sumário */}
         <TocItem
           text="5. CONCLUSÃO"
-          page={getPage("conclusao")}
+          page={pageNumbers?.["conclusao"]}
           link="#conclusao"
           style={styles.mainItemText}
         />
-        {getPage("fotos_antes") && (
+        {pageNumbers?.["fotos_antes"] && (
           <TocItem
             text="6. RELATÓRIO FOTOGRÁFICO - ANTES"
-            page={getPage("fotos_antes")}
+            page={pageNumbers?.["fotos_antes"]}
             link="#fotos_antes"
             style={styles.mainItemText}
           />
         )}
-        {getPage("fotos_durante") && (
+        {pageNumbers?.["fotos_durante"] && (
           <TocItem
             text="7. RELATÓRIO FOTOGRÁFICO - DURANTE"
-            page={getPage("fotos_durante")}
+            page={pageNumbers?.["fotos_durante"]}
             link="#fotos_durante"
             style={styles.mainItemText}
           />
         )}
-        {getPage("fotos_depois") && (
+        {pageNumbers?.["fotos_depois"] && (
           <TocItem
             text="8. RELATÓRIO FOTOGRÁFICO - DEPOIS"
-            page={getPage("fotos_depois")}
+            page={pageNumbers?.["fotos_depois"]}
             link="#fotos_depois"
             style={styles.mainItemText}
           />

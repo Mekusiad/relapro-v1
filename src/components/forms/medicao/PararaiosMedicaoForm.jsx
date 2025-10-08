@@ -4,30 +4,74 @@ import React from "react";
 
 // VALORES PREDEFINIDOS - Agora servem apenas como um modelo
 const initialResistenciaState = [
-  { fase: "A", numeroSerie: "", tensaoEnsaio: "5000", valorMedido: "", valorReferencia: ">1000", tempo: "60" },
-  { fase: "B", numeroSerie: "", tensaoEnsaio: "5000", valorMedido: "", valorReferencia: ">1000", tempo: "60" },
-  { fase: "C", numeroSerie: "", tensaoEnsaio: "5000", valorMedido: "", valorReferencia: ">1000", tempo: "60" },
+  {
+    fase: "A",
+    numeroSerie: "",
+    tensaoEnsaio: "5000",
+    valorMedido: "",
+    valorReferencia: ">1000",
+    tempo: "60",
+  },
+  {
+    fase: "B",
+    numeroSerie: "",
+    tensaoEnsaio: "5000",
+    valorMedido: "",
+    valorReferencia: ">1000",
+    tempo: "60",
+  },
+  {
+    fase: "C",
+    numeroSerie: "",
+    tensaoEnsaio: "5000",
+    valorMedido: "",
+    valorReferencia: ">1000",
+    tempo: "60",
+  },
 ];
 
 const initialFugaState = [
-  { fase: "A", numeroSerie: "", tensaoEnsaio: "5000", valorMedido: "", valorReferencia: "<300", tempo: "60" },
-  { fase: "B", numeroSerie: "", tensaoEnsaio: "5000", valorMedido: "", valorReferencia: "<300", tempo: "60" },
-  { fase: "C", numeroSerie: "", tensaoEnsaio: "5000", valorMedido: "", valorReferencia: "<300", tempo: "60" },
+  {
+    fase: "A",
+    numeroSerie: "",
+    tensaoEnsaio: "5000",
+    valorMedido: "",
+    valorReferencia: "<300",
+    tempo: "60",
+  },
+  {
+    fase: "B",
+    numeroSerie: "",
+    tensaoEnsaio: "5000",
+    valorMedido: "",
+    valorReferencia: "<300",
+    tempo: "60",
+  },
+  {
+    fase: "C",
+    numeroSerie: "",
+    tensaoEnsaio: "5000",
+    valorMedido: "",
+    valorReferencia: "<300",
+    tempo: "60",
+  },
 ];
-
 
 // Função helper para criar uma cópia profunda (deep copy) dos dados iniciais.
 const getInitialState = (existingData) => ({
-    ...existingData,
-    resistenciaIsolamento: existingData?.resistenciaIsolamento || JSON.parse(JSON.stringify(initialResistenciaState)),
-    correnteFuga: existingData?.correnteFuga || JSON.parse(JSON.stringify(initialFugaState)),
+  ...existingData,
+  resistenciaIsolamento:
+    existingData?.resistenciaIsolamento ||
+    JSON.parse(JSON.stringify(initialResistenciaState)),
+  correnteFuga:
+    existingData?.correnteFuga || JSON.parse(JSON.stringify(initialFugaState)),
 });
-
 
 function PararaiosMedicaoForm({ data, onDataChange }) {
   // Garantimos que cada formulário trabalhe com sua própria cópia dos dados.
   const formData = getInitialState(data);
-  const { resistenciaIsolamento: isolamentoData, correnteFuga: fugaData } = formData;
+  const { resistenciaIsolamento: isolamentoData, correnteFuga: fugaData } =
+    formData;
 
   // Função genérica para atualizar campos simples e comunicar ao pai.
   const handleChange = (e) => {
@@ -42,22 +86,22 @@ function PararaiosMedicaoForm({ data, onDataChange }) {
   const handleIsolamentoChange = (index, field, value) => {
     // Usamos .map() para criar um NOVO array.
     const updatedData = isolamentoData.map((row, i) => {
-        if (i === index) {
-            // Usamos o spread operator (...) para criar um NOVO objeto para a linha que foi alterada.
-            return { ...row, [field]: value };
-        }
-        // Retornamos a linha original se ela não foi alterada.
-        return row;
+      if (i === index) {
+        // Usamos o spread operator (...) para criar um NOVO objeto para a linha que foi alterada.
+        return { ...row, [field]: value };
+      }
+      // Retornamos a linha original se ela não foi alterada.
+      return row;
     });
     onDataChange({ resistenciaIsolamento: updatedData });
   };
-  
+
   const handleFugaChange = (index, field, value) => {
     const updatedData = fugaData.map((row, i) => {
-        if (i === index) {
-            return { ...row, [field]: value };
-        }
-        return row;
+      if (i === index) {
+        return { ...row, [field]: value };
+      }
+      return row;
     });
     onDataChange({ correnteFuga: updatedData });
   };
@@ -176,11 +220,7 @@ function PararaiosMedicaoForm({ data, onDataChange }) {
                   <input
                     value={row.tempo || ""}
                     onChange={(e) =>
-                      handleIsolamentoChange(
-                        index,
-                        "tempo",
-                        e.target.value
-                      )
+                      handleIsolamentoChange(index, "tempo", e.target.value)
                     }
                     className="input"
                   />
@@ -212,11 +252,7 @@ function PararaiosMedicaoForm({ data, onDataChange }) {
                   <input
                     value={row.numeroSerie || ""}
                     onChange={(e) =>
-                      handleFugaChange(
-                        index,
-                        "numeroSerie",
-                        e.target.value
-                      )
+                      handleFugaChange(index, "numeroSerie", e.target.value)
                     }
                     className="input"
                   />
@@ -225,11 +261,7 @@ function PararaiosMedicaoForm({ data, onDataChange }) {
                   <input
                     value={row.tensaoEnsaio || ""}
                     onChange={(e) =>
-                      handleFugaChange(
-                        index,
-                        "tensaoEnsaio",
-                        e.target.value
-                      )
+                      handleFugaChange(index, "tensaoEnsaio", e.target.value)
                     }
                     className="input"
                   />
@@ -238,11 +270,7 @@ function PararaiosMedicaoForm({ data, onDataChange }) {
                   <input
                     value={row.valorMedido || ""}
                     onChange={(e) =>
-                      handleFugaChange(
-                        index,
-                        "valorMedido",
-                        e.target.value
-                      )
+                      handleFugaChange(index, "valorMedido", e.target.value)
                     }
                     className="input"
                   />
@@ -251,11 +279,7 @@ function PararaiosMedicaoForm({ data, onDataChange }) {
                   <input
                     value={row.valorReferencia || ""}
                     onChange={(e) =>
-                      handleFugaChange(
-                        index,
-                        "valorReferencia",
-                        e.target.value
-                      )
+                      handleFugaChange(index, "valorReferencia", e.target.value)
                     }
                     className="input"
                   />
@@ -264,11 +288,7 @@ function PararaiosMedicaoForm({ data, onDataChange }) {
                   <input
                     value={row.tempo || ""}
                     onChange={(e) =>
-                      handleFugaChange(
-                        index,
-                        "tempo",
-                        e.target.value
-                      )
+                      handleFugaChange(index, "tempo", e.target.value)
                     }
                     className="input"
                   />
@@ -279,7 +299,7 @@ function PararaiosMedicaoForm({ data, onDataChange }) {
         </table>
       </div>
 
-            <div className="form-group-inline-checkbox">
+      <div className="form-group-inline-checkbox">
         <input
           type="checkbox"
           id="naoConforme"
@@ -288,8 +308,8 @@ function PararaiosMedicaoForm({ data, onDataChange }) {
           onChange={handleChange}
         />
         <label htmlFor="naoConforme">
-          EQUIPAMENTO NÃO CONFORME (se houver, selecione a caixa e
-          descreva as informações na caixa abaixo)
+          EQUIPAMENTO NÃO CONFORME (se houver, selecione a caixa e descreva as
+          informações na caixa abaixo)
         </label>
       </div>
       {formData.naoConforme && (

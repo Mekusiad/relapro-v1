@@ -16,7 +16,7 @@
 }
 
 .btn .material-icons {
-    font-size: 1.2rem;
+  font-size: 1.2rem;
 }
 
 /* Variante Primária (Azul do Tema) */
@@ -32,12 +32,14 @@
 }
 
 /* Variante Secundária/Cancelar (Cinza claro) */
-.btn-secondary, .btn-cancel {
+.btn-secondary,
+.btn-cancel {
   background-color: var(--gray-light);
   color: var(--black);
   border-color: var(--gray-medium);
 }
-.btn-secondary:hover, .btn-cancel:hover {
+.btn-secondary:hover,
+.btn-cancel:hover {
   background-color: #e0e0e0;
   transform: translateY(-2px);
 }
@@ -76,10 +78,10 @@
 }
 
 .btn:disabled {
-    background-color: var(--gray-medium);
-    cursor: not-allowed;
-    transform: none;
-    box-shadow: none;
+  background-color: var(--gray-medium);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 /* Variante para botão secundário com borda */

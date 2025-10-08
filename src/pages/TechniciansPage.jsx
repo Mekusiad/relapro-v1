@@ -1,50 +1,61 @@
 // src/pages/TechniciansPage.jsx
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { toast } from "sonner";
 import { useAuth } from "../contexts/AuthContext.jsx";
-import {
-  getTechnicians,
-  addTechnician,
-  updateTechnician,
-  deleteTechnician,
-} from "../services/technicianService.js";
+import { getTechnicians, addTechnician, updateTechnician, deleteTechnician } from "../services/technicianService.js";
 import TechnicianCard from "../components/ui/TechnicianCard.jsx";
 import TechnicianFormModal from "../components/modals/TechnicianFormModal.jsx";
 import ConfirmationModal from "../components/modals/ConfirmationModal.jsx";
 import Button from "../components/ui/Button.jsx";
+import { Search } from "lucide-react";
 import "../styles/technicians.css";
 
 function TechniciansPage() {
-  const [technicians, setTechnicians] = useState([]);
+  const [allTechnicians, setAllTechnicians] = useState([]); // Armazena todos os técnicos
+  const [filteredTechnicians, setFilteredTechnicians] = useState([]); // Armazena os técnicos filtrados
   const [loading, setLoading] = useState(true);
   const [isFormModalOpen, setIsFormModalOpen] = useState(false);
   const [editingTechnician, setEditingTechnician] = useState(null);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [technicianToDelete, setTechnicianToDelete] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(0);
+  const [searchTerm, setSearchTerm] = useState(""); // Estado para o termo de busca
 
   const { user } = useAuth();
 
-  const loadTechnicians = async (page) => {
+  // Função para carregar todos os técnicos uma única vez
+  const loadAllTechnicians = useCallback(async () => {
     try {
       setLoading(true);
-      const data = await getTechnicians({ page: page, limit: 12 });
-      setTechnicians(data.funcionarios);
-      setTotalPages(data.totalPages);
-      setCurrentPage(data.currentPage);
+      const data = await getTechnicians(); // Busca a lista completa
+      setAllTechnicians(data.funcionarios);
+      setFilteredTechnicians(data.funcionarios); // Inicialmente, a lista filtrada é a lista completa
     } catch (error) {
       console.error("Falha ao carregar técnicos:", error);
       toast.error(error.message || "Falha ao carregar técnicos.");
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
+  // Carrega os dados quando o componente é montado
   useEffect(() => {
-    loadTechnicians(currentPage);
-  }, [currentPage]);
+    if (user) {
+      loadAllTechnicians();
+    }
+  }, [user, loadAllTechnicians]);
+
+  // Efeito para aplicar o filtro sempre que o searchTerm ou a lista principal mudam
+  useEffect(() => {
+    const lowercasedFilter = searchTerm.toLowerCase();
+    const filteredData = allTechnicians.filter(item => {
+      const nameMatch = item.nome.toLowerCase().includes(lowercasedFilter);
+      const matriculaMatch = item.matricula.toString().includes(lowercasedFilter);
+      return nameMatch || matriculaMatch;
+    });
+    setFilteredTechnicians(filteredData);
+  }, [searchTerm, allTechnicians]);
+
 
   const handleOpenFormModal = (technician = null) => {
     setEditingTechnician(technician);
@@ -56,7 +67,6 @@ function TechniciansPage() {
     setEditingTechnician(null);
   };
 
-  // Ajustado para o fluxo manual do toast
   const handleSave = async (technicianData) => {
     const isEditing = !!editingTechnician;
     const toastId = toast.loading(
@@ -70,14 +80,12 @@ function TechniciansPage() {
 
       if (response.status === true) {
         toast.success(response.message, { id: toastId });
-        loadTechnicians(currentPage);
+        loadAllTechnicians(); // Recarrega a lista completa após salvar
         handleCloseFormModal();
       } else {
-        // Caso a API retorne um erro lógico (status: false)
         toast.error(response.message, { id: toastId });
       }
     } catch (error) {
-      // Caso a API retorne um erro de rede/servidor (ex: 4xx, 5xx)
       toast.error(error.message, { id: toastId });
     }
   };
@@ -87,21 +95,19 @@ function TechniciansPage() {
     setIsConfirmModalOpen(true);
   };
 
-  // Ajustado para o fluxo manual do toast
   const handleConfirmDelete = async () => {
     if (!technicianToDelete || !user) return;
-
     const toastId = toast.loading("Excluindo funcionário...");
 
     try {
       const response = await deleteTechnician(
-        user.matricula,
-        technicianToDelete.matricula
+        technicianToDelete.matricula,
+        user.matricula
       );
 
       if (response.status === true) {
         toast.success(response.message, { id: toastId });
-        loadTechnicians(currentPage);
+        loadAllTechnicians(); // Recarrega a lista completa após excluir
       } else {
         toast.error(response.message, { id: toastId });
       }
@@ -113,69 +119,47 @@ function TechniciansPage() {
     setTechnicianToDelete(null);
   };
 
-  const handleNextPage = () => {
-    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
-  };
-
-  const handlePrevPage = () => {
-    if (currentPage > 1) setCurrentPage(currentPage - 1);
-  };
-
   return (
     <div className="technicians-screen-container container">
-      <div className="screen-header">
-        <h1>
-          <span className="material-icons">engineering</span> Gestão de Técnicos
-        </h1>
-        <Button variant="primary" onClick={() => handleOpenFormModal(null)}>
-          <span className="material-icons">add</span> Cadastrar Novo Técnico
-        </Button>
+      <div className="screen-header with-filter">
+        <div className="header-content">
+          <h1>
+            <span className="material-icons">engineering</span> Gestão de
+            Técnicos
+          </h1>
+          <Button variant="primary" onClick={() => handleOpenFormModal(null)}>
+            <span className="material-icons">add</span> Cadastrar Novo Técnico
+          </Button>
+        </div>
+        <div className="search-bar-wrapper">
+           <Search className="search-icon" size={20} />
+          <input
+            type="text"
+            placeholder="Pesquisar por nome ou matrícula..."
+            className="input search-input"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
       </div>
 
       {loading ? (
         <p>Carregando técnicos...</p>
       ) : (
-        <>
-          <div className="technicians-grid">
-            {technicians.length > 0 ? (
-              technicians.map((tech) => (
-                <TechnicianCard
-                  key={tech.id}
-                  technician={tech}
-                  onEdit={() => handleOpenFormModal(tech)}
-                  onDelete={() => handleDeleteClick(tech)}
-                />
-              ))
-            ) : (
-              <p>Nenhum técnico encontrado.</p>
-            )}
-          </div>
-          {totalPages > 1 && (
-            <div
-              className="pagination-controls"
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                marginTop: "2rem",
-                gap: "1rem",
-              }}
-            >
-              <Button onClick={handlePrevPage} disabled={currentPage === 1}>
-                Anterior
-              </Button>
-              <span>
-                Página {currentPage} de {totalPages}
-              </span>
-              <Button
-                onClick={handleNextPage}
-                disabled={currentPage === totalPages}
-              >
-                Próximo
-              </Button>
-            </div>
+        <div className="technicians-grid">
+          {filteredTechnicians.length > 0 ? (
+            filteredTechnicians.map((tech) => (
+              <TechnicianCard
+                key={tech.id}
+                technician={tech}
+                onEdit={() => handleOpenFormModal(tech)}
+                onDelete={() => handleDeleteClick(tech)}
+              />
+            ))
+          ) : (
+            <p>Nenhum técnico encontrado com os critérios de busca.</p>
           )}
-        </>
+        </div>
       )}
 
       <TechnicianFormModal
@@ -197,3 +181,4 @@ function TechniciansPage() {
 }
 
 export default TechniciansPage;
+

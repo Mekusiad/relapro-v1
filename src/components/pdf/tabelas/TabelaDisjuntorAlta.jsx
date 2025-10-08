@@ -4,6 +4,8 @@ import React from "react";
 import { Text, View, StyleSheet } from "@react-pdf/renderer";
 import ComponentInfoHeaderPdf from "./ComponentInfoHeaderPdf.jsx";
 import CondicoesEnsaioPdf from "./CondicoesEnsaioPdf.jsx";
+import EnsaioEquipamentosPdf from "./EnsaioEquipamentosPdf.jsx";
+import EnsaioFotosPdf from "./EnsaioFotosPdf.jsx";
 
 // --- ESTILOS ---
 const styles = StyleSheet.create({
@@ -117,30 +119,20 @@ const EnsaioTable = ({ title, data, columns }) => {
 };
 
 const ServicosSection = ({ data }) => {
-  if (!data) return null;
-  const servicos = Object.entries(data).filter(
-    ([_, value]) => value && value !== "N/A"
-  );
-  if (servicos.length === 0) return null;
-
-  const serviceLabels = {
-    limpezaComponentes: "Limpeza dos componentes",
-    inspecaoVisual: "Inspeção Visual",
-    reapertoConexoes: "Reaperto das Conexões",
-  };
-
+  if (!data || data.length === 0) return null;
   return (
-    <View style={styles.section} wrap={false}>
+    <View style={styles.section}>
       <Text style={styles.subtitle}>Serviços Efetuados</Text>
       <View style={styles.serviceGrid}>
-        {servicos.map(([key, value]) => (
-          <View key={key} style={styles.serviceItem}>
-            <Text style={styles.serviceLabel}>
-              {serviceLabels[key] || key}:
-            </Text>
-            <Text style={styles.serviceValue}>{value}</Text>
-          </View>
-        ))}
+        {data.map(
+          (servico, index) =>
+            servico.valor !== "N/A" && (
+              <View key={index} style={styles.serviceItem}>
+                <Text style={styles.serviceLabel}>{servico.label}:</Text>
+                <Text style={styles.serviceValue}>{servico.valor}</Text>
+              </View>
+            )
+        )}
       </View>
     </View>
   );
@@ -236,6 +228,8 @@ const TabelaDisjuntorAlta = ({ componente, Html, stylesheet }) => {
               )}
             </View>
           )}
+          <EnsaioEquipamentosPdf equipamentos={ensaio.equipamentos} />
+          <EnsaioFotosPdf fotos={ensaio.fotos} />
         </View>
       ))}
     </View>

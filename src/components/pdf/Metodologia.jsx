@@ -56,6 +56,7 @@ const Metodologia = ({ bookmarkId }) => (
   <Page
     size="A4"
     style={styles.page}
+    id={bookmarkId}
     bookmark={{ title: "Metodologia", id: bookmarkId }}
   >
     <Text style={styles.mainTitle}>3. Metodologia e Critérios</Text>

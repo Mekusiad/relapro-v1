@@ -185,8 +185,8 @@ function MeasurementModal({
     }
   }, [isOpen, currentMeasurement, user]);
 
-   const handleDataChange = useCallback((newData) => {
-    setMeasurementData(prevData => ({ ...prevData, ...newData }));
+  const handleDataChange = useCallback((newData) => {
+    setMeasurementData((prevData) => ({ ...prevData, ...newData }));
   }, []);
 
   const handlePhotosChange = useCallback((updatedPhotos) => {
@@ -217,8 +217,9 @@ function MeasurementModal({
       const response = await updatePhotoEnsaioDescription(
         numeroOs,
         currentMeasurement.component?.ensaios?.[0].id,
-        photo.cloudinaryId, 
-        photo.descricao);
+        photo.cloudinaryId,
+        photo.descricao
+      );
       // Atualiza o estado inicial para evitar chamadas repetidas
       setInitialPhotos((prev) =>
         prev.map((p) =>
@@ -290,10 +291,11 @@ function MeasurementModal({
     setSelectedEquipment((prev) => prev.filter((e) => e.id !== equipId));
   };
 
-const handleSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!currentMeasurement || !user) return;
-    if (selectedEquipment.length === 0) return toast.error("Selecione ao menos um equipamento.");
+    if (selectedEquipment.length === 0)
+      return toast.error("Selecione ao menos um equipamento.");
 
     setIsSaving(true);
     const toastId = toast.loading("A salvar medições...");
@@ -322,7 +324,9 @@ const handleSubmit = async (e) => {
         : await saveMeasurement(user.matricula, numeroOs, payload);
 
       if (!ensaioResponse || !ensaioResponse.status) {
-        throw new Error(ensaioResponse.message || "Falha ao salvar os dados da medição.");
+        throw new Error(
+          ensaioResponse.message || "Falha ao salvar os dados da medição."
+        );
       }
 
       const savedEnsaio = ensaioResponse.data;
@@ -332,20 +336,27 @@ const handleSubmit = async (e) => {
       if (fotosParaUpload.length > 0) {
         toast.loading("A enviar fotos...", { id: toastId });
         const uploadPromises = fotosParaUpload.map((photo) =>
-          uploadEnsaioPhoto(numeroOs, savedEnsaio.id, photo.file, photo.descricao)
+          uploadEnsaioPhoto(
+            numeroOs,
+            savedEnsaio.id,
+            photo.file,
+            photo.descricao
+          )
         );
         // O backend deve retornar as fotos criadas
-        const uploadedPhotosData = await Promise.all(uploadPromises); 
+        const uploadedPhotosData = await Promise.all(uploadPromises);
         // Adiciona as novas fotos ao objeto de ensaio para passar para o pai
-        savedEnsaio.fotos = [...(savedEnsaio.fotos || []), ...uploadedPhotosData.flatMap(res => res.data)];
+        savedEnsaio.fotos = [
+          ...(savedEnsaio.fotos || []),
+          ...uploadedPhotosData.flatMap((res) => res.data),
+        ];
       }
 
       toast.success("Medições e fotos salvas com sucesso!", { id: toastId });
-      
+
       // 3. Chama o callback onSaveSuccess com o objeto de ensaio completo e atualizado
       onSaveSuccess(savedEnsaio);
       onRequestClose();
-
     } catch (error) {
       toast.error(error.message, { id: toastId });
     } finally {
@@ -376,9 +387,7 @@ const handleSubmit = async (e) => {
               name="dataEnsaio"
               className="input"
               value={measurementData.dataEnsaio || ""}
-              onChange={(e) =>
-                handleDataChange({ dataEnsaio: e.target.value })
-              }
+              onChange={(e) => handleDataChange({ dataEnsaio: e.target.value })}
             />
           </div>
           <div className="form-group">
@@ -421,7 +430,6 @@ const handleSubmit = async (e) => {
         <hr className="form-divider" />
         <h3 className="form-section-title">Fotos do Ensaio</h3>
         <PhotoUploadBlock
-          
           name="fotosEnsaio"
           photos={measurementData.fotos || []}
           onPhotosChange={handlePhotosChange}

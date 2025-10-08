@@ -97,6 +97,7 @@ const Recomendacoes = ({ osData, bookmarkId }) => {
     <Page
       size="A4"
       style={styles.page}
+      id={bookmarkId}
       bookmark={{ title: "Recomendações", id: bookmarkId }}
     >
       <Text style={styles.mainTitle}>2. Recomendações Técnicas</Text>

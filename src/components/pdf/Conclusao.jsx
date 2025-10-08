@@ -97,6 +97,7 @@ const Conclusao = ({ osData, bookmarkId }) => {
     <Page
       size="A4"
       style={styles.page}
+      id={bookmarkId}
       bookmark={{ title: "Conclusão", id: bookmarkId }}
     >
       <Text style={styles.mainTitle}>5. Conclusão</Text>
@@ -118,7 +119,7 @@ const Conclusao = ({ osData, bookmarkId }) => {
               <Text style={styles.substationName}>
                 Subestação: {item.subestacaoNome}
               </Text>
-              <Text style={styles.observationText}>"{item.observation}"</Text>
+              <Text style={styles.observationText}>"{item.observacao}"</Text>
             </View>
           ))
         ) : (

@@ -3,12 +3,12 @@
 import React from "react";
 
 const initialServicosState = {
-  servicoCaixas: 'N/A',
-  servicoCaptores: 'N/A',
+  servicoCaixas: "N/A",
+  servicoCaptores: "N/A",
 };
 
 function MalhaAterramentoMedicaoForm({ data, onDataChange }) {
-   // O estado local foi removido. Os dados vêm diretamente das props.
+  // O estado local foi removido. Os dados vêm diretamente das props.
   const formData = data || {};
   const servicosData = data?.servicos || initialServicosState;
 
