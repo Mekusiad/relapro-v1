@@ -43,7 +43,6 @@ const styles = StyleSheet.create({
   pageNumber: { fontSize: 11, fontWeight: "bold", color: "#334155" },
 });
 
-// Componente TocItem permanece o mesmo
 const TocItem = ({ text, page, link, style }) => (
   <View style={styles.tocItem}>
     <Link src={link} style={styles.tocLink}>
@@ -55,33 +54,34 @@ const TocItem = ({ text, page, link, style }) => (
 );
 
 function Sumario({ osData, sections, pageNumbers }) {
-  // A função getPage agora procura pela âncora
-  const getPage = (id) => pageNumbers?.[`ancora_${id}`];
+  const getPage = (id) => pageNumbers?.[id];
 
+  // ==================================================================
+  // INÍCIO DA CORREÇÃO: Lógica para listar TODOS os equipamentos, não apenas agrupar por tipo.
+  // ==================================================================
   const substationsWithMeasurements = (osData.subestacoes || [])
     .map((substation) => {
       const componentsWithEssays = (substation.componentes || []).filter(
         (comp) => comp.ensaios && comp.ensaios.length > 0
       );
-      const uniqueComponentsByType = Object.values(
-        componentsWithEssays.reduce((acc, comp) => {
-          const key = comp.nomeEquipamento;
-          if (!acc[key]) {
-            acc[key] = comp;
-          }
-          return acc;
-        }, {})
-      );
-      if (uniqueComponentsByType.length > 0) {
+
+      if (componentsWithEssays.length > 0) {
         return {
           id: substation.id,
           nome: substation.nome,
-          componentes: uniqueComponentsByType,
+          componentes: componentsWithEssays, // Usa a lista completa de componentes com ensaios
         };
       }
       return null;
     })
     .filter((sub) => sub !== null);
+  // ==================================================================
+  // FIM DA CORREÇÃO
+  // ==================================================================
+
+  // Identifica o ID do primeiro componente de todos para tratar a numeração de página corretamente
+  const firstComponentId =
+    substationsWithMeasurements?.[0]?.componentes?.[0]?.id;
 
   if (!osData) return null;
 
@@ -94,24 +94,23 @@ function Sumario({ osData, sections, pageNumbers }) {
       <Text style={styles.mainTitle}>Sumário</Text>
 
       <View style={styles.tocContainer}>
-        {/* Os links estáticos não precisam de âncora, mas podemos padronizar */}
         <TocItem
           text="1. DADOS DA ORDEM DE SERVIÇO"
-          page={pageNumbers?.["dados_os"]}
+          page={getPage("dados_os")}
           link="#dados_os"
           style={styles.mainItemText}
         />
         {sections.hasRecommendations && (
           <TocItem
             text="2. RECOMENDAÇÕES TÉCNICAS"
-            page={pageNumbers?.["recomendacoes"]}
+            page={getPage("recomendacoes")}
             link="#recomendacoes"
             style={styles.mainItemText}
           />
         )}
         <TocItem
           text="3. METODOLOGIA APLICADA"
-          page={pageNumbers?.["metodologia"]}
+          page={getPage("metodologia")}
           link="#metodologia"
           style={styles.mainItemText}
         />
@@ -121,7 +120,7 @@ function Sumario({ osData, sections, pageNumbers }) {
             <TocItem
               text="4. MEDIÇÕES DOS EQUIPAMENTOS"
               page={getPage("medicoes")}
-              link="#ancora_medicoes"
+              link="#ancora_medicoes" // Link aponta para a âncora
               style={styles.mainItemText}
             />
 
@@ -129,7 +128,13 @@ function Sumario({ osData, sections, pageNumbers }) {
               <View key={substation.id}>
                 <TocItem
                   text={substation.nome}
-                  page={getPage(`comp_${substation.componentes[0].id}`)}
+                  // O número da página é o da página do primeiro componente
+                  page={
+                    substation.componentes[0].id === firstComponentId
+                      ? getPage("medicoes")
+                      : getPage(`comp_${substation.componentes[0].id}`)
+                  }
+                  // O link aponta para a âncora do primeiro componente
                   link={`#ancora_comp_${substation.componentes[0].id}`}
                   style={styles.substationItemText}
                 />
@@ -146,7 +151,10 @@ function Sumario({ osData, sections, pageNumbers }) {
                     </Link>
                     <Text style={styles.dots} />
                     <Text style={styles.pageNumber}>
-                      {getPage(`comp_${comp.id}`)}
+                      {/* Lógica para pegar o número de página correto */}
+                      {comp.id === firstComponentId
+                        ? getPage("medicoes")
+                        : getPage(`comp_${comp.id}`)}
                     </Text>
                   </View>
                 ))}
@@ -155,33 +163,32 @@ function Sumario({ osData, sections, pageNumbers }) {
           </>
         )}
 
-        {/* Restante do sumário */}
         <TocItem
           text="5. CONCLUSÃO"
-          page={pageNumbers?.["conclusao"]}
+          page={getPage("conclusao")}
           link="#conclusao"
           style={styles.mainItemText}
         />
-        {pageNumbers?.["fotos_antes"] && (
+        {getPage("fotos_antes") && (
           <TocItem
             text="6. RELATÓRIO FOTOGRÁFICO - ANTES"
-            page={pageNumbers?.["fotos_antes"]}
+            page={getPage("fotos_antes")}
             link="#fotos_antes"
             style={styles.mainItemText}
           />
         )}
-        {pageNumbers?.["fotos_durante"] && (
+        {getPage("fotos_durante") && (
           <TocItem
             text="7. RELATÓRIO FOTOGRÁFICO - DURANTE"
-            page={pageNumbers?.["fotos_durante"]}
+            page={getPage("fotos_durante")}
             link="#fotos_durante"
             style={styles.mainItemText}
           />
         )}
-        {pageNumbers?.["fotos_depois"] && (
+        {getPage("fotos_depois") && (
           <TocItem
             text="8. RELATÓRIO FOTOGRÁFICO - DEPOIS"
-            page={pageNumbers?.["fotos_depois"]}
+            page={getPage("fotos_depois")}
             link="#fotos_depois"
             style={styles.mainItemText}
           />

@@ -18,9 +18,6 @@ import TabelaTransformadorPotencial from "./tabelas/TabelaTransformadorPotencial
 import TabelaTransformadorAlta from "./tabelas/TabelaTransformadorAlta.jsx";
 import TabelaMalhaAterramento from "./tabelas/TabelaMalhaAterramento.jsx";
 
-// =============================================================================
-// CORREÇÃO FINAL DO MAPEAMENTO APLICADA AQUI
-// =============================================================================
 const componentTableMap = {
   MALHA: TabelaMalhaAterramento,
   RESISTOR: TabelaResistor,
@@ -34,8 +31,8 @@ const componentTableMap = {
   TRAFO_MEDIA: TabelaTransformadorMedia,
   TRAFO_CORRENTE: TabelaTransformadorCorrente,
   TRAFO_POTENCIAL: TabelaTransformadorPotencial,
-  BATERIA: TabelaBancoDeBaterias, // Chave corrigida de 'BANCO_BATERIAS' para 'BATERIA'
-  BANCO_BATERIAS: TabelaBancoDeBaterias, // Mantido por segurança
+  BATERIA: TabelaBancoDeBaterias,
+  BANCO_BATERIAS: TabelaBancoDeBaterias,
 };
 
 const styles = StyleSheet.create({
@@ -80,11 +77,6 @@ function TabelasDeMedicao({ subestacoes, Html, stylesheet }) {
       )
     : [];
 
-  // LOG: Verifica quantos componentes serão renderizados
-  console.log(
-    `[TabelasDeMedicao] Total de componentes com ensaios para renderizar: ${componentsToRender.length}`
-  );
-
   if (componentsToRender.length === 0) {
     return null;
   }
@@ -94,19 +86,6 @@ function TabelasDeMedicao({ subestacoes, Html, stylesheet }) {
       {componentsToRender.map((component, index) => {
         const ComponentTable = componentTableMap[component.tipo];
 
-        // LOG: Mostra qual componente está sendo processado no loop
-        console.log(
-          `[TabelasDeMedicao] Processando componente [${index}]: ID=${component.id}, Tipo=${component.tipo}`
-        );
-
-        if (!ComponentTable) {
-          // LOG: Alerta se um tipo de componente não tem uma tabela mapeada
-          console.warn(
-            `[TabelasDeMedicao] AVISO: Nenhum componente de tabela encontrado para o tipo '${component.tipo}'.`
-          );
-        }
-
-        // Lógica de bookmark corrigida
         let pageBookmark = {
           title: component.nomeEquipamento,
           id: `comp_${component.id}`,
@@ -119,27 +98,33 @@ function TabelasDeMedicao({ subestacoes, Html, stylesheet }) {
           };
         }
 
-        // LOG: Mostra qual objeto de bookmark está sendo criado para esta página
-        console.log(
-          `[TabelasDeMedicao] Bookmark criado para a página [${index}]:`,
-          pageBookmark
-        );
-
         return (
           <Page
             key={component.id}
             size="A4"
+            // ==================================================================
+            // CORREÇÃO: ID da PÁGINA para a numeração
+            // ==================================================================
+            id={index === 0 ? "medicoes" : `comp_${component.id}`}
             style={styles.page}
             break={index > 0}
+            bookmark={pageBookmark}
           >
-            <View id={`ancora_comp_${component.id}`} />
-
+            {/* ================================================================== */}
+            {/* CORREÇÃO: IDs de ÂNCORA nos títulos para os links */}
+            {/* ================================================================== */}
             {index === 0 && (
-              <Text style={styles.mainTitle}>Medições dos Equipamentos</Text>
+              <Text id="ancora_medicoes" style={styles.mainTitle}>
+                Medições dos Equipamentos
+              </Text>
             )}
-            <Text style={styles.substationTitle}>
+            <Text
+              id={`ancora_comp_${component.id}`}
+              style={styles.substationTitle}
+            >
               Subestação: {component.nomeSubestacao}
             </Text>
+
             <View>
               {ComponentTable ? (
                 <ComponentTable
